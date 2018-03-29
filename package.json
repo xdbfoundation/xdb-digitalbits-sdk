@@ -9,7 +9,8 @@
     "preversion": "gulp test",
     "version": "gulp build",
     "postversion": "git push && git push --tags",
-    "postinstall": "postinstall-build lib --script version"
+    "build:node": "gulp build:node",
+    "postinstall": "postinstall-build lib --script build:node"
   },
   "keywords": [
     "stellar"
