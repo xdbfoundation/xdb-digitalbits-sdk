@@ -17,7 +17,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/stellar/js-stellar-sdk.git"
+    "url": "https://github.com/DigitalBitsOrg/js-digitalbits-sdk.git"
   },
   "engines": {
     "node": ">=0.10 <=4"
@@ -26,9 +26,9 @@
   "license": "Apache-2.0",
   "private": true,
   "bugs": {
-    "url": "https://github.com/stellar/js-stellar-sdk/issues"
+    "url": "https://github.com/DigitalBitsOrg/js-digitalbits-sdk/issues"
   },
-  "homepage": "https://github.com/stellar/js-stellar-sdk",
+  "homepage": "https://github.com/DigitalBitsOrg/js-digitalbits-sdk",
   "devDependencies": {
     "babel": "~5.8.23",
     "babel-core": "~5.8.25",
