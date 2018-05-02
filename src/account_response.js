@@ -1,4 +1,4 @@
-import {Account as BaseAccount} from "stellar-base";
+import {Account as BaseAccount} from "digitalbits-base";
 import forIn from "lodash/forIn";
 
 /**
