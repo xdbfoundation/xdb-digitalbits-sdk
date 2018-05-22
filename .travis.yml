@@ -70,3 +70,4 @@ deploy:
       repo: stellar/js-stellar-sdk
       node: 6.9.4
       condition: "$INTEGRATION = true"
+
