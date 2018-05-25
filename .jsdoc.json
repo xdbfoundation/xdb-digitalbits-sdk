@@ -1,7 +1,7 @@
 {
   "source": {
-    "include": ["src", "node_modules/stellar-base/src"],
-    "exclude": "node_modules/stellar-base/src/generated"
+    "include": ["src", "node_modules/digitalbits-base/src"],
+    "exclude": "node_modules/digitalbits-base/src/generated"
   },
   "opts": {
     "destination": "./jsdoc/",
