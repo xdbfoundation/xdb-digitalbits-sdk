@@ -59,7 +59,7 @@ deploy:
     skip_cleanup: true
     on:
       tags: true
-      repo: stellar/js-stellar-sdk
+      repo: DigitalBitsOrg/js-digitalbits-sdk
       node: 6.9.4
       condition: "$INTEGRATION = true"
   - provider: script
@@ -67,6 +67,6 @@ deploy:
     skip_cleanup: true
     on:
       tags: true
-      repo: stellar/js-stellar-sdk
+      repo: DigitalBitsOrg/js-digitalbits-sdk 
       node: 6.9.4
       condition: "$INTEGRATION = true"
