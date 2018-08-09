@@ -25,7 +25,7 @@ script:
     else
       echo "Pull request - skip Sauce Labs testing..."
     fi
-  elif [ "${INTEGRATION}" = "true" ]; then
+    #elif [ "${INTEGRATION}" = "true" ]; then
     # Ugly but it's the only way to make istanbul generate coverage report
     #babel-node ./node_modules/gulp/bin/gulp.js test:integration
   else
