@@ -24,7 +24,6 @@
   },
   "author": "Stellar Development Foundation <hello@stellar.org>",
   "license": "Apache-2.0",
-  "private": true,
   "bugs": {
     "url": "https://github.com/DigitalBitsOrg/js-digitalbits-sdk/issues"
   },
