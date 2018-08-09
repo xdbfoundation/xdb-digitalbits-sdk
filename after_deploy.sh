@@ -1,5 +1,5 @@
 npm install jsdoc
-git clone -b gh-pages "https://stellar-jenkins@github.com/stellar/js-stellar-sdk.git" jsdoc
+git clone -b gh-pages "git@github.com:DigitalBitsOrg/js-digitalbits-sdk.git" jsdoc
 
 if [ ! -d "jsdoc" ]; then
   echo "Error cloning"

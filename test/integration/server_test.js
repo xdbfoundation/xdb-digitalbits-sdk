@@ -5,7 +5,7 @@ describe("integration tests", function () {
   this.timeout(TIMEOUT);
   this.slow(TIMEOUT/2);
 
-  const HORIZON = 'https://horizon-testnet.stellar.org';
+  const HORIZON = 'https://horizon.testnet.digitalbits.io';
   StellarSdk.Network.useTestNetwork();
   let server = new StellarSdk.Server(HORIZON);
   let master = StellarSdk.Keypair.random();
