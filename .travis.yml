@@ -15,7 +15,7 @@ before_install:
 - npm install -g npm@'>=2.13.5'
 
 #echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
-#echo "machine github.com login stellar-jenkins password $GITHUB_TOKEN" >~/.netrc
+#echo "machine github.com login digitalbits-jenkins password $GITHUB_TOKEN" >~/.netrc
 script:
 - |
   git config --global user.name "Travis CI"

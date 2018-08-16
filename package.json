@@ -13,7 +13,7 @@
     "postinstall": "postinstall-build lib --script build:node"
   },
   "keywords": [
-    "stellar"
+    "digitalbits"
   ],
   "repository": {
     "type": "git",

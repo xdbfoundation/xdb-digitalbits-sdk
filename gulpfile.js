@@ -54,7 +54,7 @@ gulp.task('build:node', ['lint:src'], function() {
 gulp.task('build:browser', ['lint:src'], function() {
   return gulp.src('src/browser.js')
     .pipe(plugins.webpack({
-      output: { library: 'StellarSdk' },
+      output: { library: 'DigitalBitsSdk' },
       module: {
         loaders: [
           { test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader'}
@@ -67,14 +67,14 @@ gulp.task('build:browser', ['lint:src'], function() {
     }))
     // Add EventSource polyfill for IE11
     .pipe(plugins.insert.prepend(fs.readFileSync('./node_modules/event-source-polyfill/eventsource.js')))
-    .pipe(plugins.rename('stellar-sdk.js'))
+    .pipe(plugins.rename('digitalbits-sdk.js'))
     .pipe(gulp.dest('dist'))
     .pipe(plugins.uglify({
       output: {
         ascii_only: true
       }
     }))
-    .pipe(plugins.rename('stellar-sdk.min.js'))
+    .pipe(plugins.rename('digitalbits-sdk.min.js'))
     .pipe(gulp.dest('dist'));
 });
 

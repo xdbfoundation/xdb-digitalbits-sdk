@@ -24,7 +24,7 @@ module.exports = function(config) {
 
   config.set({
     sauceLabs: {
-      testName: 'js-stellar-sdk',
+      testName: 'js-digitalbits-sdk',
       recordScreenshots: false,
       recordVideo: false
     },
@@ -39,7 +39,7 @@ module.exports = function(config) {
     browsers: Object.keys(customLaunchers),
 
     files: [
-      'dist/stellar-sdk.js',
+      'dist/digitalbits-sdk.js',
       'test/test-helper.js',
       'test/unit/**/*.js'
     ],
