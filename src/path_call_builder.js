@@ -1,7 +1,7 @@
 import {CallBuilder} from './call_builder';
 
 /**
- * The Stellar Network allows payments to be made across assets through path payments. A path payment specifies a
+ * The DigitalBits Network allows payments to be made across assets through path payments. A path payment specifies a
  * series of assets to route a payment through, from source asset (the asset debited from the payer) to destination
  * asset (the asset credited to the payee).
  *
@@ -16,7 +16,7 @@ import {CallBuilder} from './call_builder';
  * used to determine if there a given path can satisfy a payment of the desired amount.
  *
  * Do not create this object directly, use {@link Server#paths}.
- * @see [Find Payment Paths](https://www.stellar.org/developers/horizon/reference/path-finding.html)
+ * @see [Find Payment Paths](https://developer.digitalbits.io/horizon/reference/path-finding.html)
  * @param {string} serverUrl Horizon server URL.
  * @param {string} source The sender's account ID. Any returned path must use a source that the sender can hold.
  * @param {string} destination The destination account ID that any returned path should use.

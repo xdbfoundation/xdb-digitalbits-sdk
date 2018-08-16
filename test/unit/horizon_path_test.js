@@ -2,8 +2,8 @@ describe("horizon path tests", function () {
 
   beforeEach(function () {
     this.axiosMock = sinon.mock(axios);
-    StellarSdk.Config.setDefault();
-    StellarSdk.Network.useTestNetwork();
+    DigitalBitsSdk.Config.setDefault();
+    DigitalBitsSdk.Network.useTestNetwork();
   });
 
   afterEach(function () {
@@ -13,7 +13,7 @@ describe("horizon path tests", function () {
 
   function test_horizon_paths(serverUrl) {
 
-    let server = new StellarSdk.Server(serverUrl);
+    let server = new DigitalBitsSdk.Server(serverUrl);
 
     let randomResult = {
       data: {
@@ -58,13 +58,13 @@ describe("horizon path tests", function () {
     it("server.submitTransaction() " + serverUrl, function (done) {
       randomResult.endpoint = "post";
 
-      let keypair = StellarSdk.Keypair.random();
-      let account = new StellarSdk.Account(keypair.publicKey(), "56199647068161");
+      let keypair = DigitalBitsSdk.Keypair.random();
+      let account = new DigitalBitsSdk.Account(keypair.publicKey(), "56199647068161");
       
-      let fakeTransaction = new StellarSdk.TransactionBuilder(account)
-        .addOperation(StellarSdk.Operation.payment({
+      let fakeTransaction = new DigitalBitsSdk.TransactionBuilder(account)
+        .addOperation(DigitalBitsSdk.Operation.payment({
           destination: keypair.publicKey(),
-          asset: StellarSdk.Asset.native(),
+          asset: DigitalBitsSdk.Asset.native(),
           amount: "100.50"
         }))
         .build();

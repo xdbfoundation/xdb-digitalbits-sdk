@@ -2,9 +2,9 @@ import http from "http";
 
 describe("federation-server.js tests", function () {
   beforeEach(function () {
-    this.server = new StellarSdk.FederationServer('https://acme.com:1337/federation', 'stellar.org');
+    this.server = new DigitalBitsSdk.FederationServer('https://acme.com:1337/federation', 'stellar.org');
     this.axiosMock = sinon.mock(axios);
-    StellarSdk.Config.setDefault();
+    DigitalBitsSdk.Config.setDefault();
   });
 
   afterEach(function () {
@@ -14,16 +14,16 @@ describe("federation-server.js tests", function () {
 
   describe('FederationServer.constructor', function () {
     it("throws error for insecure server", function () {
-      expect(() => new StellarSdk.FederationServer('http://acme.com:1337/federation', 'stellar.org')).to.throw(/Cannot connect to insecure federation server/);
+      expect(() => new DigitalBitsSdk.FederationServer('http://acme.com:1337/federation', 'stellar.org')).to.throw(/Cannot connect to insecure federation server/);
     });
 
     it("allow insecure server when opts.allowHttp flag is set", function () {
-      expect(() => new StellarSdk.FederationServer('http://acme.com:1337/federation', 'stellar.org', {allowHttp: true})).to.not.throw();
+      expect(() => new DigitalBitsSdk.FederationServer('http://acme.com:1337/federation', 'stellar.org', {allowHttp: true})).to.not.throw();
     });
 
     it("allow insecure server when global Config.allowHttp flag is set", function () {
-      StellarSdk.Config.setAllowHttp(true);
-      expect(() => new StellarSdk.FederationServer('http://acme.com:1337/federation', 'stellar.org', {allowHttp: true})).to.not.throw();
+      DigitalBitsSdk.Config.setAllowHttp(true);
+      expect(() => new DigitalBitsSdk.FederationServer('http://acme.com:1337/federation', 'stellar.org', {allowHttp: true})).to.not.throw();
     });
   });
 
@@ -51,7 +51,7 @@ describe("federation-server.js tests", function () {
         });
     });
 
-    it("requests is correct for username as stellar address", function (done) {
+    it("requests is correct for username as digitalbits address", function (done) {
       this.server.resolveAddress('bob')
         .then(response => {
           expect(response.stellar_address).equals('bob*stellar.org');
@@ -117,16 +117,16 @@ describe("federation-server.js tests", function () {
   describe('FederationServer.createForDomain', function () {
     it("creates correct object", function (done) {
       this.axiosMock.expects('get')
-        .withArgs(sinon.match('https://acme.com/.well-known/stellar.toml'))
+        .withArgs(sinon.match('https://acme.com/.well-known/digitalbits.toml'))
         .returns(Promise.resolve({
           data: `
-#   The endpoint which clients should query to resolve stellar addresses
+#   The endpoint which clients should query to resolve digitalbits addresses
 #   for users on your domain.
 FEDERATION_SERVER="https://api.stellar.org/federation"
 `
         }));
 
-      StellarSdk.FederationServer.createForDomain('acme.com')
+      DigitalBitsSdk.FederationServer.createForDomain('acme.com')
         .then(federationServer => {
           expect(federationServer.serverURL.protocol()).equals('https');
           expect(federationServer.serverURL.hostname()).equals('api.stellar.org');
@@ -136,31 +136,31 @@ FEDERATION_SERVER="https://api.stellar.org/federation"
         });
     });
 
-    it("fails when stellar.toml does not contain federation server info", function (done) {
+    it("fails when digitalbits.toml does not contain federation server info", function (done) {
       this.axiosMock.expects('get')
-        .withArgs(sinon.match('https://acme.com/.well-known/stellar.toml'))
+        .withArgs(sinon.match('https://acme.com/.well-known/digitalbits.toml'))
         .returns(Promise.resolve({
           data: ''
         }));
 
-      StellarSdk.FederationServer.createForDomain('acme.com').should.be.rejectedWith(/stellar.toml does not contain FEDERATION_SERVER field/).and.notify(done);
+      DigitalBitsSdk.FederationServer.createForDomain('acme.com').should.be.rejectedWith(/digitalbits.toml does not contain FEDERATION_SERVER field/).and.notify(done);
     });
   });
 
   describe('FederationServer.resolve', function () {
     it("succeeds for a valid account ID", function (done) {
-      StellarSdk.FederationServer.resolve('GAFSZ3VPBC2H2DVKCEWLN3PQWZW6BVDMFROWJUDAJ3KWSOKQIJ4R5W4J')
+      DigitalBitsSdk.FederationServer.resolve('GAFSZ3VPBC2H2DVKCEWLN3PQWZW6BVDMFROWJUDAJ3KWSOKQIJ4R5W4J')
         .should.eventually.deep.equal({account_id: 'GAFSZ3VPBC2H2DVKCEWLN3PQWZW6BVDMFROWJUDAJ3KWSOKQIJ4R5W4J'})
         .notify(done);
     });
 
     it("fails for invalid account ID", function (done) {
-      StellarSdk.FederationServer.resolve('invalid').should.be.rejectedWith(/Invalid Account ID/).notify(done);
+      DigitalBitsSdk.FederationServer.resolve('invalid').should.be.rejectedWith(/Invalid Account ID/).notify(done);
     });
 
-    it("succeeds for a valid Stellar address", function (done) {
+    it("succeeds for a valid DigitalBits address", function (done) {
       this.axiosMock.expects('get')
-        .withArgs(sinon.match('https://stellar.org/.well-known/stellar.toml'))
+        .withArgs(sinon.match('https://stellar.org/.well-known/digitalbits.toml'))
         .returns(Promise.resolve({
           data: `
 #   The endpoint which clients should query to resolve stellar addresses
@@ -180,7 +180,7 @@ FEDERATION_SERVER="https://api.stellar.org/federation"
           }
         }));
 
-      StellarSdk.FederationServer.resolve('bob*stellar.org')
+      DigitalBitsSdk.FederationServer.resolve('bob*stellar.org')
         .should.eventually.deep.equal({
           stellar_address: 'bob*stellar.org',
           account_id: 'GB5XVAABEQMY63WTHDQ5RXADGYF345VWMNPTN2GFUDZT57D57ZQTJ7PS',
@@ -190,8 +190,8 @@ FEDERATION_SERVER="https://api.stellar.org/federation"
         .notify(done);
     });
 
-    it("fails for invalid Stellar address", function (done) {
-      StellarSdk.FederationServer.resolve('bob*stellar.org*test').should.be.rejectedWith(/Invalid Stellar address/).notify(done);
+    it("fails for invalid DigitalBits address", function (done) {
+      DigitalBitsSdk.FederationServer.resolve('bob*stellar.org*test').should.be.rejectedWith(/Invalid DigitalBits address/).notify(done);
     });
 
     it("fails when memo is not string", function (done) {
@@ -215,12 +215,12 @@ FEDERATION_SERVER="https://api.stellar.org/federation"
       if (typeof window != 'undefined') {
         return done();
       }
-      var response = Array(StellarSdk.FEDERATION_RESPONSE_MAX_SIZE+10).join('a');
+      var response = Array(DigitalBitsSdk.FEDERATION_RESPONSE_MAX_SIZE+10).join('a');
       let tempServer = http.createServer((req, res) => {
         res.setHeader('Content-Type', 'application/json; charset=UTF-8');
         res.end(response);
       }).listen(4444, () => {
-        new StellarSdk.FederationServer('http://localhost:4444/federation', 'stellar.org', {allowHttp: true})
+        new DigitalBitsSdk.FederationServer('http://localhost:4444/federation', 'stellar.org', {allowHttp: true})
           .resolveAddress('bob*stellar.org')
           .should.be.rejectedWith(/federation response exceeds allowed size of [0-9]+/)
           .notify(done)

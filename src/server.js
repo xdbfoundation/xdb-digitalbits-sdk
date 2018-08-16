@@ -26,10 +26,10 @@ let URITemplate = require("urijs").URITemplate;
 export const SUBMIT_TRANSACTION_TIMEOUT = 60*1000;
 
 /**
- * Server handles the network connection to a [Horizon](https://www.stellar.org/developers/horizon/learn/index.html)
+ * Server handles the network connection to a [Horizon](https://developer.digitalbits.io/horizon/learn/index.html)
  * instance and exposes an interface for requests to that instance.
  * @constructor
- * @param {string} serverURL Horizon Server URL (ex. `https://horizon-testnet.stellar.org`).
+ * @param {string} serverURL Horizon Server URL (ex. `https://horizon.testnet.digitalbits.io`).
  * @param {object} [opts]
  * @param {boolean} [opts.allowHttp] - Allow connecting to http servers, default: `false`. This must be set to false in production deployments! You can also use {@link Config} class to set this globally.
  */
@@ -49,7 +49,7 @@ export class Server {
 
     /**
      * Submits a transaction to the network.
-     * @see [Post Transaction](https://www.stellar.org/developers/horizon/reference/transactions-create.html)
+     * @see [Post Transaction](https://developer.digitalbits.io/horizon/reference/transactions-create.html)
      * @param {Transaction} transaction - The transaction to submit.
      * @returns {Promise} Promise that resolves or rejects with response from horizon.
      */
@@ -98,7 +98,7 @@ export class Server {
     }
 
     /**
-     * People on the Stellar network can make offers to buy or sell assets. This endpoint represents all the offers a particular account makes.
+     * People on the DigitalBits network can make offers to buy or sell assets. This endpoint represents all the offers a particular account makes.
      * Currently this method only supports querying offers for account and should be used like this:
      * ```
      * server.offers('accounts', accountId).call()
@@ -141,7 +141,7 @@ export class Server {
     }
 
     /**
-     * The Stellar Network allows payments to be made between assets through path payments. A path payment specifies a
+     * The DigitalBits Network allows payments to be made between assets through path payments. A path payment specifies a
      * series of assets to route a payment through, from source asset (the asset debited from the payer) to destination
      * asset (the asset credited to the payee).
      *

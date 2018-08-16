@@ -1,6 +1,6 @@
 if (typeof window === 'undefined') {
   require('babel/register');
-  global.StellarSdk = require('../src/index');
+  global.DigitalBitsSdk = require('../src/index');
   global.axios = require("axios");
   var chaiAsPromised = require("chai-as-promised");
   global.chai = require('chai');
@@ -10,6 +10,6 @@ if (typeof window === 'undefined') {
   global.Promise = require('bluebird');
   global.expect = global.chai.expect;
 } else {
-  window.axios = StellarSdk.axios;
-  window.Promise = window.bluebird = StellarSdk.bluebird;
+  window.axios = DigitalBitsSdk.axios;
+  window.Promise = window.bluebird = DigitalBitsSdk.bluebird;
 }

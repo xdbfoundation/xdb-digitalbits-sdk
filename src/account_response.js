@@ -22,7 +22,7 @@ export class AccountResponse {
     }
 
     /**
-     * Returns Stellar account ID, ex. `GB3KJPLFUYN5VL6R3GU3EGCGVCKFDSD7BEDX42HWG5BWFKB3KQGJJRMA`
+     * Returns DigitalBits account ID, ex. `GB3KJPLFUYN5VL6R3GU3EGCGVCKFDSD7BEDX42HWG5BWFKB3KQGJJRMA`
      * @returns {string}
      */
     accountId() {

@@ -4,7 +4,7 @@ import {CallBuilder} from "./call_builder";
  * Creates a new {@link TradesCallBuilder} pointed to server defined by serverUrl.
  *
  * Do not create this object directly, use {@link Server#trades}.
- * @see [Trades](https://www.stellar.org/developers/horizon/reference/endpoints/trades.html)
+ * @see [Trades](https://developer.digitalbits.io/horizon/reference/endpoints/trades.html)
  * @param {string} serverUrl serverUrl Horizon server URL.
  */
 export class TradesCallBuilder extends CallBuilder {

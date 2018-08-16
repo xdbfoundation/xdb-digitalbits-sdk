@@ -1,9 +1,9 @@
 describe("server.js tests", function () {
   beforeEach(function () {
-    this.server = new StellarSdk.Server('https://horizon-live.stellar.org:1337');
+    this.server = new DigitalBitsSdk.Server('https://horizon-live.stellar.org:1337');
     this.axiosMock = sinon.mock(axios);
-    StellarSdk.Config.setDefault();
-    StellarSdk.Network.useTestNetwork();
+    DigitalBitsSdk.Config.setDefault();
+    DigitalBitsSdk.Network.useTestNetwork();
   });
 
   afterEach(function () {
@@ -13,16 +13,16 @@ describe("server.js tests", function () {
 
   describe('Server.constructor', function () {
     it("throws error for insecure server", function () {
-      expect(() => new StellarSdk.Server('http://horizon-live.stellar.org:1337')).to.throw(/Cannot connect to insecure horizon server/);
+      expect(() => new DigitalBitsSdk.Server('http://horizon-live.stellar.org:1337')).to.throw(/Cannot connect to insecure horizon server/);
     });
 
     it("allow insecure server when opts.allowHttp flag is set", function () {
-      expect(() => new StellarSdk.Server('http://horizon-live.stellar.org:1337', {allowHttp: true})).to.not.throw();
+      expect(() => new DigitalBitsSdk.Server('http://horizon-live.stellar.org:1337', {allowHttp: true})).to.not.throw();
     });
 
     it("allow insecure server when global Config.allowHttp flag is set", function () {
-      StellarSdk.Config.setAllowHttp(true);
-      expect(() => new StellarSdk.Server('http://horizon-live.stellar.org:1337')).to.not.throw();
+      DigitalBitsSdk.Config.setAllowHttp(true);
+      expect(() => new DigitalBitsSdk.Server('http://horizon-live.stellar.org:1337')).to.not.throw();
     });
   });
 
@@ -283,7 +283,7 @@ describe("server.js tests", function () {
             .then(function () {
               done("didn't throw an error");
             })
-            .catch(StellarSdk.NotFoundError, function (err) {
+            .catch(DigitalBitsSdk.NotFoundError, function (err) {
               done();
             })
             .catch(function (err) {
@@ -467,12 +467,12 @@ describe("server.js tests", function () {
 
   describe('Server.submitTransaction', function() {
     it("sends a transaction", function(done) {
-      let keypair = StellarSdk.Keypair.random();
-      let account = new StellarSdk.Account(keypair.publicKey(), "56199647068161");
-      let transaction = new StellarSdk.TransactionBuilder(account)
-        .addOperation(StellarSdk.Operation.payment({
+      let keypair = DigitalBitsSdk.Keypair.random();
+      let account = new DigitalBitsSdk.Account(keypair.publicKey(), "56199647068161");
+      let transaction = new DigitalBitsSdk.TransactionBuilder(account)
+        .addOperation(DigitalBitsSdk.Operation.payment({
           destination: "GASOCNHNNLYFNMDJYQ3XFMI7BYHIOCFW3GJEOWRPEGK2TDPGTG2E5EDW",
-          asset: StellarSdk.Asset.native(),
+          asset: DigitalBitsSdk.Asset.native(),
           amount: "100.50"
         }))
         .build();
@@ -643,7 +643,7 @@ describe("server.js tests", function () {
           .withArgs(sinon.match('https://horizon-live.stellar.org:1337/order_book?selling_asset_type=native&buying_asset_type=credit_alphanum4&buying_asset_code=USD&buying_asset_issuer=GDVDKQFP665JAO7A2LSHNLQIUNYNAAIGJ6FYJVMG4DT3YJQQJSRBLQDG'))
           .returns(Promise.resolve({data: orderBookResponse}));
 
-        this.server.orderbook(StellarSdk.Asset.native(), new StellarSdk.Asset('USD', "GDVDKQFP665JAO7A2LSHNLQIUNYNAAIGJ6FYJVMG4DT3YJQQJSRBLQDG"))
+        this.server.orderbook(DigitalBitsSdk.Asset.native(), new DigitalBitsSdk.Asset('USD', "GDVDKQFP665JAO7A2LSHNLQIUNYNAAIGJ6FYJVMG4DT3YJQQJSRBLQDG"))
           .call()
           .then(function (response) {
             expect(response).to.be.deep.equal(orderBookResponse);
@@ -659,7 +659,7 @@ describe("server.js tests", function () {
           .withArgs(sinon.match('https://horizon-live.stellar.org:1337/order_book?selling_asset_type=credit_alphanum4&selling_asset_code=USD&selling_asset_issuer=GDVDKQFP665JAO7A2LSHNLQIUNYNAAIGJ6FYJVMG4DT3YJQQJSRBLQDG&buying_asset_type=native'))
           .returns(Promise.resolve({data: orderBookResponse}));
 
-        this.server.orderbook(new StellarSdk.Asset('USD', "GDVDKQFP665JAO7A2LSHNLQIUNYNAAIGJ6FYJVMG4DT3YJQQJSRBLQDG"), StellarSdk.Asset.native())
+        this.server.orderbook(new DigitalBitsSdk.Asset('USD', "GDVDKQFP665JAO7A2LSHNLQIUNYNAAIGJ6FYJVMG4DT3YJQQJSRBLQDG"), DigitalBitsSdk.Asset.native())
           .call()
           .then(function (response) {
             expect(response).to.be.deep.equal(orderBookResponse);
@@ -783,7 +783,7 @@ describe("server.js tests", function () {
             .returns(Promise.resolve({data: tradesResponse}));
 
         this.server.trades()
-            .forAssetPair(StellarSdk.Asset.native(), new StellarSdk.Asset('JPY', "GBVAOIACNSB7OVUXJYC5UE2D4YK2F7A24T7EE5YOMN4CE6GCHUTOUQXM"))
+            .forAssetPair(DigitalBitsSdk.Asset.native(), new DigitalBitsSdk.Asset('JPY', "GBVAOIACNSB7OVUXJYC5UE2D4YK2F7A24T7EE5YOMN4CE6GCHUTOUQXM"))
             .call()
             .then(function (response) {
               expect(response.records).to.be.deep.equal(tradesResponse._embedded.records);
@@ -986,7 +986,7 @@ describe("server.js tests", function () {
           .withArgs(sinon.match('https://horizon-live.stellar.org:1337/paths?destination_account=GAEDTJ4PPEFVW5XV2S7LUXBEHNQMX5Q2GM562RJGOQG7GVCE5H3HIB4V&source_account=GARSFJNXJIHO6ULUBK3DBYKVSIZE7SC72S5DYBCHU7DKL22UXKVD7MXP&destination_amount=20.0&destination_asset_type=credit_alphanum4&destination_asset_code=EUR&destination_asset_issuer=GDSBCQO34HWPGUGQSP3QBFEXVTSR2PW46UIGTHVWGWJGQKH3AFNHXHXN'))
           .returns(Promise.resolve({data: pathsResponse}));
 
-        this.server.paths("GARSFJNXJIHO6ULUBK3DBYKVSIZE7SC72S5DYBCHU7DKL22UXKVD7MXP","GAEDTJ4PPEFVW5XV2S7LUXBEHNQMX5Q2GM562RJGOQG7GVCE5H3HIB4V", new StellarSdk.Asset('EUR', 'GDSBCQO34HWPGUGQSP3QBFEXVTSR2PW46UIGTHVWGWJGQKH3AFNHXHXN'), '20.0')
+        this.server.paths("GARSFJNXJIHO6ULUBK3DBYKVSIZE7SC72S5DYBCHU7DKL22UXKVD7MXP","GAEDTJ4PPEFVW5XV2S7LUXBEHNQMX5Q2GM562RJGOQG7GVCE5H3HIB4V", new DigitalBitsSdk.Asset('EUR', 'GDSBCQO34HWPGUGQSP3QBFEXVTSR2PW46UIGTHVWGWJGQKH3AFNHXHXN'), '20.0')
           .call()
           .then(function (response) {
             expect(response.records).to.be.deep.equal(pathsResponse._embedded.records);
@@ -1407,7 +1407,7 @@ describe("server.js tests", function () {
           .withArgs(sinon.match('https://horizon-live.stellar.org:1337/trade_aggregations?base_asset_type=native&counter_asset_type=credit_alphanum4&counter_asset_code=BTC&counter_asset_issuer=GATEMHCCKCY67ZUCKTROYN24ZYT5GK4EQZ65JJLDHKHRUZI3EUEKMTCH&start_time=1512689100000&end_time=1512775500000&resolution=300000'))
           .returns(Promise.resolve({ data: tradeAggregationResponse }));
 
-        this.server.tradeAggregation(StellarSdk.Asset.native(), new StellarSdk.Asset('BTC', "GATEMHCCKCY67ZUCKTROYN24ZYT5GK4EQZ65JJLDHKHRUZI3EUEKMTCH"), 1512689100000, 1512775500000, 300000)
+        this.server.tradeAggregation(DigitalBitsSdk.Asset.native(), new DigitalBitsSdk.Asset('BTC', "GATEMHCCKCY67ZUCKTROYN24ZYT5GK4EQZ65JJLDHKHRUZI3EUEKMTCH"), 1512689100000, 1512775500000, 300000)
           .call()
           .then(function (response) {
             expect(response.records).to.be.deep.equal(tradeAggregationResponse._embedded.records);
@@ -1425,7 +1425,7 @@ describe("server.js tests", function () {
           .withArgs(sinon.match('https://horizon-live.stellar.org:1337/trade_aggregations?base_asset_type=credit_alphanum4&base_asset_code=BTC&base_asset_issuer=GATEMHCCKCY67ZUCKTROYN24ZYT5GK4EQZ65JJLDHKHRUZI3EUEKMTCH&counter_asset_type=native&start_time=1512689100000&end_time=1512775500000&resolution=300000'))
           .returns(Promise.resolve({ data: tradeAggregationResponse }));
 
-        this.server.tradeAggregation(new StellarSdk.Asset('BTC', "GATEMHCCKCY67ZUCKTROYN24ZYT5GK4EQZ65JJLDHKHRUZI3EUEKMTCH"), StellarSdk.Asset.native(), 1512689100000, 1512775500000, 300000)
+        this.server.tradeAggregation(new DigitalBitsSdk.Asset('BTC', "GATEMHCCKCY67ZUCKTROYN24ZYT5GK4EQZ65JJLDHKHRUZI3EUEKMTCH"), DigitalBitsSdk.Asset.native(), 1512689100000, 1512775500000, 300000)
           .call()
           .then(function (response) {
             expect(response.records).to.be.deep.equal(tradeAggregationResponse._embedded.records);
@@ -1614,7 +1614,7 @@ describe("server.js tests", function () {
             {
               "_links": {
                 "toml": {
-                  "href": "https://bakalr/.well-known/stellar.toml"
+                  "href": "https://bakalr/.well-known/digitalbits.toml"
                 }
               },
               "asset_type": "credit_alphanum4",
