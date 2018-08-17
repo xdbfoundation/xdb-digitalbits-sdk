@@ -1,6 +1,6 @@
 {
   "name": "digitalbits-sdk",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "description": "digitalbits-sdk is a library for working with the DigitalBits Horizon server.",
   "main": "lib/index.js",
   "scripts": {
