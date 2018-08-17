@@ -95,7 +95,7 @@ FEDERATION_SERVER="https://api.stellar.org/federation"
       if (typeof window != 'undefined') {
         return done();
       }
-      var response = Array(DigitalBitsSdk.DIGITAL_TOML_MAX_SIZE+10).join('a');
+      var response = Array(DigitalBitsSdk.DIGITALBITS_TOML_MAX_SIZE+10).join('a');
       let tempServer = http.createServer((req, res) => {
         res.setHeader('Content-Type', 'text/x-toml; charset=UTF-8');
         res.end(response);
