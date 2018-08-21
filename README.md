@@ -106,7 +106,7 @@ Make sure that you are using the latest version number. They can be found on the
   ```
 
 ## Usage
-For information on how to use js-digitalbits-sdk, take a look at the [Developers site](https://developer.digitalbits.io/js-digitalbits-sdk/learn/index.html).
+For information on how to use js-digitalbits-sdk, take a look at the [Developers site](https://developer.digitalbits.io/js-digitalbits-sdk/reference/index.html).
 
 There is also API Documentation [here](https://developer.digitalbits.io/reference/).
 
@@ -123,7 +123,7 @@ gulp test:browser
 ```
 
 ## Documentation
-Documentation for this repo lives in [Developers site](https://developer.digitalbits.io/js-digitalbits-sdk/learn/index.html).
+Documentation for this repo lives in [Developers site](https://developer.digitalbits.io/js-digitalbits-sdk/reference/index.html).
 
 ## Contributing
 For information on how to contribute, please refer to our [contribution guide](https://github.com/digitalbitsorg/js-digitalbits-sdk/blob/master/CONTRIBUTING.md).

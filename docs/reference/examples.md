@@ -8,7 +8,7 @@ title: Basic Examples
 
 ## Creating a payment transaction
 
-js-digitalbits-sdk exposes the [`TransactionBuilder`](https://github.com/digitalbitsorg/js-digitalbits-base/blob/master/src/transaction_builder.js) class from js-digitalbits-base.  There are more examples of [building transactions here](https://developer.digitalbits.io/js-digitalbits-base/learn/base-examples.html). All those examples can be signed and submitted to DigitalBits in a similar manner as is done below.
+js-digitalbits-sdk exposes the [`TransactionBuilder`](https://github.com/digitalbitsorg/js-digitalbits-base/blob/master/src/transaction_builder.js) class from js-digitalbits-base.  There are more examples of [building transactions here](https://developer.digitalbits.io/js-digitalbits-base/reference/base-examples.html). All those examples can be signed and submitted to DigitalBits in a similar manner as is done below.
 
 In this example you must ensure that the destination account exists
 
@@ -64,7 +64,7 @@ server.loadAccount(sourcePublicKey)
         // to avoid errors from the use of the JavaScript Number data structure.
         amount: '350.1234567',
       }))
-      // Uncomment to add a memo (https://developer.digitalbits.io/learn/concepts/transactions.html)
+      // Uncomment to add a memo (https://developer.digitalbits.io/guide/concepts/transactions.html)
       // .addMemo(DigitalBitsSdk.Memo.text('Hello world!'))
       .build();
 
