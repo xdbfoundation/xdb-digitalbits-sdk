@@ -57,7 +57,7 @@ var es = server.transactions()
 ## Handling responses
 
 ### XDR
-The transaction endpoints will return some fields in raw [XDR](https://developer.digitalbits.io/horizon/learn/xdr.html)
+The transaction endpoints will return some fields in raw [XDR](https://developer.digitalbits.io/horizon/reference/xdr.html)
 form. You can convert this XDR to JSON using the `.fromXDR()` method.
 
 An example of re-writing the txHandler from above to print the XDR fields as JSON:
@@ -93,7 +93,7 @@ server.payments()
 
 ## Building transactions
 
-See the [Building Transactions](https://developer.digitalbits.io/js-digitalbits-base/learn/building-transactions.html) guide for information about assembling a transaction.
+See the [Building Transactions](https://developer.digitalbits.io/js-digitalbits-base/reference/building-transactions.html) guide for information about assembling a transaction.
 
 ## Submitting transactions
 Once you have built your transaction, you can submit it to the DigitalBits network with `Server.submitTransaction()`.
