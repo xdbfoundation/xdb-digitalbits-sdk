@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Home - Documentation</title>
+    <title>src/call_builder.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -29,92 +29,266 @@
 
 <div id="main">
     
+    <h1 class="page-title">src/call_builder.js</h1>
+    
 
     
 
 
 
     
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import {NotFoundError, NetworkError, BadRequestError} from "./errors";
+import forEach from 'lodash/forEach';
 
+let URI = require("urijs");
+let URITemplate = require("urijs/src/URITemplate");
 
+let axios = require("axios");
+var EventSource = (typeof window === 'undefined') ? require('eventsource') : window.EventSource;
+let toBluebird = require("bluebird").resolve;
 
+/**
+ * Creates a new {@link CallBuilder} pointed to server defined by serverUrl.
+ *
+ * This is an **abstract** class. Do not create this object directly, use {@link Server} class.
+ * @param {string} serverUrl
+ * @class CallBuilder
+ */
+export class CallBuilder {
+  constructor(serverUrl) {
+    this.url = serverUrl;
+    this.filter = [];
+    this.originalSegments = this.url.segment() || [];
+  }
 
+  /**
+   * @private
+   */
+  checkFilter() {
+    if (this.filter.length >= 2) {
+      throw new BadRequestError("Too many filters specified", this.filter);
+    }
 
+    if (this.filter.length === 1) {
+      //append filters to original segments
+      let newSegment = this.originalSegments.concat(this.filter[0]);
+      this.url.segment(newSegment);
+    }        
+  }
 
+  /**
+   * Triggers a HTTP request using this builder's current configuration.
+   * Returns a Promise that resolves to the server's response.
+   * @returns {Promise}
+   */
+  call() {
+    this.checkFilter();
+    return this._sendNormalRequest(this.url)
+      .then(r => this._parseResponse(r));
+  }
 
+  /**
+   * Creates an EventSource that listens for incoming messages from the server. To stop listening for new
+   * events call the function returned by this method.
+   * @see [Horizon Response Format](https://developer.digitalbits.io/horizon/learn/responses.html)
+   * @see [MDN EventSource](https://developer.mozilla.org/en-US/docs/Web/API/EventSource)
+   * @param {object} [options] EventSource options.
+   * @param {function} [options.onmessage] Callback function to handle incoming messages.
+   * @param {function} [options.onerror] Callback function to handle errors.
+   * @param {number} [options.reconnectTimeout] Custom stream connection timeout in ms, default is 15 seconds.
+   * @returns {function} Close function. Run to close the connection and stop listening for new events.
+   */
+  stream(options) {
+    this.checkFilter();
 
+    // EventSource object
+    let es;
+    // timeout is the id of the timeout to be triggered if there were no new messages
+    // in the last 15 seconds. The timeout is reset when a new message arrive.
+    // It prevents closing EventSource object in case of 504 errors as `readyState`
+    // property is not reliable.
+    let timeout;
 
-    
+    var createTimeout = () => {
+      timeout = setTimeout(() => {
+        es.close();
+        es = createEventSource();
+      }, options.reconnectTimeout || 15*1000);
+    };
 
+    var createEventSource = () => {
+      try {
+        es = new EventSource(this.url.toString());
+      } catch (err) {
+        if (options.onerror) {
+          options.onerror(err);
+          options.onerror('EventSource not supported');
+        }
+        return false;
+      }
 
-    <section class="readme">
-        <article><h1>js-digitalbits-sdk</h1><p><a href="https://travis-ci.com/digitalbitsorg/js-digitalbits-sdk"><img src="https://travis-ci.com/digitalbitsorg/js-digitalbits-sdk.svg?branch=master" alt="Build Status"></a>
-<a href="https://coveralls.io/github/digitalbitsorg/js-digitalbits-sdk?branch=master"><img src="https://coveralls.io/repos/digitalbits/js-digitalbits-sdk/badge.svg?branch=master&amp;service=github" alt="Coverage Status"></a>
-<a href="https://david-dm.org/digitalbitsorg/js-digitalbits-sdk"><img src="https://david-dm.org/digitalbitsorg/js-digitalbits-sdk.svg" alt="Dependency Status"></a></p>
-<p>js-digitalbits-sdk is a Javascript library for communicating with a <a href="https://github.com/digitalbitsorg/horizon">DigitalBits Horizon server</a>. It is used for building DigitalBits apps either on Node.js or in the browser.</p>
-<p>It provides:</p>
-<ul>
-<li>a networking layer API for Horizon endpoints.</li>
-<li>facilities for building and signing transactions, for communicating with a DigitalBits Horizon instance, and for submitting transactions or querying network history.</li>
-</ul>
-<blockquote>
-<p><strong>Warning!</strong> Node version of <code>digitalbits-base</code> (<code>digitalbits-sdk</code> dependency) package is using <a href="https://www.npmjs.com/package/ed25519"><code>ed25519</code></a> package, a native implementation of <a href="https://ed25519.cr.yp.to/">Ed25519</a> in Node.js, as an <a href="https://docs.npmjs.com/files/package.json#optionaldependencies">optional dependency</a>. This means that if for any reason installation of this package fails, <code>digitalbits-base</code> (and <code>digitalbits-sdk</code>) will fallback to the much slower implementation contained in <a href="https://www.npmjs.com/package/tweetnacl"><code>tweetnacl</code></a>.</p>
-<p>If you are using <code>digitalbits-sdk</code>/<code>digitalbits-base</code> in a browser you can ignore this. However, for production backend deployments you should definitely be using <code>ed25519</code>. If <code>ed25519</code> is successfully installed and working <code>DigitalBitsSdk.FastSigning</code> variable will be equal <code>true</code>. Otherwise it will be <code>false</code>.</p>
-</blockquote>
-<h3>js-digitalbits-sdk vs js-digitalbits-base</h3><p>js-digitalbits-sdk is a high-level library that serves as client side API for <a href="https://github.com/digitalbitsorg/horizon">Horizon</a>. This library makes extensive use of the lower-level <a href="https://github.com/digitalbitsorg/js-digitalbits-base">js-digitalbits-base</a> and exposes js-digitalbits-base classes via its export object.  js-digitalbits-base can be used as a standalone library for creating DigitalBits primitive constructs via XDR helpers and wrappers. js-digitalbits-base doesn't depend on connecting to Horizon.</p>
-<p>js-digitalbits-sdk exposes all js-digitalbits-base classes so you don't have to install js-digitalbits-base along js-digitalbits-sdk.</p>
-<h2>Quick start</h2><p>Using npm to include js-digitalbits-sdk in your own project:</p>
-<pre class="prettyprint source lang-shell"><code>npm install --save digitalbits-sdk</code></pre><p>For browsers, <a href="#to-self-host-for-use-in-the-browser">use Bower to install js-digitalbits-sdk</a>. It exports a
-variable <code>DigitalBitsSdk</code>. The example below assumes you have <code>digitalbits-sdk.js</code>
-relative to your html file.</p>
-<pre class="prettyprint source lang-html"><code>&lt;script src=&quot;digitalbits-sdk.js&quot;>&lt;/script>
-&lt;script>console.log(DigitalBitsSdk);&lt;/script>
-</code></pre><h2>Install</h2><h3>To use as a module in a Node.js project</h3><ol>
-<li><p>Install it using npm:</p>
-<pre class="prettyprint source lang-shell"><code>npm install --save digitalbits-sdk</code></pre></li>
-<li><p>require/import it in your JavaScript:</p>
-<pre class="prettyprint source lang-js"><code>var DigitalBitsSdk = require('digitalbits-sdk');</code></pre></li>
-</ol>
-<h4>Help! I'm having trouble installing the SDK on Windows</h4><p>Unfortunately, the DigitalBits platform development team mostly works on OS X and Linux, and so sometimes bugs creep through that are specific to windows.  When installing digitalbits-sdk on windows, you might see an error that looks similar to the following:</p>
-<pre class="prettyprint source lang-shell"><code>error MSB8020: The build tools for v120 (Platform Toolset = 'v120 ') cannot be found. To build using the v120 build tools, please install v120 build tools.  Alternatively, you may upgrade to the current Visual Studio tools by selecting the Project menu or right-click the solution, and then selecting &quot;Retarget solution&quot;</code></pre><p>To resolve this issue, you should upgrade your version of nodejs, node-gyp and then re-attempt to install the offending package using <code>npm install -g --msvs_version=2015 ed25519</code>.  Afterwards, retry installing digitalbits-sdk as normal.</p>
-<p>If you encounter the error: &quot;failed to find C:\OpenSSL-Win64&quot;, You need to install OpenSSL. More information about this issue can be found <a href="https://github.com/nodejs/node-gyp/wiki/Linking-to-OpenSSL">here</a>.</p>
-<p>In the event the above does not work, please join us on our community slack to get help resolving your issue.</p>
-<h3>To self host for use in the browser</h3><ol>
-<li><p>Install it using <a href="http://bower.io">bower</a>:</p>
-<pre class="prettyprint source lang-shell"><code>bower install digitalbits-sdk</code></pre></li>
-<li><p>Include it in the browser:</p>
-<pre class="prettyprint source lang-html"><code>&lt;script src=&quot;./bower_components/digitalbits-sdk/digitalbits-sdk.js&quot;>&lt;/script>
-&lt;script>console.log(DigitalBitsSdk);&lt;/script></code></pre></li>
-</ol>
-<p>If you don't want to use install Bower, you can copy built JS files from the <a href="https://github.com/digitalbitsorg/bower-js-digitalbits-sdk">bower-js-digitalbits-sdk repo</a>.</p>
-<h3>To use the <a href="https://cdnjs.com/libraries/digitalbits-sdk">cdnjs</a> hosted script in the browser</h3><ol>
-<li><p>Instruct the browser to fetch the library from <a href="https://cdnjs.com/libraries/digitalbits-sdk">cdnjs</a>, a 3rd party service that hosts js libraries:</p>
-<pre class="prettyprint source lang-html"><code>&lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/digitalbits-sdk/{version}/digitalbits-sdk.js&quot;>&lt;/script>
-&lt;script>console.log(DigitalBitsSdk);&lt;/script></code></pre></li>
-</ol>
-<p>Note that this method relies using a third party to host the JS library. This may not be entirely secure.</p>
-<p>Make sure that you are using the latest version number. They can be found on the <a href="https://github.com/digitalbitsorg/js-digitalbits-sdk/releases">releases page in Github</a>.</p>
-<h3>To develop and test js-digitalbits-sdk itself</h3><ol>
-<li><p>Clone the repo:</p>
-<pre class="prettyprint source lang-shell"><code>git clone https://github.com/digitalbitsorg/js-digitalbits-sdk.git</code></pre></li>
-<li><p>Install dependencies inside js-digitalbits-sdk folder:</p>
-<pre class="prettyprint source lang-shell"><code>cd js-digitalbits-sdk
-npm install</code></pre></li>
-</ol>
-<h2>Usage</h2><p>For information on how to use js-digitalbits-sdk, take a look at the <a href="https://developer.digitalbits.io/js-digitalbits-sdk/reference/index.html">Developers site</a>.</p>
-<p>There is also API Documentation <a href="https://developer.digitalbits.io/reference/">here</a>.</p>
-<h2>Testing</h2><p>To run all tests:</p>
-<pre class="prettyprint source lang-shell"><code>gulp test</code></pre><p>To run a specific set of tests:</p>
-<pre class="prettyprint source lang-shell"><code>gulp test:node
-gulp test:browser</code></pre><h2>Documentation</h2><p>Documentation for this repo lives in <a href="https://developer.digitalbits.io/js-digitalbits-sdk/reference/index.html">Developers site</a>.</p>
-<h2>Contributing</h2><p>For information on how to contribute, please refer to our <a href="https://github.com/digitalbitsorg/js-digitalbits-sdk/blob/master/CONTRIBUTING.md">contribution guide</a>.</p>
-<h2>Publishing to npm</h2><pre class="prettyprint source"><code>npm version [&lt;newversion> | major | minor | patch | premajor | preminor | prepatch | prerelease]</code></pre><p>A new version will be published to npm <strong>and</strong> Bower by Travis CI.</p>
-<p>npm &gt;=2.13.0 required.
-Read more about <a href="https://docs.npmjs.com/cli/version">npm version</a>.</p>
-<h2>License</h2><p>js-digitalbits-sdk is licensed under an Apache-2.0 license. See the <a href="https://github.com/digitalbitsorg/js-digitalbits-sdk/blob/master/LICENSE">LICENSE</a> file for details.</p></article>
+      createTimeout();
+
+      es.onmessage = message => {
+        var result = message.data ? this._parseRecord(JSON.parse(message.data)) : message;
+        if (result.paging_token) {
+          this.url.setQuery("cursor", result.paging_token);
+        }
+        clearTimeout(timeout);
+        createTimeout();
+        options.onmessage(result);
+      };
+
+      es.onerror = error => {
+        if (options.onerror) {
+          options.onerror(error);
+        }
+      };
+
+      return es;
+    };
+
+    createEventSource();
+    return function close() {
+      clearTimeout(timeout);
+      es.close();
+    };
+  }
+
+  /**
+   * @private
+   */
+  _requestFnForLink(link) {
+    return opts => {
+      let uri;
+
+      if (link.templated) {
+        let template = URITemplate(link.href);
+        uri = URI(template.expand(opts || {}));
+      } else {
+        uri = URI(link.href);
+      }
+
+      return this._sendNormalRequest(uri).then(r => this._parseRecord(r));
+    };
+  } 
+
+  /**
+   * Convert each link into a function on the response object.
+   * @private
+   */
+  _parseRecord(json) {
+    if (!json._links) {
+      return json;
+    }
+    forEach(json._links, (n, key) => {
+      // If the key with the link name already exists, create a copy
+      if (typeof json[key] != 'undefined') {
+        json[`${key}_attr`] = json[key];
+      }
+      json[key] = this._requestFnForLink(n);
+    });
+    return json;
+  }
+  
+  _sendNormalRequest(url) {
+    if (url.authority() === '') {
+      url = url.authority(this.url.authority());
+    }
+
+    if (url.protocol() === '') {
+      url = url.protocol(this.url.protocol());
+    }
+
+    // Temp fix for: https://github.com/digitalbitsorg/js-digitalbits-sdk/issues/15
+    url.addQuery('c', Math.random());
+    var promise = axios.get(url.toString())
+      .then(response => response.data)
+      .catch(this._handleNetworkError);
+    return toBluebird(promise);
+  }
+
+  /**
+   * @private
+   */
+  _parseResponse(json) {
+    if (json._embedded &amp;&amp; json._embedded.records) {
+      return this._toCollectionPage(json);
+    } else {
+      return this._parseRecord(json);
+    }
+  }
+
+  /**
+   * @private
+   */
+  _toCollectionPage(json) {
+    for (var i = 0; i &lt; json._embedded.records.length; i++) {
+      json._embedded.records[i] = this._parseRecord(json._embedded.records[i]);
+    }
+    return {
+      records: json._embedded.records,
+      next: () => {
+        return this._sendNormalRequest(URI(json._links.next.href))
+          .then(r => this._toCollectionPage(r));
+      },
+      prev: () => {
+        return this._sendNormalRequest(URI(json._links.prev.href))
+          .then(r => this._toCollectionPage(r));
+      }
+    };
+  }
+
+  /**
+   * @private
+   */
+  _handleNetworkError(response) {
+    if (response instanceof Error) {
+      return Promise.reject(response);
+    } else {
+      switch (response.status) {
+        case 404:
+          return Promise.reject(new NotFoundError(response.data, response));
+        default:
+          return Promise.reject(new NetworkError(response.status, response));
+      }
+    }
+  }
+
+  /**
+   * Adds `cursor` parameter to the current call. Returns the CallBuilder object on which this method has been called.
+   * @see [Paging](https://developer.digitalbits.io/horizon/learn/paging.html)
+   * @param {string} cursor A cursor is a value that points to a specific location in a collection of resources.
+   */
+  cursor(cursor) {
+    this.url.addQuery("cursor", cursor);
+    return this;
+  }
+
+  /**
+   * Adds `limit` parameter to the current call. Returns the CallBuilder object on which this method has been called.
+   * @see [Paging](https://developer.digitalbits.io/horizon/learn/paging.html)
+   * @param {number} number Number of records the server should return.
+   */
+  limit(number) {
+    this.url.addQuery("limit", number);
+    return this;
+  }
+
+  /**
+   * Adds `order` parameter to the current call. Returns the CallBuilder object on which this method has been called.
+   * @param {"asc"|"desc"} direction
+   */
+  order(direction) {
+    this.url.addQuery("order", direction);
+    return this;
+  }
+}
+</code></pre>
+        </article>
     </section>
-
-
 
 
 
