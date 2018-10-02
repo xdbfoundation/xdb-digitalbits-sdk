@@ -6,7 +6,7 @@ const allowedResolutions = [300000, 900000, 3600000, 86400000, 604800000];
 /**
  * Trade Aggregations facilitate efficient gathering of historical trade data
  * Do not create this object directly, use {@link Server#tradeAggregation}.
- * @param {string} serverUrl serverUrl Horizon server URL.
+ * @param {string} serverUrl serverUrl Frontier server URL.
  * @param {Asset} base base asset
  * @param {Asset} counter counter asset
  * @param {long} start_time lower time boundary represented as millis since epoch

@@ -40,17 +40,17 @@ var sourcePublicKey = sourceKeypair.publicKey();
 
 var receiverPublicKey = 'GAIRISXKPLOWZBMFRPU5XRGUUX3VMA3ZEWKBM5MSNRU3CHV6P4PYZ74D';
 
-// Configure DigitalBitsSdk to talk to the horizon instance hosted by Digitalbits.io
-// To use the live network, set the hostname to 'horizon.livenet.digitalbits.io'
-var server = new DigitalBitsSdk.Server('https://horizon.testnet.digitalbits.io');
+// Configure DigitalBitsSdk to talk to the frontier instance hosted by Digitalbits.io
+// To use the live network, set the hostname to 'frontier.livenet.digitalbits.io'
+var server = new DigitalBitsSdk.Server('https://frontier.testnet.digitalbits.io');
 
 // Uncomment the following line to build transactions for the live network. Be
-// sure to also change the horizon hostname.
+// sure to also change the frontier hostname.
 // DigitalBitsSdk.Network.usePublicNetwork();
 DigitalBitsSdk.Network.useTestNetwork();
 
 // Transactions require a valid sequence number that is specific to this account.
-// We can fetch the current sequence number for the source account from Horizon.
+// We can fetch the current sequence number for the source account from Frontier.
 server.loadAccount(sourcePublicKey)
   .then(function(account) {
     var transaction = new DigitalBitsSdk.TransactionBuilder(account)
@@ -77,7 +77,7 @@ server.loadAccount(sourcePublicKey)
     // Let's see the XDR (encoded in base64) of the transaction we just built
     console.log(transaction.toEnvelope().toXDR('base64'));
 
-    // Submit the transaction to the Horizon server. The Horizon server will then
+    // Submit the transaction to the Frontier server. The Frontier server will then
     // submit the transaction into the network for us.
     server.submitTransaction(transaction)
       .then(function(transactionResult) {
@@ -101,7 +101,7 @@ Let's say you want to look at an account's transaction history.  You can use the
 
 ```javascript
 var DigitalBitsSdk = require('digitalbits-sdk')
-var server = new DigitalBitsSdk.Server('https://horizon.testnet.digitalbits.io');
+var server = new DigitalBitsSdk.Server('https://frontier.testnet.digitalbits.io');
 var accountId = 'GBBORXCY3PQRRDLJ7G7DWHQBXPCJVFGJ4RGMJQVAX6ORAUH6RWSPP6FM';
 
 server.transactions()
@@ -123,12 +123,12 @@ server.transactions()
 
 ## Streaming payment events
 
-js-digitalbits-sdk provides streaming support for Horizon endpoints using `EventSource`.  You can pass a function to handle any events that occur on the stream.
+js-digitalbits-sdk provides streaming support for Frontier endpoints using `EventSource`.  You can pass a function to handle any events that occur on the stream.
 
 Try submitting a transaction (via the guide above) while running the following code example.
 ```javascript
 var DigitalBitsSdk = require('digitalbits-sdk')
-var server = new DigitalBitsSdk.Server('https://horizon.testnet.digitalbits.io');
+var server = new DigitalBitsSdk.Server('https://frontier.testnet.digitalbits.io');
 
 // Get a message any time a payment occurs. Cursor is set to "now" to be notified
 // of payments happening starting from when this script runs (as opposed to from
@@ -142,4 +142,4 @@ var es = server.payments()
   })
 ```
 
-For more on streaming events, please check out [the Horizon responses documentation](https://developer.digitalbits.io/horizon/reference/responses.html#streaming) and this [guide to server-sent events](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events).
+For more on streaming events, please check out [the Frontier responses documentation](https://developer.digitalbits.io/frontier/reference/responses.html#streaming) and this [guide to server-sent events](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events).

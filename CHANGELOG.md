@@ -4,7 +4,7 @@ As this project is pre 1.0, breaking changes may happen for minor version bumps.
 
 ## 0.8.0
 
-* Modify `/trades` endpoint to reflect changes in horizon. 
+* Modify `/trades` endpoint to reflect changes in frontier. 
 * Add `/trade_aggregations` support.
 * Add `/assets` support. 
 

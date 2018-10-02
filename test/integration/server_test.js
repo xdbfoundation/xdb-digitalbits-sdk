@@ -5,7 +5,7 @@ describe("integration tests", function () {
   this.timeout(TIMEOUT);
   this.slow(TIMEOUT/2);
 
-  const HORIZON = 'https://horizon.testnet.digitalbits.io';
+  const HORIZON = 'https://frontier.testnet.digitalbits.io';
   DigitalBitsSdk.Network.useTestNetwork();
   let server = new DigitalBitsSdk.Server(HORIZON);
   let master = DigitalBitsSdk.Keypair.random();

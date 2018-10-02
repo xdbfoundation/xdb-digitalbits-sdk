@@ -5,11 +5,11 @@
 
 
 
-js-digitalbits-sdk is a Javascript library for communicating with a [DigitalBits Horizon server](https://github.com/digitalbitsorg/horizon). It is used for building DigitalBits apps either on Node.js or in the browser.
+js-digitalbits-sdk is a Javascript library for communicating with a [DigitalBits Frontier server](https://github.com/digitalbitsorg/frontier). It is used for building DigitalBits apps either on Node.js or in the browser.
 
 It provides:
-- a networking layer API for Horizon endpoints.
-- facilities for building and signing transactions, for communicating with a DigitalBits Horizon instance, and for submitting transactions or querying network history.
+- a networking layer API for Frontier endpoints.
+- facilities for building and signing transactions, for communicating with a DigitalBits Frontier instance, and for submitting transactions or querying network history.
 
 > **Warning!** Node version of `digitalbits-base` (`digitalbits-sdk` dependency) package is using [`ed25519`](https://www.npmjs.com/package/ed25519) package, a native implementation of [Ed25519](https://ed25519.cr.yp.to/) in Node.js, as an [optional dependency](https://docs.npmjs.com/files/package.json#optionaldependencies). This means that if for any reason installation of this package fails, `digitalbits-base` (and `digitalbits-sdk`) will fallback to the much slower implementation contained in [`tweetnacl`](https://www.npmjs.com/package/tweetnacl).
 >
@@ -17,7 +17,7 @@ It provides:
 
 ### js-digitalbits-sdk vs js-digitalbits-base
 
-js-digitalbits-sdk is a high-level library that serves as client side API for [Horizon](https://github.com/digitalbitsorg/horizon). This library makes extensive use of the lower-level [js-digitalbits-base](https://github.com/digitalbitsorg/js-digitalbits-base) and exposes js-digitalbits-base classes via its export object.  js-digitalbits-base can be used as a standalone library for creating DigitalBits primitive constructs via XDR helpers and wrappers. js-digitalbits-base doesn't depend on connecting to Horizon.
+js-digitalbits-sdk is a high-level library that serves as client side API for [Frontier](https://github.com/digitalbitsorg/frontier). This library makes extensive use of the lower-level [js-digitalbits-base](https://github.com/digitalbitsorg/js-digitalbits-base) and exposes js-digitalbits-base classes via its export object.  js-digitalbits-base can be used as a standalone library for creating DigitalBits primitive constructs via XDR helpers and wrappers. js-digitalbits-base doesn't depend on connecting to Frontier.
 
 js-digitalbits-sdk exposes all js-digitalbits-base classes so you don't have to install js-digitalbits-base along js-digitalbits-sdk.
 

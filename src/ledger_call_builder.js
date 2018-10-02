@@ -5,10 +5,10 @@ export class LedgerCallBuilder extends CallBuilder {
      * Creates a new {@link LedgerCallBuilder} pointed to server defined by serverUrl.
      *
      * Do not create this object directly, use {@link Server#ledgers}.
-     * @see [All Ledgers](https://developer.digitalbits.io/horizon/reference/ledgers-all.html)
+     * @see [All Ledgers](https://developer.digitalbits.io/frontier/reference/ledgers-all.html)
      * @constructor
      * @extends CallBuilder
-     * @param {string} serverUrl Horizon server URL.
+     * @param {string} serverUrl Frontier server URL.
      */
     constructor(serverUrl) {
         super(serverUrl);

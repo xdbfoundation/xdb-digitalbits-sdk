@@ -13,7 +13,7 @@ describe("server.js tests", function () {
 
   describe('Server.constructor', function () {
     it("throws error for insecure server", function () {
-      expect(() => new DigitalBitsSdk.Server('http://horizon-live.stellar.org:1337')).to.throw(/Cannot connect to insecure horizon server/);
+      expect(() => new DigitalBitsSdk.Server('http://horizon-live.stellar.org:1337')).to.throw(/Cannot connect to insecure frontier server/);
     });
 
     it("allow insecure server when opts.allowHttp flag is set", function () {

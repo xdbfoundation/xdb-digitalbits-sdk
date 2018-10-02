@@ -26,10 +26,10 @@ let URITemplate = require("urijs").URITemplate;
 export const SUBMIT_TRANSACTION_TIMEOUT = 60*1000;
 
 /**
- * Server handles the network connection to a [Horizon](https://developer.digitalbits.io/horizon/learn/index.html)
+ * Server handles the network connection to a [Frontier](https://developer.digitalbits.io/frontier/learn/index.html)
  * instance and exposes an interface for requests to that instance.
  * @constructor
- * @param {string} serverURL Horizon Server URL (ex. `https://horizon.testnet.digitalbits.io`).
+ * @param {string} serverURL Frontier Server URL (ex. `https://frontier.testnet.digitalbits.io`).
  * @param {object} [opts]
  * @param {boolean} [opts.allowHttp] - Allow connecting to http servers, default: `false`. This must be set to false in production deployments! You can also use {@link Config} class to set this globally.
  */
@@ -43,15 +43,15 @@ export class Server {
         }
 
         if (this.serverURL.protocol() != 'https' && !allowHttp) {
-            throw new Error('Cannot connect to insecure horizon server');
+            throw new Error('Cannot connect to insecure frontier server');
         }
     }
 
     /**
      * Submits a transaction to the network.
-     * @see [Post Transaction](https://developer.digitalbits.io/horizon/reference/transactions-create.html)
+     * @see [Post Transaction](https://developer.digitalbits.io/frontier/reference/transactions-create.html)
      * @param {Transaction} transaction - The transaction to submit.
-     * @returns {Promise} Promise that resolves or rejects with response from horizon.
+     * @returns {Promise} Promise that resolves or rejects with response from frontier.
      */
     submitTransaction(transaction) {
         let tx = encodeURIComponent(transaction.toEnvelope().toXDR().toString("base64"));
@@ -74,7 +74,7 @@ export class Server {
     }
 
     /**
-     * Returns new {@link AccountCallBuilder} object configured by a current Horizon server configuration.
+     * Returns new {@link AccountCallBuilder} object configured by a current Frontier server configuration.
      * @returns {AccountCallBuilder}
      */
     accounts() {
@@ -82,7 +82,7 @@ export class Server {
     }
 
     /**
-     * Returns new {@link LedgerCallBuilder} object configured by a current Horizon server configuration.
+     * Returns new {@link LedgerCallBuilder} object configured by a current Frontier server configuration.
      * @returns {LedgerCallBuilder}
      */
     ledgers() {
@@ -90,7 +90,7 @@ export class Server {
     }
 
     /**
-     * Returns new {@link TransactionCallBuilder} object configured by a current Horizon server configuration.
+     * Returns new {@link TransactionCallBuilder} object configured by a current Frontier server configuration.
      * @returns {TransactionCallBuilder}
      */
     transactions() {
@@ -115,7 +115,7 @@ export class Server {
     }
 
     /**
-     * Returns new {@link OrderbookCallBuilder} object configured by a current Horizon server configuration.
+     * Returns new {@link OrderbookCallBuilder} object configured by a current Frontier server configuration.
      * @param {Asset} selling Asset being sold
      * @param {Asset} buying Asset being bought
      * @returns {OrderbookCallBuilder}
@@ -125,7 +125,7 @@ export class Server {
     }
 
     /**
-     * Returns new {@link TradesCallBuilder} object configured by a current Horizon server configuration.
+     * Returns new {@link TradesCallBuilder} object configured by a current Frontier server configuration.
      * @returns {TradesCallBuilder}
      */
     trades() {
@@ -133,7 +133,7 @@ export class Server {
     }
 
     /**
-     * Returns new {@link OperationCallBuilder} object configured by a current Horizon server configuration.
+     * Returns new {@link OperationCallBuilder} object configured by a current Frontier server configuration.
      * @returns {OperationCallBuilder}
      */
     operations() {
@@ -151,11 +151,11 @@ export class Server {
      * * The source address
      * * The asset and amount that the destination account should receive
      *
-     * As part of the search, horizon will load a list of assets available to the source address and will find any
+     * As part of the search, frontier will load a list of assets available to the source address and will find any
      * payment paths from those source assets to the desired destination asset. The search's amount parameter will be
      * used to determine if there a given path can satisfy a payment of the desired amount.
      *
-     * Returns new {@link PathCallBuilder} object configured with the current Horizon server configuration.
+     * Returns new {@link PathCallBuilder} object configured with the current Frontier server configuration.
      *
      * @param {string} source The sender's account ID. Any returned path will use a source that the sender can hold.
      * @param {string} destination The destination account ID that any returned path should use.
@@ -168,7 +168,7 @@ export class Server {
     }
 
     /**
-     * Returns new {@link PaymentCallBuilder} object configured with the current Horizon server configuration.
+     * Returns new {@link PaymentCallBuilder} object configured with the current Frontier server configuration.
      * @returns {PaymentCallBuilder}
      */
     payments() {
@@ -176,7 +176,7 @@ export class Server {
     }
 
     /**
-     * Returns new {@link EffectCallBuilder} object configured with the current Horizon server configuration.
+     * Returns new {@link EffectCallBuilder} object configured with the current Frontier server configuration.
      * @returns {EffectCallBuilder}
      */
     effects() {
@@ -184,7 +184,7 @@ export class Server {
     }
 
     /**
-     * Returns new {@link FriendbotBuilder} object configured with the current Horizon server configuration.
+     * Returns new {@link FriendbotBuilder} object configured with the current Frontier server configuration.
      * @returns {FriendbotBuilder}
      * @private
      */
@@ -193,7 +193,7 @@ export class Server {
     }
 
     /**
-     * Returns new {@link AssetsCallBuilder} object configured with the current Horizon server configuration.
+     * Returns new {@link AssetsCallBuilder} object configured with the current Frontier server configuration.
      * @returns {AssetsCallBuilder}
      */
     assets() {
@@ -222,7 +222,7 @@ export class Server {
      * @param {long} start_time lower time boundary represented as millis since epoch
      * @param {long} end_time upper time boundary represented as millis since epoch
      * @param {long} resolution segment duration as millis since epoch. *Supported values are 5 minutes (300000), 15 minutes (900000), 1 hour (3600000), 1 day (86400000) and 1 week (604800000).
-     * Returns new {@link TradeAggregationCallBuilder} object configured with the current Horizon server configuration.
+     * Returns new {@link TradeAggregationCallBuilder} object configured with the current Frontier server configuration.
      * @returns {TradeAggregationCallBuilder}
      */
     tradeAggregation(base, counter, start_time, end_time, resolution){

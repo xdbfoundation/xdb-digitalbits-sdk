@@ -51,7 +51,7 @@ export class CallBuilder {
   /**
    * Creates an EventSource that listens for incoming messages from the server. To stop listening for new
    * events call the function returned by this method.
-   * @see [Horizon Response Format](https://developer.digitalbits.io/horizon/learn/responses.html)
+   * @see [Frontier Response Format](https://developer.digitalbits.io/frontier/learn/responses.html)
    * @see [MDN EventSource](https://developer.mozilla.org/en-US/docs/Web/API/EventSource)
    * @param {object} [options] EventSource options.
    * @param {function} [options.onmessage] Callback function to handle incoming messages.
@@ -218,7 +218,7 @@ export class CallBuilder {
 
   /**
    * Adds `cursor` parameter to the current call. Returns the CallBuilder object on which this method has been called.
-   * @see [Paging](https://developer.digitalbits.io/horizon/learn/paging.html)
+   * @see [Paging](https://developer.digitalbits.io/frontier/learn/paging.html)
    * @param {string} cursor A cursor is a value that points to a specific location in a collection of resources.
    */
   cursor(cursor) {
@@ -228,7 +228,7 @@ export class CallBuilder {
 
   /**
    * Adds `limit` parameter to the current call. Returns the CallBuilder object on which this method has been called.
-   * @see [Paging](https://developer.digitalbits.io/horizon/learn/paging.html)
+   * @see [Paging](https://developer.digitalbits.io/frontier/learn/paging.html)
    * @param {number} number Number of records the server should return.
    */
   limit(number) {

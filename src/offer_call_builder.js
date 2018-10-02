@@ -6,8 +6,8 @@ import {BadRequestError} from "./errors";
  * Creates a new {@link OfferCallBuilder} pointed to server defined by serverUrl.
  *
  * Do not create this object directly, use {@link Server#offers}.
- * @see [Offers for Account](https://developer.digitalbits.io/horizon/reference/offers-for-account.html)
- * @param {string} serverUrl Horizon server URL.
+ * @see [Offers for Account](https://developer.digitalbits.io/frontier/reference/offers-for-account.html)
+ * @param {string} serverUrl Frontier server URL.
  * @param {string} resource Resource to query offers
  * @param {...string} resourceParams Parameters for selected resource
  */

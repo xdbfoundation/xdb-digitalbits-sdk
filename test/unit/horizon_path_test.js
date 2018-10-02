@@ -1,4 +1,4 @@
-describe("horizon path tests", function () {
+describe("frontier path tests", function () {
 
   beforeEach(function () {
     this.axiosMock = sinon.mock(axios);
@@ -11,7 +11,7 @@ describe("horizon path tests", function () {
     this.axiosMock.restore();
   });
 
-  function test_horizon_paths(serverUrl) {
+  function test_frontier_paths(serverUrl) {
 
     let server = new DigitalBitsSdk.Server(serverUrl);
 
@@ -93,7 +93,7 @@ describe("horizon path tests", function () {
 
   for (var index = 0; index < serverUrls.length; index++) {
     var serverUrl = serverUrls[index];
-    test_horizon_paths(serverUrl);
+    test_frontier_paths(serverUrl);
   }
 
 });

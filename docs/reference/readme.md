@@ -1,21 +1,21 @@
 ---
 title: Overview
 ---
-The JavaScript DigitalBits SDK facilitates integration with the [DigitalBits Horizon API server](https://github.com/digitalbitsorg/horizon) and submission of DigitalBits transactions, either on Node.js or in the browser. It has two main uses: [querying Horizon](#querying-horizon) and [building, signing, and submitting transactions to the DigitalBits network](#building-transactions).
+The JavaScript DigitalBits SDK facilitates integration with the [DigitalBits Frontier API server](https://github.com/digitalbitsorg/frontier) and submission of DigitalBits transactions, either on Node.js or in the browser. It has two main uses: [querying Frontier](#querying-frontier) and [building, signing, and submitting transactions to the DigitalBits network](#building-transactions).
 
 [Building and installing js-digitalbits-sdk](https://github.com/digitalbitsorg/js-digitalbits-sdk)<br>
 [Examples of using js-digitalbits-sdk](./examples.md)
 
-# Querying Horizon
-js-digitalbits-sdk gives you access to all the endpoints exposed by Horizon.
+# Querying Frontier
+js-digitalbits-sdk gives you access to all the endpoints exposed by Frontier.
 
 ## Building requests
 js-digitalbits-sdk uses the [Builder pattern](https://en.wikipedia.org/wiki/Builder_pattern) to create the requests to send
-to Horizon. Starting with a [server](https://digitalbitsorg.github.io/js-digitalbits-sdk/Server.html) object, you can chain methods together to generate a query.
-(See the [Horizon reference](https://developer.digitalbits.io/reference/) documentation for what methods are possible.)
+to Frontier. Starting with a [server](https://digitalbitsorg.github.io/js-digitalbits-sdk/Server.html) object, you can chain methods together to generate a query.
+(See the [Frontier reference](https://developer.digitalbits.io/reference/) documentation for what methods are possible.)
 ```js
 var DigitalBitsSdk = require('digitalbits-sdk');
-var server = new DigitalBitsSdk.Server('https://horizon.testnet.digitalbits.io');
+var server = new DigitalBitsSdk.Server('https://frontier.testnet.digitalbits.io');
 // get a list of transactions that occurred in ledger 1400
 server.transactions()
     .forLedger(1400)
@@ -28,18 +28,18 @@ server.transactions()
 ```
 
 Once the request is built, it can be invoked with `.call()` or with `.stream()`. `call()` will return a
-[promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) to the response given by Horizon.
+[promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) to the response given by Frontier.
 
 ## Streaming requests
 Many requests can be invoked with `stream()`. Instead of returning a promise like `call()` does, `.stream()` will return an `EventSource`.
-Horizon will start sending responses from either the beginning of time or from the point specified with `.cursor()`.
-(See the [Horizon reference](https://developer.digitalbits.io/reference/) documentation to learn which endpoints support streaming.)
+Frontier will start sending responses from either the beginning of time or from the point specified with `.cursor()`.
+(See the [Frontier reference](https://developer.digitalbits.io/reference/) documentation to learn which endpoints support streaming.)
 
 For example, to log instances of transactions from a particular account:
 
 ```javascript
 var DigitalBitsSdk = require('digitalbits-sdk')
-var server = new DigitalBitsSdk.Server('https://horizon.testnet.digitalbits.io');
+var server = new DigitalBitsSdk.Server('https://frontier.testnet.digitalbits.io');
 var lastCursor=0; // or load where you left off
 
 var txHandler = function (txResponse) {
@@ -57,7 +57,7 @@ var es = server.transactions()
 ## Handling responses
 
 ### XDR
-The transaction endpoints will return some fields in raw [XDR](https://developer.digitalbits.io/horizon/reference/xdr.html)
+The transaction endpoints will return some fields in raw [XDR](https://developer.digitalbits.io/frontier/reference/xdr.html)
 form. You can convert this XDR to JSON using the `.fromXDR()` method.
 
 An example of re-writing the txHandler from above to print the XDR fields as JSON:
@@ -73,7 +73,7 @@ var txHandler = function (txResponse) {
 
 
 ### Following links
-The links returned with the Horizon response are converted into functions you can call on the returned object.
+The links returned with the Frontier response are converted into functions you can call on the returned object.
 This allows you to simply use `.next()` to page through results. It also makes fetching additional info, as in the following example, easy:
 
 ```js
@@ -81,7 +81,7 @@ server.payments()
     .limit(1)
     .call()
     .then(function(response){
-        // will follow the transactions link returned by Horizon
+        // will follow the transactions link returned by Frontier
         response.records[0].transaction().then(function(txs){
             console.log(txs);
         });
@@ -100,7 +100,7 @@ Once you have built your transaction, you can submit it to the DigitalBits netwo
 ```js
 var DigitalBitsSdk = require('digitalbits-sdk')
 DigitalBitsSdk.Network.useTestNetwork();
-var server = new DigitalBitsSdk.Server('https://horizon.testnet.digitalbits.io');
+var server = new DigitalBitsSdk.Server('https://frontier.testnet.digitalbits.io');
 
 var transaction = new DigitalBitsSdk.TransactionBuilder(account)
         // this operation funds the new account with XLM

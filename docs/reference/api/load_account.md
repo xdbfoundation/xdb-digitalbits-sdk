@@ -4,7 +4,7 @@ title: loadAccount()
 
 ## Overview
 
-In order to submit transactions for an account, you need to know the account's sequence number (please see [this explanation](../readme.md#sequence-numbers)).  If you don't store the sequence number locally, you have to read the sequence number from the Horizon server.
+In order to submit transactions for an account, you need to know the account's sequence number (please see [this explanation](../readme.md#sequence-numbers)).  If you don't store the sequence number locally, you have to read the sequence number from the Frontier server.
 
 `loadAccount()` allows you to read sequence numbers from the network.  Simply pass in the address of the account you're interested in, and it will return to you a [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) that resolves to an [Account object](https://github.com/digitalbitsorg/js-digitalbits-base/blob/master/src/account.js).
 

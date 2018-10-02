@@ -1,7 +1,7 @@
 {
   "name": "digitalbits-sdk",
   "version": "0.8.1",
-  "description": "digitalbits-sdk is a library for working with the DigitalBits Horizon server.",
+  "description": "digitalbits-sdk is a library for working with the DigitalBits Frontier server.",
   "main": "lib/index.js",
   "scripts": {
     "test": "babel-node ./node_modules/.bin/gulp test",

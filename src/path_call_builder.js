@@ -11,13 +11,13 @@ import {CallBuilder} from './call_builder';
  * * The source address
  * * The asset and amount that the destination account should receive
  *
- * As part of the search, horizon will load a list of assets available to the source address and will find any
+ * As part of the search, frontier will load a list of assets available to the source address and will find any
  * payment paths from those source assets to the desired destination asset. The search's amount parameter will be
  * used to determine if there a given path can satisfy a payment of the desired amount.
  *
  * Do not create this object directly, use {@link Server#paths}.
- * @see [Find Payment Paths](https://developer.digitalbits.io/horizon/reference/path-finding.html)
- * @param {string} serverUrl Horizon server URL.
+ * @see [Find Payment Paths](https://developer.digitalbits.io/frontier/reference/path-finding.html)
+ * @param {string} serverUrl Frontier server URL.
  * @param {string} source The sender's account ID. Any returned path must use a source that the sender can hold.
  * @param {string} destination The destination account ID that any returned path should use.
  * @param {Asset} destinationAsset The destination asset.

@@ -8,8 +8,8 @@ import forIn from "lodash/forIn";
  * The balances section in the returned JSON will also list all the trust lines this account has set up.
  * It also contains {@link Account} object and exposes it's methods so can be used in {@link TransactionBuilder}.
  *
- * @see [Account Details](https://developer.digitalbits.io/horizon/reference/accounts-single.html)
- * @param {string} response Response from horizon account endpoint.
+ * @see [Account Details](https://developer.digitalbits.io/frontier/reference/accounts-single.html)
+ * @param {string} response Response from frontier account endpoint.
  * @returns {AccountResponse}
  */
 export class AccountResponse {
