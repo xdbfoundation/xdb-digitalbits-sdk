@@ -17,7 +17,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/DigitalBitsOrg/js-digitalbits-sdk.git"
+    "url": "https://github.com/xdbfoundation/js-digitalbits-sdk.git"
   },
   "engines": {
     "node": ">=0.10 <=4"
@@ -25,9 +25,9 @@
   "author": "Stellar Development Foundation <hello@stellar.org>",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/DigitalBitsOrg/js-digitalbits-sdk/issues"
+    "url": "https://github.com/xdbfoundation/js-digitalbits-sdk/issues"
   },
-  "homepage": "https://github.com/DigitalBitsOrg/js-digitalbits-sdk",
+  "homepage": "https://github.com/xdbfoundation/js-digitalbits-sdk",
   "devDependencies": {
     "babel": "~5.8.23",
     "babel-core": "~5.8.25",
@@ -85,7 +85,7 @@
     "eventsource": "^0.2.1",
     "lodash": "^4.0.1",
     "postinstall-build": "^5.0.1",
-    "digitalbits-base": "git+ssh://git@github.com/DigitalBitsOrg/js-digitalbits-base.git",
+    "digitalbits-base": "git+ssh://git@github.com/xdbfoundation/js-digitalbits-base.git",
     "toml": "^2.3.0",
     "urijs": "1.18.4"
   }
