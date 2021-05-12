@@ -1,0 +1,4 @@
+[submodule "digitalbits-base"]
+	path = digitalbits-base
+	url = https://github.com/xdbfoundation/js-digitalbits-base.git
+	branch = updated
