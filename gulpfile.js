@@ -11,23 +11,6 @@ var webpackConfigBrowser = require('./webpack.config.browser.js');
 var clear = require('clear');
 var plumber = require('gulp-plumber');
 
-gulp.task('lint:src', function lintSrc() {
-  return gulp
-    .src(['src/**/*.ts'])
-    .pipe(plumber())
-    .pipe(plugins.tslint({ formatter: "verbose" }))
-    .pipe(plugins.tslint.report());
-});
-
-// Lint our test code
-gulp.task('lint:test', function lintTest() {
-  return gulp
-    .src(['test/unit/**/*.js', 'gulpfile.js'])
-    .pipe(plumber())
-    .pipe(plugins.eslint())
-    .pipe(plugins.eslint.format())
-    .pipe(plugins.eslint.failAfterError());
-});
 
 gulp.task('clean', function clean() {
   return gulp
@@ -67,8 +50,6 @@ gulp.task(
 
 gulp.task(
   'build:browser',
-  gulp.parallel(
-    'lint:src',
     function buildBrowser() {
       return gulp
         .src('src/browser.ts')
@@ -77,7 +58,6 @@ gulp.task(
         )
         .pipe(gulp.dest('dist'))
     }
-  )
 );
 
 gulp.task(

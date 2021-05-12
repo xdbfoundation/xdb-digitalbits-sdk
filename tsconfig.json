@@ -7,13 +7,11 @@
     "rootDir": "src",
     "outDir": "lib",
     "target": "es5",
-    "allowJs": true,
     "emitDecoratorMetadata": false,
     "experimentalDecorators": false,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "importHelpers": true,
-    "isolatedModules": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitAny": true,
     "noImplicitReturns": true,
@@ -27,7 +25,7 @@
     "sourceMap": true,
     "skipLibCheck": true,
     "strict": true,
-    "strictNullChecks": true,
+    "strictNullChecks": false,
     "stripInternal": true
   },
   "include": ["src"]

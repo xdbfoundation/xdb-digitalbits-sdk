@@ -5,7 +5,7 @@ import {
   Keypair,
   Operation,
   Transaction,
-  TransactionBuilder,
+  TransactionBuilder
 } from "digitalbits-base";
 import { InvalidSep10ChallengeError } from "./errors";
 
@@ -36,7 +36,7 @@ export namespace Utils {
     clientAccountID: string,
     anchorName: string,
     timeout: number = 300,
-    networkPassphrase?: string,
+    networkPassphrase?: string
   ): string {
     const account = new Account(serverKeypair.publicKey(), "-1");
     const now = Math.floor(Date.now() / 1000);
@@ -53,15 +53,15 @@ export namespace Utils {
       networkPassphrase,
       timebounds: {
         minTime: now,
-        maxTime: now + timeout,
-      },
+        maxTime: now + timeout
+      }
     })
       .addOperation(
         Operation.manageData({
           name: `${anchorName} auth`,
           value,
-          source: clientAccountID,
-        }),
+          source: clientAccountID
+        })
       )
       .build();
 
@@ -99,28 +99,30 @@ export namespace Utils {
    */
   export function verifyChallengeTx(
     challengeTx: string,
-    serverAccountId: string,
-    networkPassphrase?: string,
+    serverAccountId: string
   ): boolean {
-    const transaction = new Transaction(challengeTx, networkPassphrase);
+    const transaction = new Transaction(
+      challengeTx,
+      "LiveNet Global DigitalBits Network ; February 2021"
+    );
 
     const sequence = Number.parseInt(transaction.sequence, 10);
 
     if (sequence !== 0) {
       throw new InvalidSep10ChallengeError(
-        "The transaction sequence number should be zero",
+        "The transaction sequence number should be zero"
       );
     }
 
     if (transaction.source !== serverAccountId) {
       throw new InvalidSep10ChallengeError(
-        "The transaction source account is not equal to the server's account",
+        "The transaction source account is not equal to the server's account"
       );
     }
 
     if (transaction.operations.length !== 1) {
       throw new InvalidSep10ChallengeError(
-        "The transaction should contain only one operation",
+        "The transaction should contain only one operation"
       );
     }
 
@@ -128,31 +130,31 @@ export namespace Utils {
 
     if (!operation.source) {
       throw new InvalidSep10ChallengeError(
-        "The transaction's operation should contain a source account",
+        "The transaction's operation should contain a source account"
       );
     }
 
     if (operation.type !== "manageData") {
       throw new InvalidSep10ChallengeError(
-        "The transaction's operation should be manageData",
+        "The transaction's operation should be manageData"
       );
     }
 
     if (Buffer.from(operation.value.toString(), "base64").length !== 48) {
       throw new InvalidSep10ChallengeError(
-        "The transaction's operation value should be a 64 bytes base64 random string",
+        "The transaction's operation value should be a 64 bytes base64 random string"
       );
     }
 
     if (!verifyTxSignedBy(transaction, serverAccountId)) {
       throw new InvalidSep10ChallengeError(
-        "The transaction is not signed by the server",
+        "The transaction is not signed by the server"
       );
     }
 
     if (!verifyTxSignedBy(transaction, operation.source as string)) {
       throw new InvalidSep10ChallengeError(
-        "The transaction is not signed by the client",
+        "The transaction is not signed by the client"
       );
     }
 
@@ -184,13 +186,13 @@ export namespace Utils {
    */
   export function verifyTxSignedBy(
     transaction: Transaction,
-    accountId: string,
+    accountId: string
   ): boolean {
     const hashedSignatureBase = transaction.hash();
 
     const keypair = Keypair.fromPublicKey(accountId);
 
-    return !!transaction.signatures.find((sig) => {
+    return !!transaction.signatures.find(sig => {
       return keypair.verify(hashedSignatureBase, sig.signature());
     });
   }
