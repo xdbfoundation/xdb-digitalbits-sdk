@@ -97,6 +97,7 @@ See the [Building Transactions](https://developer.digitalbits.io/js-digitalbits-
 
 ## Submitting transactions
 Once you have built your transaction, you can submit it to the DigitalBits network with `Server.submitTransaction()`.
+
 ```js
 var DigitalBitsSdk = require('digitalbits-sdk')
 DigitalBitsSdk.Network.useTestNetwork();
