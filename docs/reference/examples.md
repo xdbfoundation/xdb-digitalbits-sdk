@@ -126,6 +126,7 @@ server.transactions()
 js-digitalbits-sdk provides streaming support for Frontier endpoints using `EventSource`.  You can pass a function to handle any events that occur on the stream.
 
 Try submitting a transaction (via the guide above) while running the following code example.
+
 ```javascript
 var DigitalBitsSdk = require('digitalbits-sdk')
 var server = new DigitalBitsSdk.Server('https://frontier.testnet.digitalbits.io');
