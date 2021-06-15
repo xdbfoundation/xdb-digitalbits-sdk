@@ -1,8 +1,10 @@
 /node_modules/
 /tmp/
-/dist/
 /lib/
+/libdocs/
+/dist/
 /coverage/
 /jsdoc/
 .DS_Store
 .idea/
+js-digitalbits-base/

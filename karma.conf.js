@@ -1,32 +1,31 @@
+const webpackConfig = require("./webpack.config.browser.js");
+
+delete webpackConfig.plugins;
+delete webpackConfig.output;
+
 module.exports = function(config) {
   config.set({
-    frameworks: ['mocha', 'chai-as-promised', 'chai', 'sinon'],
-    browsers : ["Firefox"],
+    frameworks: ["mocha", "chai-as-promised", "chai", "sinon"],
+    browsers: ["Firefox"],
 
     files: [
-      'dist/digitalbits-sdk.js',
-      'test/test-helper.js',
-      'test/unit/**/*.js'
+      "dist/digitalbits-sdk.js",
+      "test/test-browser.js",
+      "test/unit/**/*.js",
     ],
 
     preprocessors: {
-      'test/**/*.js': ['webpack']
+      "test/**/*.js": ["webpack"],
     },
 
-    webpack: {
-      module: {
-        loaders: [
-          { test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader'}
-        ]
-      }
-    },
+    webpack: webpackConfig,
 
     webpackMiddleware: {
-      noInfo: true
+      noInfo: true,
     },
 
     singleRun: true,
 
-    reporters: ['dots']
+    reporters: ["dots"],
   });
 };

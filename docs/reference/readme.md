@@ -1,16 +1,15 @@
 The JavaScript DigitalBits SDK facilitates integration with the [DigitalBits Frontier API server](https://github.com/xdbfoundation/go/tree/master/services/frontier) and submission of DigitalBits transactions, either on Node.js or in the browser. It has two main uses: [querying Frontier](#querying-frontier) and [building, signing, and submitting transactions to the DigitalBits network](#building-transactions).
 
-- [Building and installing js-digitalbits-sdk](https://github.com/xdbfoundation/js-digitalbits-sdk)
-- [Examples of using js-digitalbits-sdk](https://developers.digitalbits.io/reference/js-digitalbits-sdk/docs/reference/examples)
+[Building and installing js-digitalbits-sdk](https://github.com/xdbfoundation/js-digitalbits-sdk)<br>
+[Examples of using js-digitalbits-sdk](./examples.md)
 
 # Querying Frontier
 js-digitalbits-sdk gives you access to all the endpoints exposed by Frontier.
 
 ## Building requests
 js-digitalbits-sdk uses the [Builder pattern](https://en.wikipedia.org/wiki/Builder_pattern) to create the requests to send
-to Frontier. Starting with a [server](https://digitalbitsorg.github.io/js-digitalbits-sdk/Server.html) object, you can chain methods together to generate a query.
+to Frontier. Starting with a server object, you can chain methods together to generate a query.
 (See the [Frontier reference](https://developers.digitalbits.io/reference/) documentation for what methods are possible.)
-
 ```js
 var DigitalBitsSdk = require('digitalbits-sdk');
 var server = new DigitalBitsSdk.Server('https://frontier.testnet.digitalbits.io');
@@ -31,7 +30,7 @@ Once the request is built, it can be invoked with `.call()` or with `.stream()`.
 ## Streaming requests
 Many requests can be invoked with `stream()`. Instead of returning a promise like `call()` does, `.stream()` will return an `EventSource`.
 Frontier will start sending responses from either the beginning of time or from the point specified with `.cursor()`.
-(See the [Frontier reference](https://developers.digitalbits.io/reference/) documentation to learn which endpoints support streaming.)
+(See the [Frontier reference](https://developers.digitalbits.io/reference/go/services/frontier/internal/docs/reference/streaming) documentation to learn which endpoints support streaming.)
 
 For example, to log instances of transactions from a particular account:
 
@@ -55,7 +54,7 @@ var es = server.transactions()
 ## Handling responses
 
 ### XDR
-The transaction endpoints will return some fields in raw [XDR](https://developers.digitalbits.io/reference/go/services/frontier/internal/docs/reference/xdr)
+The transaction endpoints will return some fields in raw [XDR](https://developers.digitalbits.io/guides/docs/guides/concepts/xdr)
 form. You can convert this XDR to JSON using the `.fromXDR()` method.
 
 An example of re-writing the txHandler from above to print the XDR fields as JSON:
@@ -71,7 +70,7 @@ var txHandler = function (txResponse) {
 
 
 ### Following links
-The links returned with the Frontier response are converted into functions you can call on the returned object.
+The [HAL format](https://developers.digitalbits.io/reference/go/services/frontier/internal/docs/reference/responses) links returned with the Frontier response are converted into functions you can call on the returned object.
 This allows you to simply use `.next()` to page through results. It also makes fetching additional info, as in the following example, easy:
 
 ```js
@@ -94,29 +93,41 @@ server.payments()
 See the [Building Transactions](https://developers.digitalbits.io/reference/js-digitalbits-base/docs/reference/building-transactions) guide for information about assembling a transaction.
 
 ## Submitting transactions
-Once you have built your transaction, you can submit it to the DigitalBits network with `Server.submitTransaction()`.
-
+Once you have built your transaction, you can submit it to the DigitalBitsnetwork with `Server.submitTransaction()`.
 ```js
-var DigitalBitsSdk = require('digitalbits-sdk')
-DigitalBitsSdk.Network.useTestNetwork();
-var server = new DigitalBitsSdk.Server('https://frontier.testnet.digitalbits.io');
+const DigitalBitsSdk = require('digitalbits-sdk')
+const server = new DigitalBitsSdk.Server('https://frontier.testnet.digitalbits.io');
 
-var transaction = new DigitalBitsSdk.TransactionBuilder(account)
-        // this operation funds the new account with XLM
-        .addOperation(DigitalBitsSdk.Operation.payment({
-            destination: "GASOCNHNNLYFNMDJYQ3XFMI7BYHIOCFW3GJEOWRPEGK2TDPGTG2E5EDW",
-            asset: DigitalBitsSdk.Asset.native(),
-            amount: "20000000"
-        }))
+(async function main() {
+    const account = await server.loadAccount(publicKey);
+
+    /*
+        Right now, we have one function that fetches the base fee.
+        In the future, we'll have functions that are smarter about suggesting fees,
+        e.g.: `fetchCheapFee`, `fetchAverageFee`, `fetchPriorityFee`, etc.
+    */
+    const fee = await server.fetchBaseFee();
+
+    const transaction = new DigitalBitsSdk.TransactionBuilder(account, { fee, networkPassphrase: DigitalBitsSdk.Networks.TESTNET })
+        .addOperation(
+            // this operation funds the new account with XLM
+            DigitalBitsSdk.Operation.payment({
+                destination: "GASOCNHNNLYFNMDJYQ3XFMI7BYHIOCFW3GJEOWRPEGK2TDPGTG2E5EDW",
+                asset: DigitalBitsSdk.Asset.native(),
+                amount: "2"
+            })
+        )
+        .setTimeout(30)
         .build();
 
-transaction.sign(DigitalBitsSdk.Keypair.fromSecret(secretString)); // sign the transaction
+    // sign the transaction
+    transaction.sign(DigitalBitsSdk.Keypair.fromSecret(secretString));
 
-server.submitTransaction(transaction)
-    .then(function (transactionResult) {
+    try {
+        const transactionResult = await server.submitTransaction(transaction);
         console.log(transactionResult);
-    })
-    .catch(function (err) {
+    } catch (err) {
         console.error(err);
-    });
+    }
+})()
 ```
