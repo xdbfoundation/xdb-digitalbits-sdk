@@ -1,7 +1,8 @@
 The JavaScript DigitalBits SDK facilitates integration with the [DigitalBits Frontier API server](https://github.com/xdbfoundation/go/tree/master/services/frontier) and submission of DigitalBits transactions, either on Node.js or in the browser. It has two main uses: [querying Frontier](#querying-frontier) and [building, signing, and submitting transactions to the DigitalBits network](#building-transactions).
 
-[Building and installing js-digitalbits-sdk](https://github.com/xdbfoundation/js-digitalbits-sdk)<br>
-[Examples of using js-digitalbits-sdk](./examples.md)
+[Building and installing js-digitalbits-sdk](https://github.com/xdbfoundation/js-digitalbits-sdk)
+
+[Examples of using js-digitalbits-sdk](https:/developers.digitalbits.io/reference/js-digitalbits-sdk/docs/reference/examples)
 
 # Querying Frontier
 js-digitalbits-sdk gives you access to all the endpoints exposed by Frontier.
@@ -10,17 +11,18 @@ js-digitalbits-sdk gives you access to all the endpoints exposed by Frontier.
 js-digitalbits-sdk uses the [Builder pattern](https://en.wikipedia.org/wiki/Builder_pattern) to create the requests to send
 to Frontier. Starting with a server object, you can chain methods together to generate a query.
 (See the [Frontier reference](https://developers.digitalbits.io/reference/) documentation for what methods are possible.)
-```js
+
+```javascript
 var DigitalBitsSdk = require('digitalbits-sdk');
 var server = new DigitalBitsSdk.Server('https://frontier.testnet.digitalbits.io');
 // get a list of transactions that occurred in ledger 1400
 server.transactions()
-    .forLedger(1400)
+    .forLedger(957773)
     .call().then(function(r){ console.log(r); });
 
 // get a list of transactions submitted by a particular account
 server.transactions()
-    .forAccount('GASOCNHNNLYFNMDJYQ3XFMI7BYHIOCFW3GJEOWRPEGK2TDPGTG2E5EDW')
+    .forAccount('GDFOHLMYCXVZD2CDXZLMW6W6TMU4YO27XFF2IBAFAV66MSTPDDSK2LAY')
     .call().then(function(r){ console.log(r); });
 ```
 
@@ -94,7 +96,8 @@ See the [Building Transactions](https://developers.digitalbits.io/reference/js-d
 
 ## Submitting transactions
 Once you have built your transaction, you can submit it to the DigitalBitsnetwork with `Server.submitTransaction()`.
-```js
+
+```javascript
 const DigitalBitsSdk = require('digitalbits-sdk')
 const server = new DigitalBitsSdk.Server('https://frontier.testnet.digitalbits.io');
 
@@ -110,11 +113,11 @@ const server = new DigitalBitsSdk.Server('https://frontier.testnet.digitalbits.i
 
     const transaction = new DigitalBitsSdk.TransactionBuilder(account, { fee, networkPassphrase: DigitalBitsSdk.Networks.TESTNET })
         .addOperation(
-            // this operation funds the new account with XLM
+            // this operation funds the new account with XDB
             DigitalBitsSdk.Operation.payment({
-                destination: "GASOCNHNNLYFNMDJYQ3XFMI7BYHIOCFW3GJEOWRPEGK2TDPGTG2E5EDW",
+                destination: "GATYL2JFZSFM6CV5HFGUJQMK3QN3DHG57EWNVP37RVUV5GHZDDG2M7C6",
                 asset: DigitalBitsSdk.Asset.native(),
-                amount: "2"
+                amount: "100"
             })
         )
         .setTimeout(30)
