@@ -1,7 +1,3 @@
----
-title: Basic Examples
----
-
 - [Creating a payment Transaction](#creating-a-payment-transaction)
 - [Loading an account's transaction history](#loading-an-accounts-transaction-history)
 - [Streaming payment events](#streaming-payment-events)
@@ -31,13 +27,13 @@ using modern Javascript, but `await` calls can also be rendered with promises.
 const DigitalBitsSdk = require('digitalbits-sdk');
 
 // The source account is the account we will be signing and sending from.
-const sourceSecretKey = 'SCZANGBA5YHTNYVVV4C3U252E2B6P6F5T3U6MM63WBSBZATAQI3EBTQ4';
+const sourceSecretKey = 'SC422IJ7VPKGII4APQIWJIY6TPQDOU72MWWCQW6L6BQ7URZWHOZJN6W7';
 
 // Derive Keypair object and public key (that starts with a G) from the secret
 const sourceKeypair = DigitalBitsSdk.Keypair.fromSecret(sourceSecretKey);
 const sourcePublicKey = sourceKeypair.publicKey();
 
-const receiverPublicKey = 'GAIRISXKPLOWZBMFRPU5XRGUUX3VMA3ZEWKBM5MSNRU3CHV6P4PYZ74D';
+const receiverPublicKey = 'GATYL2JFZSFM6CV5HFGUJQMK3QN3DHG57EWNVP37RVUV5GHZDDG2M7C6';
 
 // Configure DigitalBitsSdk to talk to the frontier instance hosted by digitalbits.io
 // To use the live network, set the hostname to 'frontier.livenet.digitalbits.io'
@@ -65,9 +61,9 @@ const server = new DigitalBitsSdk.Server('https://frontier.testnet.digitalbits.i
     // Add a payment operation to the transaction
     .addOperation(DigitalBitsSdk.Operation.payment({
       destination: receiverPublicKey,
-      // The term native asset refers to lumens
+      // The term native asset refers to digitalbits
       asset: DigitalBitsSdk.Asset.native(),
-      // Specify 350.1234567 lumens. Lumens are divisible to seven digits past
+      // Specify 350.1234567 digitalbits. Digitalbits are divisible to seven digits past
       // the decimal. They are represented in JS DigitalBits SDK in string format
       // to avoid errors from the use of the JavaScript Number data structure.
       amount: '350.1234567',
@@ -108,7 +104,7 @@ Let's say you want to look at an account's transaction history.  You can use the
 ```javascript
 const DigitalBitsSdk = require('digitalbits-sdk')
 const server = new DigitalBitsSdk.Server('https://frontier.testnet.digitalbits.io');
-const accountId = 'GBBORXCY3PQRRDLJ7G7DWHQBXPCJVFGJ4RGMJQVAX6ORAUH6RWSPP6FM';
+const accountId = 'GDS5URKDAYKYSITEKIW6P2YS2HUXPBTF4FMRTEII7DRF2ZMMR6SFHLQE';
 
 server.transactions()
     .forAccount(accountId)
@@ -132,6 +128,7 @@ server.transactions()
 js-digitalbits-sdk provides streaming support for Frontier endpoints using `EventSource`.  You can pass a function to handle any events that occur on the stream.
 
 Try submitting a transaction (via the guide above) while running the following code example.
+
 ```javascript
 const DigitalBitsSdk = require('digitalbits-sdk')
 const server = new DigitalBitsSdk.Server('https://frontier.testnet.digitalbits.io');
