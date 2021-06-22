@@ -4,7 +4,7 @@
 
 ## Creating a payment transaction
 
-The `js-digitalbits-sdk` exposes the `TransactionBuilder` class from `js-digitalbits-base`.  There are more examples of [building transactions here](https://developers.digitalbits.io/reference/js-digitalbits-base/docs/reference/base-examples). All those examples can be signed and submitted to DigitalBits in a similar manner as is done below.
+The `js-digitalbits-sdk` exposes the `TransactionBuilder` class from `js-digitalbits-base`.  There are more examples of [building transactions here](https://github.com/xdbfoundation/js-digitalbits-base/blob/master/docs/reference/base-examples.md). All those examples can be signed and submitted to DigitalBits in a similar manner as is done below.
 
 In this example, the destination account must exist. The example is written
 using modern Javascript, but `await` calls can also be rendered with promises.
@@ -70,7 +70,7 @@ const server = new DigitalBitsSdk.Server('https://frontier.testnet.digitalbits.i
     }))
     // Make this transaction valid for the next 30 seconds only
     .setTimeout(30)
-    // Uncomment to add a memo (https://developers.digitalbits.io/guides/docs/guides/concepts/transactions)
+    // Uncomment to add a memo (https://github.com/xdbfoundation/docs/blob/master/guides/concepts/transactions.md)
     // .addMemo(DigitalBitsSdk.Memo.text('Hello world!'))
     .build();
 
@@ -145,4 +145,4 @@ const es = server.payments()
   })
 ```
 
-For more on streaming events, please check out [the Frontier documentation](https://developers.digitalbits.io/reference/go/services/frontier/internal/docs/reference/streaming) and this [guide to server-sent events](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events).
+For more on streaming events, please check out [the Frontier documentation](https://github.com/xdbfoundation/go/blob/master/services/frontier/internal/docs/reference/readme.md) and this [guide to server-sent events](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events).
