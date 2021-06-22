@@ -2,7 +2,7 @@ The JavaScript DigitalBits SDK facilitates integration with the [DigitalBits Fro
 
 [Building and installing js-digitalbits-sdk](https://github.com/xdbfoundation/js-digitalbits-sdk)
 
-[Examples of using js-digitalbits-sdk](https:/developers.digitalbits.io/reference/js-digitalbits-sdk/docs/reference/examples)
+[Examples of using js-digitalbits-sdk](./examples.md)
 
 # Querying Frontier
 js-digitalbits-sdk gives you access to all the endpoints exposed by Frontier.
@@ -10,7 +10,7 @@ js-digitalbits-sdk gives you access to all the endpoints exposed by Frontier.
 ## Building requests
 js-digitalbits-sdk uses the [Builder pattern](https://en.wikipedia.org/wiki/Builder_pattern) to create the requests to send
 to Frontier. Starting with a server object, you can chain methods together to generate a query.
-(See the [Frontier reference](https://developers.digitalbits.io/reference/) documentation for what methods are possible.)
+(See the [Frontier reference](https://github.com/xdbfoundation/go/blob/master/services/frontier/internal/docs/reference/readme.md) documentation for what methods are possible.)
 
 ```javascript
 var DigitalBitsSdk = require('digitalbits-sdk');
@@ -32,7 +32,7 @@ Once the request is built, it can be invoked with `.call()` or with `.stream()`.
 ## Streaming requests
 Many requests can be invoked with `stream()`. Instead of returning a promise like `call()` does, `.stream()` will return an `EventSource`.
 Frontier will start sending responses from either the beginning of time or from the point specified with `.cursor()`.
-(See the [Frontier reference](https://developers.digitalbits.io/reference/go/services/frontier/internal/docs/reference/streaming) documentation to learn which endpoints support streaming.)
+(See the [Frontier reference](https://github.com/xdbfoundation/go/blob/master/services/frontier/internal/docs/reference/readme.md) documentation to learn which endpoints support streaming.)
 
 For example, to log instances of transactions from a particular account:
 
@@ -56,7 +56,7 @@ var es = server.transactions()
 ## Handling responses
 
 ### XDR
-The transaction endpoints will return some fields in raw [XDR](https://developers.digitalbits.io/guides/docs/guides/concepts/xdr)
+The transaction endpoints will return some fields in raw [XDR](https://github.com/xdbfoundation/docs/blob/master/guides/concepts/xdr.md)
 form. You can convert this XDR to JSON using the `.fromXDR()` method.
 
 An example of re-writing the txHandler from above to print the XDR fields as JSON:
@@ -72,7 +72,7 @@ var txHandler = function (txResponse) {
 
 
 ### Following links
-The [HAL format](https://developers.digitalbits.io/reference/go/services/frontier/internal/docs/reference/responses) links returned with the Frontier response are converted into functions you can call on the returned object.
+The [HAL format](https://github.com/xdbfoundation/go/blob/master/services/frontier/internal/docs/reference/responses.md) links returned with the Frontier response are converted into functions you can call on the returned object.
 This allows you to simply use `.next()` to page through results. It also makes fetching additional info, as in the following example, easy:
 
 ```js
@@ -92,7 +92,7 @@ server.payments()
 
 ## Building transactions
 
-See the [Building Transactions](https://developers.digitalbits.io/reference/js-digitalbits-base/docs/reference/building-transactions) guide for information about assembling a transaction.
+See the [Building Transactions](https://github.com/xdbfoundation/js-digitalbits-base/blob/master/docs/reference/building-transactions.md) guide for information about assembling a transaction.
 
 ## Submitting transactions
 Once you have built your transaction, you can submit it to the DigitalBitsnetwork with `Server.submitTransaction()`.
