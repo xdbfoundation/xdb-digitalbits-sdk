@@ -18,9 +18,6 @@ library for creating DigitalBits primitive constructs via XDR helpers and wrappe
 **Most people will want digitalbits-sdk instead of digitalbits-base.** You should only
 use digitalbits-base if you know what you're doing!
 
-If you add `digitalbits-sdk` to a project, **do not add `digitalbits-base`!** Mis-matching
-versions could cause weird, hard-to-find bugs. `digitalbits-sdk` automatically
-installs `digitalbits-base` and exposes all of its exports in case you need them.
 
 > **Important!** The Node.js version of the `digitalbits-base` (`digitalbits-sdk` dependency) package
 > uses the [`sodium-native`](https://www.npmjs.com/package/sodium-native) package as
@@ -35,148 +32,88 @@ installs `digitalbits-base` and exposes all of its exports in case you need them
 > using `sodium-native`. If `sodium-native` is successfully installed and working the
 > `DigitalBitsSdk.FastSigning` variable will return `true`.
 
-## Quick start
-
-Using npm to include js-digitalbits-sdk in your own project:
-
-```shell
-npm install --save digitalbits-sdk
-```
 
 ## Install
 
-### To use as a module in a Node.js project
-
-1. Install it using npm:
+1. Install and create link to the [js-digitalbits-base](https://github.com/xdbfoundation/js-digitalbits-base)
 
 ```shell
-npm install --save digitalbits-sdk
+git clone https://github.com/xdbfoundation/js-digitalbits-base.git
+cd js-digitalbits-base
+bundle install
+yarn
+yarn gulp
+yarn link
+cd ..
 ```
 
-2. require/import it in your JavaScript:
+2. Clone repository and link in [js-digitalbits-base]
+
+```shell
+git clone https://github.com/xdbfoundation/js-digitalbits-sdk.git
+cd js-digitalbits-sdk
+yarn link digitalbits-base
+yarn
+yarn gulp build
+```
+
+3. Create link to the [js-digitalbits-sdk]
+
+```shell
+yarn link
+```
+
+4. Add lib to your project:
+
+```shell
+yarn link digitalbits-sdk
+```
+
+5. require/import it in your JavaScript:
 
 ```js
 var DigitalBitsSdk = require('digitalbits-sdk');
 ```
 
-### To self host for use in the browser
-
-1. Install it using [bower](http://bower.io):
-
-```shell
-bower install digitalbits-sdk
-```
-
-2. Include it in the browser:
-
-```html
-<script src="./bower_components/digitalbits-sdk/digitalbits-sdk.js"></script>
-<script>
-  console.log(DigitalBitsSdk);
-</script>
-```
-
-### To develop and test js-digitalbits-sdk itself
-
-1. Clone the repo:
-
-```shell
-git clone https://github.com/xdbfoundation/js-digitalbits-sdk.git
-```
-
-2. Install dependencies inside js-digitalbits-sdk folder:
-
-```shell
-cd js-digitalbits-sdk
-npm install
-```
-
-3. Install Node 10.16.3
-
-Because we support earlier versions of Node, please install and develop on Node
-10.16.3 so you don't get surprised when your code works locally but breaks in CI.
-
-Here's out to install `nvm` if you haven't: https://github.com/creationix/nvm
-
-```shell
-nvm install
-
-# if you've never installed 10.16.3 before you'll want to re-install yarn
-npm install -g yarn
-```
-
-If you work on several projects that use different Node versions, you might it
-helpful to install this automatic version manager:
-https://github.com/wbyoung/avn
-
-4. Observe the project's code style
-
-While you're making changes, make sure to run the linter-watcher to catch any
-   linting errors (in addition to making sure your text editor supports ESLint)
-
-```shell
-node_modules/.bin/gulp watch
-````
-
-If you're working on a file not in `src`, limit your code to Node 6.16 ES! See
-what's supported here: https://node.green/ (The reason is that our npm library
-must support earlier versions of Node, so the tests need to run on those
-versions.)
-
-### How to use with React-Native
-
-1. Add the following postinstall script:
-```
-yarn rn-nodeify --install url,events,https,http,util,stream,crypto,vm,buffer --hack --yarn
-```
-2. `yarn add -D rn-nodeify`
-3. Uncomment `require('crypto')` on shim.js
-4. `react-native link react-native-randombytes`
-5. Create file `rn-cli.config.js`
-```
-module.exports = {
-  resolver: {
-    extraNodeModules: require("node-libs-react-native"),
-  },
-};
-```
-6. Add `import "./shim";` to the top of `index.js`
-7. `yarn add digitalbits-sdk`
-
 ## Usage
 
 For information on how to use js-digitalbits-sdk, take a look at the
-[Developers site](https://developers.digitalbits.io/reference/js-digitalbits-sdk/docs/reference/readme).
+[docs](./docs/reference/readme.md).
 
 There is also API Documentation
-[here](https://developers.digitalbits.io/reference/).
+[here](https://github.com/xdbfoundation/go/tree/master/services/frontier/internal/docs/reference).
 
 ## Testing
+Build before testing:
+
+```shell
+yarn gulp build
+```
 
 To run all tests:
 
 ```shell
-gulp test
+yarn gulp test
 ```
 
 To run a specific set of tests:
 
 ```shell
-gulp test:node
-gulp test:browser
+yarn gulp test:unit
+yarn gulp test:browser
 ```
 
 To generate and check the documentation site:
 
 ```shell
 # install the `serve` command if you don't have it already
-npm install -g serve
+yarn global add serve
 
 # generate the docs files
-npm run docs
+yarn docs
 
 # get these files working in a browser
-cd jsdoc && serve .
+serve jsdocs/
 
 # you'll be able to browse the docs at http://localhost:5000
 ```
@@ -184,18 +121,8 @@ cd jsdoc && serve .
 ## Documentation
 
 Documentation for this repo lives in
-[Developers site](https://developers.digitalbits.io/reference/js-digitalbits-sdk/docs/reference/readme).
+[docs](./docs/reference/readme).
 
-## Publishing to npm
-
-```
-npm version [<newversion> | major | minor | patch | premajor | preminor | prepatch | prerelease]
-```
-
-A new version will be published to npm **and** Bower by Travis CI.
-
-npm >=2.13.0 required. Read more about
-[npm version](https://docs.npmjs.com/cli/version).
 
 ## License
 
