@@ -47,7 +47,7 @@ yarn link
 cd ..
 ```
 
-2. Clone repository and link in [js-digitalbits-base]
+2. Clone repository and link in [js-digitalbits-base](https://github.com/xdbfoundation/js-digitalbits-base)
 
 ```shell
 git clone https://github.com/xdbfoundation/js-digitalbits-sdk.git
@@ -57,7 +57,7 @@ yarn
 yarn gulp build
 ```
 
-3. Create link to the [js-digitalbits-sdk]
+3. Create link to the [js-digitalbits-sdk](https://github.com/xdbfoundation/js-digitalbits-sdk)
 
 ```shell
 yarn link
@@ -121,7 +121,7 @@ serve jsdocs/
 ## Documentation
 
 Documentation for this repo lives in
-[docs](./docs/reference/readme).
+[docs](./docs/reference/readme.md).
 
 
 ## License
