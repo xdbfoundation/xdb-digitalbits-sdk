@@ -2,7 +2,7 @@ The JavaScript DigitalBits SDK facilitates integration with the [DigitalBits Fro
 
 [Building and installing js-digitalbits-sdk](https://github.com/xdbfoundation/js-digitalbits-sdk)
 
-[Examples of using js-digitalbits-sdk](./examples.md)
+[Examples of using js-digitalbits-sdk](https://github.com/xdbfoundation/js-digitalbits-sdk/blob/master/docs/reference/examples.md)
 
 # Querying Frontier
 js-digitalbits-sdk gives you access to all the endpoints exposed by Frontier.
