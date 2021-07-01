@@ -1,7 +1,7 @@
 {
   "source": {
-    "include": ["libdocs", "js-digitalbits-base/src"],
-    "exclude": "js-digitalbits-base/src/generated"
+    "include": ["docs", "node_modules/js-digitalbits-base/src"],
+    "exclude": "node_modules/js-digitalbits-base/src/generated"
   },
   "opts": {
     "destination": "./jsdoc/",
