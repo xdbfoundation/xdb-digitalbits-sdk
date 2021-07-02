@@ -8,7 +8,7 @@ title: Basic Examples
 
 ## Creating a payment transaction
 
-The `js-digitalbits-sdk` exposes the `TransactionBuilder` class from `js-digitalbits-base`.  There are more examples of [building transactions here](https://github.com/xdbfoundation/js-digitalbits-base/blob/master/docs/reference/base-examples.md). All those examples can be signed and submitted to DigitalBits in a similar manner as is done below.
+The `js-digitalbits-sdk` exposes the `TransactionBuilder` class from `js-digitalbits-base`.  There are more examples of [building transactions here](https://developers.digitalbits.io/js-digitalbits-base/reference/base-examples.html). All those examples can be signed and submitted to DigitalBits in a similar manner as is done below.
 
 In this example, the destination account must exist. The example is written
 using modern Javascript, but `await` calls can also be rendered with promises.
@@ -20,11 +20,12 @@ using modern Javascript, but `await` calls can also be rendered with promises.
 // 1. Secret key of a funded account to be the source account
 // 2. Public key of an existing account as a recipient
 //    These two keys can be created and funded by the friendbot at
-//    https://developers.digitalbits.io/lab/ under the heading "Quick Start: Test Account"
+//    https://laboratory.livenet.digitalbits.io/#account-creator?network=test under 
+//    the heading "Quick Start: Test Account"
 // 3. Access to JS DigitalBits SDK (https://github.com/xdbfoundation/js-digitalbits-sdk)
 //    either through Node.js or in the browser.
 
-// This code can be run in the browser at https://developers.digitalbits.io/lab/
+// This code can be run in the browser at ttps://laboratory.livenet.digitalbits.io
 // That site exposes a global DigitalBitsSdk object you can use.
 // To run this code in the Chrome, open the console tab in the DevTools.
 // The hotkey to open the DevTools console is Ctrl+Shift+J or (Cmd+Opt+J on Mac).
@@ -74,7 +75,7 @@ const server = new DigitalBitsSdk.Server('https://frontier.testnet.digitalbits.i
     }))
     // Make this transaction valid for the next 30 seconds only
     .setTimeout(30)
-    // Uncomment to add a memo (https://github.com/xdbfoundation/docs/blob/master/guides/concepts/transactions.md)
+    // Uncomment to add a memo (hhttps://developers.digitalbits.io/guides/concepts/transactions.html)
     // .addMemo(DigitalBitsSdk.Memo.text('Hello world!'))
     .build();
 
@@ -149,4 +150,4 @@ const es = server.payments()
   })
 ```
 
-For more on streaming events, please check out [the Frontier documentation](https://github.com/xdbfoundation/go/blob/master/services/frontier/internal/docs/reference/readme.md) and this [guide to server-sent events](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events).
+For more on streaming events, please check out [the Frontier documentation](https://developers.digitalbits.io/frontier/reference/index.html) and this [guide to server-sent events](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events).
