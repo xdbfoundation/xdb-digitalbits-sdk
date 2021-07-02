@@ -1,3 +1,7 @@
+---
+title: Basic Examples
+---
+
 - [Creating a payment Transaction](#creating-a-payment-transaction)
 - [Loading an account's transaction history](#loading-an-accounts-transaction-history)
 - [Streaming payment events](#streaming-payment-events)

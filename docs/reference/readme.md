@@ -1,3 +1,7 @@
+---
+title: Overview
+---
+
 The JavaScript DigitalBits SDK facilitates integration with the [DigitalBits Frontier API server](https://github.com/xdbfoundation/go/tree/master/services/frontier) and submission of DigitalBits transactions, either on Node.js or in the browser. It has two main uses: [querying Frontier](#querying-frontier) and [building, signing, and submitting transactions to the DigitalBits network](#building-transactions).
 
 [Building and installing js-digitalbits-sdk](https://github.com/xdbfoundation/js-digitalbits-sdk)
