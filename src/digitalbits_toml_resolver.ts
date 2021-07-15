@@ -16,7 +16,7 @@ export class DigitalBitsTomlResolver {
   /**
    * Returns a parsed `digitalbits.toml` file for a given domain.
    * ```js
-   * DigitalBitsSdk.DigitalBitsTomlResolver.resolve('acme.com')
+   * DigitalBitsSdk.DigitalBitsTomlResolver.resolve('livenet.digitalbits.io')
    *   .then(digitalBitsToml => {
    *     // digitalBitsToml in an object representing domain digitalbits.toml file.
    *   })
@@ -24,7 +24,7 @@ export class DigitalBitsTomlResolver {
    *     // digitalbits.toml does not exist or is invalid
    *   });
    * ```
-   * @see <a href="https://developers.digitalbits.io/guides/docs/guides/concepts/digitalbits-toml" target="_blank">digitalbits.toml doc</a>
+   * @see <a href="https://developers.digitalbits.io/guides/concepts/digitalbits-toml.html" target="_blank">digitalbits.toml doc</a>
    * @param {string} domain Domain to get digitalbits.toml file for
    * @param {object} [opts] Options object
    * @param {boolean} [opts.allowHttp] - Allow connecting to http servers, default: `false`. This must be set to false in production deployments!
