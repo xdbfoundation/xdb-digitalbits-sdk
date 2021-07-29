@@ -9,7 +9,7 @@ import {
   StrKey,
   Transaction,
   xdr,
-} from "digitalbits-base";
+} from "xdb-digitalbits-base";
 import URI from "urijs";
 
 import { CallBuilder } from "./call_builder";
@@ -317,11 +317,11 @@ export class Server {
           return response.data;
         }
 
-        // TODO: fix digitalbits-base types.
+        // TODO: fix xdb-digitalbits-base types.
         const responseXDR: xdr.TransactionResult = (xdr.TransactionResult
           .fromXDR as any)(response.data.result_xdr, "base64");
 
-        // TODO: fix digitalbits-base types.
+        // TODO: fix xdb-digitalbits-base types.
         const results = (responseXDR as any).result().value();
 
         let offerResults;
@@ -329,7 +329,7 @@ export class Server {
 
         if (results.length) {
           offerResults = results
-            // TODO: fix digitalbits-base types.
+            // TODO: fix xdb-digitalbits-base types.
             .map((result: any, i: number) => {
               if (
                 result.value().switch().name !== "manageBuyOffer" &&
@@ -350,7 +350,7 @@ export class Server {
 
               const offersClaimed = offerSuccess
                 .offersClaimed()
-                // TODO: fix digitalbits-base types.
+                // TODO: fix xdb-digitalbits-base types.
                 .map((offerClaimed: any) => {
                   const claimedOfferAmountBought = new BigNumber(
                     // amountBought is a js-xdr hyper
@@ -456,7 +456,7 @@ export class Server {
                   !offersClaimed.length && effect === "manageOfferDeleted",
               };
             })
-            // TODO: fix digitalbits-base types.
+            // TODO: fix xdb-digitalbits-base types.
             .filter((result: any) => !!result);
         }
 

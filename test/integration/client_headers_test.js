@@ -12,7 +12,7 @@ describe("integration tests: client headers", function(done) {
     let server;
 
     const requestHandler = (request, response) => {
-      expect(request.headers["x-client-name"]).to.be.equal("js-digitalbits-sdk");
+      expect(request.headers["x-client-name"]).to.be.equal("xdb-digitalbits-sdk");
       expect(request.headers["x-client-version"]).to.match(
         /^[0-9]+\.[0-9]+\.[0-9]+(-[a-z]+(\.[0-9])?)?$/,
       );
@@ -40,7 +40,7 @@ describe("integration tests: client headers", function(done) {
     const requestHandler = (request, response) => {
       // eslint-disable-next-line node/no-deprecated-api
       let query = url.parse(request.url, true).query;
-      expect(query["X-Client-Name"]).to.be.equal("js-digitalbits-sdk");
+      expect(query["X-Client-Name"]).to.be.equal("xdb-digitalbits-sdk");
       expect(query["X-Client-Version"]).to.match(
         /^[0-9]+\.[0-9]+\.[0-9]+(-[a-z]+(\.[0-9])?)?$/,
       );

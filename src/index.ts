@@ -9,7 +9,7 @@ const version = require("../package.json").version;
 export * from "./frontier_api";
 export * from "./server_api";
 
-// digitalbits-sdk classes to expose
+// xdb-digitalbits-sdk classes to expose
 export * from "./account_response";
 export * from "./errors";
 export { Config } from "./config";
@@ -29,8 +29,8 @@ export {
 } from "./frontier_axios_client";
 export * from "./utils";
 
-// expose classes and functions from digitalbits-base
-export * from "digitalbits-base";
+// expose classes and functions from xdb-digitalbits-base
+export * from "xdb-digitalbits-base";
 
 export { version };
 

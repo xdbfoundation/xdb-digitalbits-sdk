@@ -9,7 +9,7 @@ module.exports = function(config) {
     browsers: ["Firefox"],
 
     files: [
-      "dist/digitalbits-sdk.js",
+      "dist/xdb-digitalbits-sdk.js",
       "test/test-browser.js",
       "test/unit/**/*.js",
     ],

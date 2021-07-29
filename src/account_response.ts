@@ -1,7 +1,7 @@
 /* tslint:disable:variable-name */
 
 import forIn from "lodash/forIn";
-import { Account as BaseAccount, MuxedAccount } from "digitalbits-base";
+import { Account as BaseAccount, MuxedAccount } from "xdb-digitalbits-base";
 import { Frontier } from "./frontier_api";
 import { ServerApi } from "./server_api";
 

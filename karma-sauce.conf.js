@@ -34,7 +34,7 @@ module.exports = function(config) {
 
   config.set({
     sauceLabs: {
-      testName: "js-digitalbits-sdk",
+      testName: "xdb-digitalbits-sdk",
       recordScreenshots: false,
       recordVideo: false,
     },
@@ -43,7 +43,7 @@ module.exports = function(config) {
     customLaunchers: customLaunchers,
     browsers: Object.keys(customLaunchers),
 
-    files: ["dist/digitalbits-sdk.js", "test/test-browser.js", "test/unit/**/*.js"],
+    files: ["dist/xdb-digitalbits-sdk.js", "test/test-browser.js", "test/unit/**/*.js"],
 
     preprocessors: {
       "test/**/*.js": ["webpack", "commonjs"],

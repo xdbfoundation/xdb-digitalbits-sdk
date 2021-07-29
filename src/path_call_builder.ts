@@ -1,4 +1,4 @@
-import { Asset } from "digitalbits-base";
+import { Asset } from "xdb-digitalbits-base";
 import { CallBuilder } from "./call_builder";
 import { ServerApi } from "./server_api";
 

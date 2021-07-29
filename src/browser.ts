@@ -2,6 +2,6 @@
 
 module.exports = require("./index");
 module.exports.axios = require("axios");
-module.exports.DigitalBitsBase = require("digitalbits-base");
+module.exports.DigitalBitsBase = require("xdb-digitalbits-base");
 
 export {};

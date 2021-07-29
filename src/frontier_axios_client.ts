@@ -25,7 +25,7 @@ export const SERVER_TIME_MAP: Record<string, ServerTime> = {};
 
 const FrontierAxiosClient = axios.create({
   headers: {
-    "X-Client-Name": "js-digitalbits-sdk",
+    "X-Client-Name": "xdb-digitalbits-sdk",
     "X-Client-Version": version,
   },
 });

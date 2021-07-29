@@ -1,4 +1,4 @@
-js-digitalbits-sdk is a Javascript library for communicating with a
+xdb-digitalbits-sdk is a Javascript library for communicating with a
 [DigitalBits Frontier server](https://github.com/xdbfoundation/go/tree/master/services/frontier).
 It is used for building DigitalBits apps either on Node.js or in the browser.
 
@@ -9,25 +9,25 @@ It provides:
   DigitalBits Frontier instance, and for submitting transactions or querying network
   history.
 
-### digitalbits-sdk vs digitalbits-base
+### xdb-digitalbits-sdk vs xdb-digitalbits-base
 
-digitalbits-sdk is a high-level library that serves as client-side API for Frontier.
-[digitalbits-base](https://github.com/xdbfoundation/js-digitalbits-base) is lower-level
+xdb-digitalbits-sdk is a high-level library that serves as client-side API for Frontier.
+[xdb-digitalbits-base](https://github.com/xdbfoundation/xdb-digitalbits-base) is lower-level
 library for creating DigitalBits primitive constructs via XDR helpers and wrappers.
 
-**Most people will want digitalbits-sdk instead of digitalbits-base.** You should only
+**Most people will want xdb-digitalbits-sdk instead of digitalbits-base.** You should only
 use digitalbits-base if you know what you're doing!
 
 
-> **Important!** The Node.js version of the `digitalbits-base` (`digitalbits-sdk` dependency) package
+> **Important!** The Node.js version of the `xdb-digitalbits-base` (`xdb-digitalbits-sdk` dependency) package
 > uses the [`sodium-native`](https://www.npmjs.com/package/sodium-native) package as
 > an [optional dependency](https://docs.npmjs.com/files/package.json#optionaldependencies). `sodium-native` is
 > a low level binding to [libsodium](https://github.com/jedisct1/libsodium),
 > (an implementation of [Ed25519](https://ed25519.cr.yp.to/) signatures).
-> If installation of `sodium-native` fails, or it is unavailable, `digitalbits-base` (and `digitalbits-sdk`) will
+> If installation of `sodium-native` fails, or it is unavailable, `xdb-digitalbits-base` (and `xdb-digitalbits-sdk`) will
 > fallback to using the [`tweetnacl`](https://www.npmjs.com/package/tweetnacl) package implementation.
 >
-> If you are using `digitalbits-sdk`/`digitalbits-base` in a browser you can ignore
+> If you are using `xdb-digitalbits-sdk`/`xdb-digitalbits-base` in a browser you can ignore
 > this. However, for production backend deployments you should be
 > using `sodium-native`. If `sodium-native` is successfully installed and working the
 > `DigitalBitsSdk.FastSigning` variable will return `true`.
@@ -35,49 +35,21 @@ use digitalbits-base if you know what you're doing!
 
 ## Install
 
-1. Install and create link to the [js-digitalbits-base](https://github.com/xdbfoundation/js-digitalbits-base)
+1. Add lib to your project:
 
 ```shell
-git clone https://github.com/xdbfoundation/js-digitalbits-base.git
-cd js-digitalbits-base
-bundle install
-yarn
-yarn gulp
-yarn link
-cd ..
+npm install xdb-digitalbits-sdk --save
 ```
 
-2. Clone repository and link in [js-digitalbits-base](https://github.com/xdbfoundation/js-digitalbits-base)
-
-```shell
-git clone https://github.com/xdbfoundation/js-digitalbits-sdk.git
-cd js-digitalbits-sdk
-yarn link digitalbits-base
-yarn
-yarn gulp build
-```
-
-3. Create link to the [js-digitalbits-sdk](https://github.com/xdbfoundation/js-digitalbits-sdk)
-
-```shell
-yarn link
-```
-
-4. Add lib to your project:
-
-```shell
-yarn link digitalbits-sdk
-```
-
-5. require/import it in your JavaScript:
+2. require/import it in your JavaScript:
 
 ```js
-var DigitalBitsSdk = require('digitalbits-sdk');
+var DigitalBitsSdk = require('xdb-digitalbits-sdk');
 ```
 
 ## Usage
 
-For information on how to use js-digitalbits-sdk, take a look at the
+For information on how to use xdb-digitalbits-sdk, take a look at the
 [docs](./docs/reference/readme.md).
 
 There is also API Documentation
@@ -126,6 +98,6 @@ Documentation for this repo lives in
 
 ## License
 
-js-digitalbits-sdk is licensed under an Apache-2.0 license. See the
-[LICENSE](https://github.com/xdbfoundation/js-digitalbits-sdk/blob/master/LICENSE) file
+xdb-digitalbits-sdk is licensed under an Apache-2.0 license. See the
+[LICENSE](https://github.com/xdbfoundation/xdb-digitalbits-sdk/blob/master/LICENSE) file
 for details.
