@@ -1,7 +1,7 @@
 {
-  "name": "digitalbits-sdk",
+  "name": "xdb-digitalbits-sdk",
   "version": "8.2.2",
-  "description": "digitalbits-sdk is a library for working with the DigitalBits Frontier server.",
+  "description": "xdb-digitalbits-sdk is a library for working with the DigitalBits Frontier server.",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
   "files": [
@@ -25,14 +25,14 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/xdbfoundation/js-digitalbits-sdk.git"
+    "url": "https://github.com/xdbfoundation/xdb-digitalbits-sdk.git"
   },
   "author": "XDB Foundation",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/xdbfoundation/js-digitalbits-sdk/issues"
+    "url": "https://github.com/xdbfoundation/xdb-digitalbits-sdk/issues"
   },
-  "homepage": "https://github.com/xdbfoundation/js-digitalbits-sdk",
+  "homepage": "https://github.com/xdbfoundation/xdb-digitalbits-sdk",
   "devDependencies": {
     "@kollavarsham/gulp-coveralls": "0.2.8",
     "@types/detect-node": "^2.0.0",
@@ -106,7 +106,7 @@
     "@types/node": ">= 8",
     "@types/randombytes": "^2.0.0",
     "@types/urijs": "^1.19.6",
-    "digitalbits-base": "git+ssh://git@github.com/xdbfoundation/js-digitalbits-base",
+    "xdb-digitalbits-base": "5.3.0",
     "axios": "0.21.1",
     "bignumber.js": "^4.0.0",
     "detect-node": "^2.0.4",

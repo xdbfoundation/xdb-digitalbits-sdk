@@ -1,5 +1,5 @@
 /**
- * Problem: digitalbits-sdk doesn't depend on browser env but the types do.
+ * Problem: xdb-digitalbits-sdk doesn't depend on browser env but the types do.
  * Workaround: Copy/paste subset of interfaces from `dom.d.ts` (TS v3.4.5):
  * - `MessageEvent` already comes from `eventsource`.
  * - `EventListener` used at `src/call_builder.ts`.

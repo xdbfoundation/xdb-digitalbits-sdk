@@ -4,8 +4,8 @@ const TerserPlugin = require("terser-webpack-plugin");
 
 module.exports = {
   entry: {
-    "digitalbits-sdk": "./src/browser.ts",
-    "digitalbits-sdk.min": "./src/browser.ts",
+    "xdb-digitalbits-sdk": "./src/browser.ts",
+    "xdb-digitalbits-sdk.min": "./src/browser.ts",
   },
   output: {
     filename: "[name].js",

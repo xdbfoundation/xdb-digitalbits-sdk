@@ -9,7 +9,7 @@ import {
   TimeoutInfinite,
   Transaction,
   TransactionBuilder,
-} from "digitalbits-base";
+} from "xdb-digitalbits-base";
 import { InvalidSep10ChallengeError } from "./errors";
 import { ServerApi } from "./server_api";
 
@@ -29,7 +29,7 @@ export namespace Utils {
    * @param {string} networkPassphrase The network passphrase. If you pass this argument then timeout is required.
    * @param {string} webAuthDomain The fully qualified domain name of the service issuing the challenge.
    * @example
-   * import { Utils, Keypair, Networks }  from 'digitalbits-sdk'
+   * import { Utils, Keypair, Networks }  from 'xdb-digitalbits-sdk'
    *
    * let serverKeyPair = Keypair.fromSecret("server-secret")
    * let challenge = Utils.buildChallengeTx(serverKeyPair, "client-digitalbits-account-id", "testnet.digitalbits.io", 300, Networks.TESTNET)
@@ -295,7 +295,7 @@ export namespace Utils {
    * @returns {string[]} The list of signers public keys that have signed the transaction, excluding the server account ID, given that the threshold was met.
    * @example
    *
-   * import { Networks, TransactionBuilder, Utils }  from 'digitalbits-sdk';
+   * import { Networks, TransactionBuilder, Utils }  from 'xdb-digitalbits-sdk';
    *
    * const serverKP = Keypair.random();
    * const clientKP1 = Keypair.random();
@@ -400,7 +400,7 @@ export namespace Utils {
    * @returns {string[]} The list of signers public keys that have signed the transaction, excluding the server account ID.
    * @example
    *
-   * import { Networks, TransactionBuilder, Utils }  from 'digitalbits-sdk';
+   * import { Networks, TransactionBuilder, Utils }  from 'xdb-digitalbits-sdk';
    *
    * const serverKP = Keypair.random();
    * const clientKP1 = Keypair.random();

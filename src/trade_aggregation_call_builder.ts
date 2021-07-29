@@ -1,5 +1,5 @@
 /* tslint:disable: variable-name */
-import { Asset } from "digitalbits-base";
+import { Asset } from "xdb-digitalbits-base";
 import { CallBuilder } from "./call_builder";
 import { BadRequestError } from "./errors";
 import { Frontier } from "./frontier_api";

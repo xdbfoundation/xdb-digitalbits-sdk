@@ -98,7 +98,7 @@ export class CallBuilder<
   public stream(options: EventSourceOptions<T> = {}): () => void {
     this.checkFilter();
 
-    this.url.setQuery("X-Client-Name", "js-digitalbits-sdk");
+    this.url.setQuery("X-Client-Name", "xdb-digitalbits-sdk");
     this.url.setQuery("X-Client-Version", version);
 
     // EventSource object

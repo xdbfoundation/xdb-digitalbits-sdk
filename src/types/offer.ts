@@ -1,4 +1,4 @@
-import { AssetType } from "digitalbits-base";
+import { AssetType } from "xdb-digitalbits-base";
 import { Frontier } from "./../frontier_api";
 
 export interface OfferAsset {
