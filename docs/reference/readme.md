@@ -96,7 +96,7 @@ server.payments()
 
 ## Building transactions
 
-See the [Building Transactions](https://developers.digitalbits.io/js-digitalbits-base/reference/building-transactions.html) guide for information about assembling a transaction.
+See the [Building Transactions](https://developers.digitalbits.io/xdb-digitalbits-base/reference/building-transactions.html) guide for information about assembling a transaction.
 
 ## Submitting transactions
 Once you have built your transaction, you can submit it to the DigitalBitsnetwork with `Server.submitTransaction()`.
