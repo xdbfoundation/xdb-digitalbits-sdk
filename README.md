@@ -75,6 +75,12 @@ yarn gulp test:unit
 yarn gulp test:browser
 ```
 
+To run an integration tests:
+
+```shell
+yarn gulp test:integration
+```
+
 To generate and check the documentation site:
 
 ```shell
