@@ -46,6 +46,7 @@ describe('integration tests: All Assets', function() {
 
       new DigitalBitsSdk.Server(`http://localhost:${port}`, { allowHttp: true })
         .assets()
+        .limit("2")
         .call();
     });
   });
