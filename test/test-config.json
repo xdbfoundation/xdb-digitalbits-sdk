@@ -1,0 +1,34 @@
+{
+  "general": {
+    "domainUrl": "https://frontier.testnet.digitalbits.io"
+  },
+  "accounts": {
+    "sourcePublicKey": "GAKEDNTY66RCNOC7DPILMA5EEDK6FNGYOQ7GRHIVDYZ57A37UYV4FMRR",
+    "sourceSecretKey": "SC422IJ7VPKGII4APQIWJIY6TPQDOU72MWWCQW6L6BQ7URZWHOZJN6W7",
+    "destinationPublicKey": "GDYAPPD2M2ASII3MZJVIY5U4C63YRIOFUB7VFNRIODVM3TGQ3RIZLAXN"
+  },
+  "assets": {
+    "usd": {
+      "fullId": "USD:GB4RZUSF3HZGCAKB3VBM2S7QOHHC5KTV3LLZXGBYR5ZO4B26CKHFZTSZ",
+      "id": "GB4RZUSF3HZGCAKB3VBM2S7QOHHC5KTV3LLZXGBYR5ZO4B26CKHFZTSZ",
+      "currencyCode": "USD"
+    },
+    "eur": {
+      "fullId": "EUR:GDCIQQY2UKVNLLWGIX74DMTEAFCMQKAKYUWPBO7PLTHIHRKSFZN7V2FC",
+      "id": "GDCIQQY2UKVNLLWGIX74DMTEAFCMQKAKYUWPBO7PLTHIHRKSFZN7V2FC",
+      "currencyCode": "EUR"
+    }    
+  },
+  "ledgers": {
+    "id": "192"
+  },
+  "transactions": {
+    "id": "081c8114fe004413a325294413c9372ce47ac4fc6925b5b994d80f854e0bddf9"
+  },
+  "operations": {
+    "id": "1099511631873"
+  },
+  "offers": {
+    "id": "1"
+  }
+}

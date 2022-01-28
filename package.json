@@ -8,9 +8,7 @@
     "/types",
     "/lib",
     "/dist"
-  ],"engines": {
-    "node": ">=7.6.0"
-  },
+  ],
   "scripts": {
     "prepare": "gulp build",
     "test": "babel-node ./node_modules/.bin/gulp test",

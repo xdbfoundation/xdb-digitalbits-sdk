@@ -10,3 +10,4 @@ global.chai.should();
 global.chai.use(chaiAsPromised);
 global.sinon = require("sinon");
 global.expect = global.chai.expect;
+global.testConfig = require("./test-config.json")
