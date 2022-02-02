@@ -3,7 +3,7 @@ name: Publish to NPM
 on:
   push:
     branches:
-      - "feature/ci-cd"
+      - master
 
 jobs:
   Publish:
@@ -23,7 +23,7 @@ jobs:
         run: yarn install
       
       # - name: Version
-      #   run: npm version  ??
+      #   run: npm version 
       
       - name: Publish
         run: npm publish --access public 
