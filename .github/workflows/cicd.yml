@@ -1,0 +1,31 @@
+name: Publish to NPM
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  Publish:
+    name: Publish
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone the repo
+        uses: actions/checkout@v2
+
+      - name: Setup node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 12
+          registry-url: https://registry.npmjs.org/
+    
+      - name: Install deps
+        run: yarn install
+      
+      # - name: Version
+      #   run: npm version 
+      
+      - name: Publish
+        run: npm publish --access public 
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
