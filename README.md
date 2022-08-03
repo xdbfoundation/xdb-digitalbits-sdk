@@ -75,6 +75,29 @@ yarn gulp test:unit
 yarn gulp test:browser
 ```
 
+To run an integration tests:
+
+1. Try run integration tests with existed config file ./test/test-config.json
+```shell
+yarn gulp test:integration
+```
+
+2. If it fail dare test account ids was expired goto https://laboratory.livenet.digitalbits.io/#explorer?resource=accounts&network=test
+and create two new test accounts
+3. Then repopulate ./test/test-config.json follow sections:
+- accounts
+- ledgers
+- transactions
+- operations
+
+with newly generated data that you can collect by utilizing spefic laboratory explorer resource actions.
+
+4. Run tests again
+
+```shell
+yarn gulp test:integration
+```
+
 To generate and check the documentation site:
 
 ```shell
