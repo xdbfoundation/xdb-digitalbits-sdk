@@ -113,7 +113,7 @@ const server = new DigitalBitsSdk.Server('https://frontier.testnet.digitalbits.i
 
     const transaction = new DigitalBitsSdk.TransactionBuilder(account, { fee, networkPassphrase: DigitalBitsSdk.Networks.TESTNET })
         .addOperation(
-            // this operation funds the new account with XLM
+            // this operation funds the new account with XDB
             DigitalBitsSdk.Operation.payment({
                 destination: "GASOCNHNNLYFNMDJYQ3XFMI7BYHIOCFW3GJEOWRPEGK2TDPGTG2E5EDW",
                 asset: DigitalBitsSdk.Asset.native(),

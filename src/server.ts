@@ -52,7 +52,7 @@ const STROOPS_IN_LUMEN = 10000000;
 // SEP 29 uses this value to define transaction memo requirements for incoming payments.
 const ACCOUNT_REQUIRES_MEMO = "MQ==";
 
-function _getAmountInLumens(amt: BigNumber) {
+function _getAmountInNibbs(amt: BigNumber) {
   return new BigNumber(amt).div(STROOPS_IN_LUMEN).toString();
 }
 
@@ -419,9 +419,9 @@ export class Server {
                     sellerId,
                     offerId: offerClaimed.offerId().toString(),
                     assetSold,
-                    amountSold: _getAmountInLumens(claimedOfferAmountSold),
+                    amountSold: _getAmountInNibbs(claimedOfferAmountSold),
                     assetBought,
-                    amountBought: _getAmountInLumens(claimedOfferAmountBought),
+                    amountBought: _getAmountInNibbs(claimedOfferAmountBought),
                   };
                 });
 
@@ -439,7 +439,7 @@ export class Server {
                   offerId: offerXDR.offerId().toString(),
                   selling: {},
                   buying: {},
-                  amount: _getAmountInLumens(offerXDR.amount().toString()),
+                  amount: _getAmountInNibbs(offerXDR.amount().toString()),
                   price: {
                     n: offerXDR.price().n(),
                     d: offerXDR.price().d(),
@@ -470,8 +470,8 @@ export class Server {
                 currentOffer,
 
                 // this value is in stroops so divide it out
-                amountBought: _getAmountInLumens(amountBought),
-                amountSold: _getAmountInLumens(amountSold),
+                amountBought: _getAmountInNibbs(amountBought),
+                amountSold: _getAmountInNibbs(amountSold),
 
                 isFullyOpen:
                   !offersClaimed.length && effect !== "manageOfferDeleted",
@@ -670,7 +670,7 @@ export class Server {
   }
 
   /**
-   * @param {string} address The DigitalBits ID that you want Friendbot to send lumens to
+   * @param {string} address The DigitalBits ID that you want Friendbot to send nibbs to
    * @returns {FriendbotBuilder} New {@link FriendbotBuilder} instance configured with the current
    * Frontier server configuration
    * @private

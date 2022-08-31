@@ -65,9 +65,9 @@ const server = new DigitalBitsSdk.Server('https://frontier.testnet.digitalbits.i
     // Add a payment operation to the transaction
     .addOperation(DigitalBitsSdk.Operation.payment({
       destination: receiverPublicKey,
-      // The term native asset refers to lumens
+      // The term native asset refers to nibbs
       asset: DigitalBitsSdk.Asset.native(),
-      // Specify 350.1234567 lumens. Lumens are divisible to seven digits past
+      // Specify 350.1234567 nibbs. Nibbs are divisible to seven digits past
       // the decimal. They are represented in JS DigitalBits SDK in string format
       // to avoid errors from the use of the JavaScript Number data structure.
       amount: '350.1234567',
