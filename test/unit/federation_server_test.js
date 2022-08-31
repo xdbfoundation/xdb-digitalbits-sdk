@@ -3,8 +3,8 @@ const http = require("http");
 describe("federation-server.js tests", function() {
   beforeEach(function() {
     this.server = new DigitalBitsSdk.FederationServer(
-      "https://api.livenet.digitalbits.io/federation",
-      "livenet.digitalbits.io",
+      "https://acme.com:1337/federation",
+      "digitalbits.io",
     );
     this.axiosMock = sinon.mock(axios);
     DigitalBitsSdk.Config.setDefault();
@@ -20,8 +20,8 @@ describe("federation-server.js tests", function() {
       expect(
         () =>
           new DigitalBitsSdk.FederationServer(
-            "http://api.livenet.digitalbits.io/federation",
-            "livenet.digitalbits.io",
+            "http://acme.com:1337/federation",
+            "digitalbits.io",
           ),
       ).to.throw(/Cannot connect to insecure federation server/);
     });
@@ -30,8 +30,8 @@ describe("federation-server.js tests", function() {
       expect(
         () =>
           new DigitalBitsSdk.FederationServer(
-            "http://api.livenet.digitalbits.io/federation",
-            "livenet.digitalbits.io",
+            "http://acme.com:1337/federation",
+            "digitalbits.io",
             { allowHttp: true },
           ),
       ).to.not.throw();
@@ -42,8 +42,8 @@ describe("federation-server.js tests", function() {
       expect(
         () =>
           new DigitalBitsSdk.FederationServer(
-            "http://api.livenet.digitalbits.io/federation",
-            "livenet.digitalbits.io",
+            "http://acme.com:1337/federation",
+            "digitalbits.io",
             { allowHttp: true },
           ),
       ).to.not.throw();
@@ -56,13 +56,13 @@ describe("federation-server.js tests", function() {
         .expects("get")
         .withArgs(
           sinon.match(
-            "https://api.livenet.digitalbits.io/federation?type=name&q=bob%2Alivenet.digitalbits.io",
+            "https://acme.com:1337/federation?type=name&q=bob%2Adigitalbits.io",
           ),
         )
         .returns(
           Promise.resolve({
             data: {
-              digitalbits_address: "bob*livenet.digitalbits.io",
+              digitalbits_address: "bob*digitalbits.io",
               account_id:
                 "GB5XVAABEQMY63WTHDQ5RXADGYF345VWMNPTN2GFUDZT57D57ZQTJ7PS",
             },
@@ -72,9 +72,9 @@ describe("federation-server.js tests", function() {
 
     it("requests is correct", function(done) {
       this.server
-        .resolveAddress("bob*livenet.digitalbits.io")
+        .resolveAddress("bob*digitalbits.io")
         .then((response) => {
-          expect(response.digitalbits_address).equals("bob*livenet.digitalbits.io");
+          expect(response.digitalbits_address).equals("bob*digitalbits.io");
           expect(response.account_id).equals(
             "GB5XVAABEQMY63WTHDQ5RXADGYF345VWMNPTN2GFUDZT57D57ZQTJ7PS",
           );
@@ -85,11 +85,11 @@ describe("federation-server.js tests", function() {
         });
     });
 
-    it("requests is correct for username as DigitalBits address", function(done) {
+    it("requests is correct for username as digitalbits address", function(done) {
       this.server
         .resolveAddress("bob")
         .then((response) => {
-          expect(response.digitalbits_address).equals("bob*livenet.digitalbits.io");
+          expect(response.digitalbits_address).equals("bob*digitalbits.io");
           expect(response.account_id).equals(
             "GB5XVAABEQMY63WTHDQ5RXADGYF345VWMNPTN2GFUDZT57D57ZQTJ7PS",
           );
@@ -107,13 +107,13 @@ describe("federation-server.js tests", function() {
         .expects("get")
         .withArgs(
           sinon.match(
-            "https://api.livenet.digitalbits.io/federation?type=id&q=GB5XVAABEQMY63WTHDQ5RXADGYF345VWMNPTN2GFUDZT57D57ZQTJ7PS",
+            "https://acme.com:1337/federation?type=id&q=GB5XVAABEQMY63WTHDQ5RXADGYF345VWMNPTN2GFUDZT57D57ZQTJ7PS",
           ),
         )
         .returns(
           Promise.resolve({
             data: {
-              digitalbits_address: "bob*livenet.digitalbits.io",
+              digitalbits_address: "bob*digitalbits.io",
               account_id:
                 "GB5XVAABEQMY63WTHDQ5RXADGYF345VWMNPTN2GFUDZT57D57ZQTJ7PS",
             },
@@ -127,7 +127,7 @@ describe("federation-server.js tests", function() {
           "GB5XVAABEQMY63WTHDQ5RXADGYF345VWMNPTN2GFUDZT57D57ZQTJ7PS",
         )
         .then((response) => {
-          expect(response.digitalbits_address).equals("bob*livenet.digitalbits.io");
+          expect(response.digitalbits_address).equals("bob*digitalbits.io");
           expect(response.account_id).equals(
             "GB5XVAABEQMY63WTHDQ5RXADGYF345VWMNPTN2GFUDZT57D57ZQTJ7PS",
           );
@@ -145,13 +145,13 @@ describe("federation-server.js tests", function() {
         .expects("get")
         .withArgs(
           sinon.match(
-            "https://api.livenet.digitalbits.io/federation?type=txid&q=3389e9f0f1a65f19736cacf544c2e825313e8447f569233bb8db39aa607c8889",
+            "https://acme.com:1337/federation?type=txid&q=3389e9f0f1a65f19736cacf544c2e825313e8447f569233bb8db39aa607c8889",
           ),
         )
         .returns(
           Promise.resolve({
             data: {
-              digitalbits_address: "bob*livenet.digitalbits.io",
+              digitalbits_address: "bob*digitalbits.io",
               account_id:
                 "GB5XVAABEQMY63WTHDQ5RXADGYF345VWMNPTN2GFUDZT57D57ZQTJ7PS",
             },
@@ -165,7 +165,7 @@ describe("federation-server.js tests", function() {
           "3389e9f0f1a65f19736cacf544c2e825313e8447f569233bb8db39aa607c8889",
         )
         .then((response) => {
-          expect(response.digitalbits_address).equals("bob*livenet.digitalbits.io");
+          expect(response.digitalbits_address).equals("bob*digitalbits.io");
           expect(response.account_id).equals(
             "GB5XVAABEQMY63WTHDQ5RXADGYF345VWMNPTN2GFUDZT57D57ZQTJ7PS",
           );
@@ -181,25 +181,25 @@ describe("federation-server.js tests", function() {
     it("creates correct object", function(done) {
       this.axiosMock
         .expects("get")
-        .withArgs(sinon.match("https://livenet.digitalbits.io/.well-known/digitalbits.toml"))
+        .withArgs(sinon.match("https://acme.com/.well-known/digitalbits.toml"))
         .returns(
           Promise.resolve({
             data: `
-#   The endpoint which clients should query to resolve DigitalBits addresses
+#   The endpoint which clients should query to resolve digitalbits addresses
 #   for users on your domain.
-FEDERATION_SERVER="https://api.livenet.digitalbits.io/federation"
+FEDERATION_SERVER="https://api.digitalbits.io/federation"
 `,
           }),
         );
 
-      DigitalBitsSdk.FederationServer.createForDomain("livenet.digitalbits.io").then(
+      DigitalBitsSdk.FederationServer.createForDomain("acme.com").then(
         (federationServer) => {
           expect(federationServer.serverURL.protocol()).equals("https");
           expect(federationServer.serverURL.hostname()).equals(
-            "api.livenet.digitalbits.io",
+            "api.digitalbits.io",
           );
           expect(federationServer.serverURL.path()).equals("/federation");
-          expect(federationServer.domain).equals("livenet.digitalbits.io");
+          expect(federationServer.domain).equals("acme.com");
           done();
         },
       );
@@ -208,14 +208,14 @@ FEDERATION_SERVER="https://api.livenet.digitalbits.io/federation"
     it("fails when digitalbits.toml does not contain federation server info", function(done) {
       this.axiosMock
         .expects("get")
-        .withArgs(sinon.match("https://livenet.digitalbits.io/.well-known/digitalbits.toml"))
+        .withArgs(sinon.match("https://acme.com/.well-known/digitalbits.toml"))
         .returns(
           Promise.resolve({
             data: "",
           }),
         );
 
-      DigitalBitsSdk.FederationServer.createForDomain("livenet.digitalbits.io")
+      DigitalBitsSdk.FederationServer.createForDomain("acme.com")
         .should.be.rejectedWith(
           /digitalbits.toml does not contain FEDERATION_SERVER field/,
         )
@@ -244,13 +244,13 @@ FEDERATION_SERVER="https://api.livenet.digitalbits.io/federation"
     it("succeeds for a valid DigitalBits address", function(done) {
       this.axiosMock
         .expects("get")
-        .withArgs(sinon.match("https://livenet.digitalbits.io/.well-known/digitalbits.toml"))
+        .withArgs(sinon.match("https://digitalbits.io/.well-known/digitalbits.toml"))
         .returns(
           Promise.resolve({
             data: `
-#   The endpoint which clients should query to resolve DigitalBits addresses
+#   The endpoint which clients should query to resolve digitalbits addresses
 #   for users on your domain.
-FEDERATION_SERVER="https://api.livenet.digitalbits.io/federation"
+FEDERATION_SERVER="https://api.digitalbits.io/federation"
 `,
           }),
         );
@@ -259,13 +259,13 @@ FEDERATION_SERVER="https://api.livenet.digitalbits.io/federation"
         .expects("get")
         .withArgs(
           sinon.match(
-            "https://api.livenet.digitalbits.io/federation?type=name&q=bob%2Alivenet.digitalbits.io",
+            "https://api.digitalbits.io/federation?type=name&q=bob%2Adigitalbits.io",
           ),
         )
         .returns(
           Promise.resolve({
             data: {
-              digitalbits_address: "bob*livenet.digitalbits.io",
+              digitalbits_address: "bob*digitalbits.io",
               account_id:
                 "GB5XVAABEQMY63WTHDQ5RXADGYF345VWMNPTN2GFUDZT57D57ZQTJ7PS",
               memo_type: "id",
@@ -274,9 +274,9 @@ FEDERATION_SERVER="https://api.livenet.digitalbits.io/federation"
           }),
         );
 
-      DigitalBitsSdk.FederationServer.resolve("bob*livenet.digitalbits.io")
+      DigitalBitsSdk.FederationServer.resolve("bob*digitalbits.io")
         .should.eventually.deep.equal({
-          digitalbits_address: "bob*livenet.digitalbits.io",
+          digitalbits_address: "bob*digitalbits.io",
           account_id:
             "GB5XVAABEQMY63WTHDQ5RXADGYF345VWMNPTN2GFUDZT57D57ZQTJ7PS",
           memo_type: "id",
@@ -286,7 +286,7 @@ FEDERATION_SERVER="https://api.livenet.digitalbits.io/federation"
     });
 
     it("fails for invalid DigitalBits address", function(done) {
-      DigitalBitsSdk.FederationServer.resolve("bob*livenet.digitalbits.io*test")
+      DigitalBitsSdk.FederationServer.resolve("bob*digitalbits.io*test")
         .should.be.rejectedWith(/Invalid DigitalBits address/)
         .notify(done);
     });
@@ -296,13 +296,13 @@ FEDERATION_SERVER="https://api.livenet.digitalbits.io/federation"
         .expects("get")
         .withArgs(
           sinon.match(
-            "https://api.livenet.digitalbits.io/federation?type=name&q=bob%2Alivenet.digitalbits.io",
+            "https://acme.com:1337/federation?type=name&q=bob%2Adigitalbits.io",
           ),
         )
         .returns(
           Promise.resolve({
             data: {
-              digitalbits_address: "bob*livenet.digitalbits.io",
+              digitalbits_address: "bob*digitalbits.io",
               account_id:
                 "GB5XVAABEQMY63WTHDQ5RXADGYF345VWMNPTN2GFUDZT57D57ZQTJ7PS",
               memo_type: "id",
@@ -312,7 +312,7 @@ FEDERATION_SERVER="https://api.livenet.digitalbits.io/federation"
         );
 
       this.server
-        .resolveAddress("bob*livenet.digitalbits.io")
+        .resolveAddress("bob*digitalbits.io")
         .should.be.rejectedWith(/memo value should be of type string/)
         .notify(done);
     });
@@ -333,10 +333,10 @@ FEDERATION_SERVER="https://api.livenet.digitalbits.io/federation"
         .listen(4444, () => {
           new DigitalBitsSdk.FederationServer(
             "http://localhost:4444/federation",
-            "livenet.digitalbits.io",
+            "digitalbits.io",
             { allowHttp: true },
           )
-            .resolveAddress("bob*livenet.digitalbits.io")
+            .resolveAddress("bob*digitalbits.io")
             .should.be.rejectedWith(
               /federation response exceeds allowed size of [0-9]+/,
             )
@@ -375,10 +375,10 @@ FEDERATION_SERVER="https://api.livenet.digitalbits.io/federation"
           .listen(4444, () => {
             new DigitalBitsSdk.FederationServer(
               "http://localhost:4444/federation",
-              "livenet.digitalbits.io",
+              "digitalbits.io",
               opts,
             )
-              .resolveAddress("bob*livenet.digitalbits.io")
+              .resolveAddress("bob*digitalbits.io")
               .should.be.rejectedWith(/timeout of 1000ms exceeded/)
               .notify(done)
               .then(() => tempServer.close());
@@ -397,7 +397,7 @@ FEDERATION_SERVER="https://api.livenet.digitalbits.io/federation"
           .listen(4444, () => {
             new DigitalBitsSdk.FederationServer(
               "http://localhost:4444/federation",
-              "livenet.digitalbits.io",
+              "digitalbits.io",
               opts,
             )
               .resolveAccountId(
@@ -421,7 +421,7 @@ FEDERATION_SERVER="https://api.livenet.digitalbits.io/federation"
           .listen(4444, () => {
             new DigitalBitsSdk.FederationServer(
               "http://localhost:4444/federation",
-              "livenet.digitalbits.io",
+              "digitalbits.io",
               opts,
             )
               .resolveTransactionId(

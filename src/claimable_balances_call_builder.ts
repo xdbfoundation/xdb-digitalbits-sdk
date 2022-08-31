@@ -6,6 +6,7 @@ import { ServerApi } from "./server_api";
  * Creates a new {@link ClaimableBalanceCallBuilder} pointed to server defined by serverUrl.
  * Do not create this object directly, use {@link Server#claimableBalances}.
  *
+ * @see [Claimable Balances](https://developers.digitalbits.io/api/resources/claimablebalances/)
  * @class ClaimableBalanceCallBuilder
  * @constructor
  * @extends CallBuilder
@@ -22,6 +23,7 @@ export class ClaimableBalanceCallBuilder extends CallBuilder<
   /**
    * The claimable balance details endpoint provides information on a single claimable balance.
    *
+   * @see [Claimable Balance Details](https://developers.digitalbits.io/api/resources/claimablebalances/single/)
    * @param {string} claimableBalanceId Claimable balance ID
    * @returns {CallBuilder<ServerApi.ClaimableBalanceRecord>} CallBuilder<ServerApi.ClaimableBalanceRecord> OperationCallBuilder instance
    */
@@ -38,6 +40,7 @@ export class ClaimableBalanceCallBuilder extends CallBuilder<
   /**
    * Returns all claimable balances which are sponsored by the given account ID.
    *
+   * @see [Claimable Balances](https://developers.digitalbits.io/api/resources/claimablebalances/list/)
    * @param {string} sponsor For example: `GDGQVOKHW4VEJRU2TETD6DBRKEO5ERCNF353LW5WBFW3JJWQ2BRQ6KDD`
    * @returns {ClaimableBalanceCallBuilder} current ClaimableBalanceCallBuilder instance
    */
@@ -49,6 +52,7 @@ export class ClaimableBalanceCallBuilder extends CallBuilder<
   /**
    * Returns all claimable balances which can be claimed by the given account ID.
    *
+   * @see [Claimable Balances](https://developers.digitalbits.io/api/resources/claimablebalances/list/)
    * @param {string} claimant For example: `GDGQVOKHW4VEJRU2TETD6DBRKEO5ERCNF353LW5WBFW3JJWQ2BRQ6KDD`
    * @returns {ClaimableBalanceCallBuilder} current ClaimableBalanceCallBuilder instance
    */
@@ -60,6 +64,7 @@ export class ClaimableBalanceCallBuilder extends CallBuilder<
   /**
    * Returns all claimable balances which provide a balance for the given asset.
    *
+   * @see [Claimable Balances](https://developers.digitalbits.io/api/resources/claimablebalances/list/)
    * @param {Asset} The Asset held by the claimable balance
    * @returns {ClaimableBalanceCallBuilder} current ClaimableBalanceCallBuilder instance
    */

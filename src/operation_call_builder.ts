@@ -5,7 +5,7 @@ import { ServerApi } from "./server_api";
  * Creates a new {@link OperationCallBuilder} pointed to server defined by serverUrl.
  * Do not create this object directly, use {@link Server#operations}.
  *
- * @see [All Operations](https://developers.digitalbits.io/reference/go/services/frontier/internal/docs/reference/endpoints/operations-all)
+ * @see [All Operations](https://developers.digitalbits.io/api/resources/operations/)
  * @class OperationCallBuilder
  * @constructor
  * @extends CallBuilder
@@ -15,14 +15,14 @@ export class OperationCallBuilder extends CallBuilder<
   ServerApi.CollectionPage<ServerApi.OperationRecord>
 > {
   constructor(serverUrl: URI) {
-    super(serverUrl);
+    super(serverUrl, "operations");
     this.url.segment("operations");
   }
 
   /**
    * The operation details endpoint provides information on a single operation. The operation ID provided in the id
    * argument specifies which operation to load.
-   * @see [Operation Details](https://developers.digitalbits.io/reference/go/services/frontier/internal/docs/reference/endpoints/operations-single)
+   * @see [Operation Details](https://developers.digitalbits.io/api/resources/operations/single/)
    * @param {number} operationId Operation ID
    * @returns {CallBuilder} this OperationCallBuilder instance
    */
@@ -38,58 +38,61 @@ export class OperationCallBuilder extends CallBuilder<
 
   /**
    * This endpoint represents all operations that were included in valid transactions that affected a particular account.
-   * @see [Operations for Account](https://developers.digitalbits.io/reference/go/services/frontier/internal/docs/reference/endpoints/operations-for-account)
+   * @see [Operations for Account](https://developers.digitalbits.io/api/resources/accounts/operations/)
    * @param {string} accountId For example: `GDGQVOKHW4VEJRU2TETD6DBRKEO5ERCNF353LW5WBFW3JJWQ2BRQ6KDD`
    * @returns {OperationCallBuilder} this OperationCallBuilder instance
    */
   public forAccount(accountId: string): this {
-    this.filter.push(["accounts", accountId, "operations"]);
-    return this;
+    return this.forEndpoint("accounts", accountId);
   }
 
   /**
    * This endpoint represents all operations that reference a given claimable_balance.
-   * @see [Operations for Claimable Balance](https://developers.digitalbits.io/reference/go/services/frontier/internal/docs/reference/endpoints/operations-for-claimable-balance)
+   * @see [Operations for Claimable Balance](https://developers.digitalbits.io/api/resources/claimablebalances/operations/)
    * @param {string} claimableBalanceId Claimable Balance ID
    * @returns {OperationCallBuilder} this OperationCallBuilder instance
    */
   public forClaimableBalance(claimableBalanceId: string): this {
-    this.filter.push(["claimable_balances", claimableBalanceId, "operations"]);
-    return this;
+    return this.forEndpoint("claimable_balances", claimableBalanceId);
   }
 
   /**
    * This endpoint returns all operations that occurred in a given ledger.
    *
-   * @see [Operations for Ledger](https://developers.digitalbits.io/reference/go/services/frontier/internal/docs/reference/endpoints/operations-for-ledger)
+   * @see [Operations for Ledger](https://developers.digitalbits.io/api/resources/ledgers/operations/)
    * @param {number|string} sequence Ledger sequence
    * @returns {OperationCallBuilder} this OperationCallBuilder instance
    */
   public forLedger(sequence: number | string): this {
-    this.filter.push([
-      "ledgers",
-      typeof sequence === "number" ? sequence.toString() : sequence,
-      "operations",
-    ]);
-    return this;
+    return this.forEndpoint("ledgers", sequence.toString());
   }
 
   /**
    * This endpoint represents all operations that are part of a given transaction.
-   * @see [Operations for Transaction](https://developers.digitalbits.io/reference/go/services/frontier/internal/docs/reference/endpoints/operations-for-transaction)
+   * @see [Operations for Transaction](https://developers.digitalbits.io/api/resources/transactions/operations/)
    * @param {string} transactionId Transaction ID
    * @returns {OperationCallBuilder} this OperationCallBuilder instance
    */
   public forTransaction(transactionId: string): this {
-    this.filter.push(["transactions", transactionId, "operations"]);
-    return this;
+    return this.forEndpoint("transactions", transactionId);
   }
 
   /**
-   * Adds a parameter defining whether to include failed transactions. By default only operations of
-   * successful transactions are returned.
+   * This endpoint represents all operations involving a particular liquidity pool.
+   *
+   * @param {string} poolId   liquidity pool ID
+   * @returns {OperationCallBuilder} this OperationCallBuilder instance
+   */
+  public forLiquidityPool(poolId: string): this {
+    return this.forEndpoint("liquidity_pools", poolId);
+  }
+
+  /**
+   * Adds a parameter defining whether to include failed transactions.
+   *   By default, only operations of successful transactions are returned.
+   *
    * @param {bool} value Set to `true` to include operations of failed transactions.
-   * @returns {TransactionCallBuilder} current TransactionCallBuilder instance
+   * @returns {OperationCallBuilder} this OperationCallBuilder instance
    */
   public includeFailed(value: boolean): this {
     this.url.setQuery("include_failed", value.toString());

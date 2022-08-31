@@ -1,6 +1,6 @@
 {
-  "name": "@digitalbits-blockchain/xdb-digitalbits-sdk",
-  "version": "8.2.2",
+  "name": "xdb-digitalbits-sdk",
+  "version": "10.2.0",
   "description": "xdb-digitalbits-sdk is a library for working with the DigitalBits Frontier server.",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
@@ -20,6 +20,27 @@
     "postversion": "git push && git push --tags",
     "prettier-all": "prettier --write **/*.{js,ts}"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "prettier": "@digitalbits-blockchain//prettier-config",
+  "lint-staged": {
+    "lib/*.{js,json}": [
+      "prettier --write",
+      "git add"
+    ],
+    "lib/*.js": [
+      "eslint --fix --max-warnings 0",
+      "git add"
+    ],
+    "**/*.ts": [
+      "prettier --write",
+      "tslint --fix",
+      "git add"
+    ]
+  },
   "keywords": [
     "digitalbits"
   ],
@@ -35,6 +56,9 @@
   "homepage": "https://github.com/xdbfoundation/xdb-digitalbits-sdk",
   "devDependencies": {
     "@kollavarsham/gulp-coveralls": "0.2.8",
+    "@digitalbits-blockchain//prettier-config": "^1.0.1",
+    "@digitalbits-blockchain//tsconfig": "^1.0.1",
+    "@digitalbits-blockchain//tslint-config": "^1.0.3",
     "@types/detect-node": "^2.0.0",
     "@types/lodash": "^4.14.130",
     "axios-mock-adapter": "^1.16.0",
@@ -49,6 +73,7 @@
     "body-parser": "^1.12.2",
     "chai": "^2.2.0",
     "chai-as-promised": "^5.2.0",
+    "chai-http": "^4.3.0",
     "clear": "^0.1.0",
     "coveralls": "3.0.2",
     "del": "^5.1.0",
@@ -75,21 +100,21 @@
     "istanbul": "^0.4.5",
     "jsdoc": "3.5.5",
     "json-loader": "^0.5.1",
-    "karma": "^5.0.2",
+    "karma": "^6.3.0",
     "karma-chai": "^0.1.0",
     "karma-chai-as-promised": "^0.1.2",
     "karma-chrome-launcher": "^3.1.0",
     "karma-commonjs": "^1.0.0",
-    "karma-firefox-launcher": "^1.2.0",
-    "karma-mocha": "^2.0.0",
+    "karma-firefox-launcher": "^2.1.2",
+    "karma-mocha": "^2.0.1",
     "karma-phantomjs-launcher": "^1.0.4",
     "karma-sauce-launcher": "2.0.2",
-    "karma-sinon": "^1.0.4",
+    "karma-sinon": "^1.0.5",
     "karma-sinon-chai": "2.0.2",
-    "karma-webpack": "3.0.5",
+    "karma-webpack": "5.0.0",
     "lint-staged": "7.3.0",
     "minami": "^1.1.1",
-    "mocha": "^7.1.1",
+    "mocha": "^9.1.4",
     "prettier": "^1.17.1",
     "sinon": "^1.14.1",
     "sinon-chai": "^2.7.0",
@@ -106,17 +131,17 @@
     "@types/node": ">= 8",
     "@types/randombytes": "^2.0.0",
     "@types/urijs": "^1.19.6",
-    "axios": "^0.25.0",
+    "axios": "0.25.0",
     "bignumber.js": "^4.0.0",
     "detect-node": "^2.0.4",
     "es6-promise": "^4.2.4",
-    "eventsource": "^1.0.7",
-    "lodash": "^4.17.11",
+    "eventsource": "^1.1.1",
+    "lodash": "^4.17.21",
     "randombytes": "^2.1.0",
+    "@digitalbits-blockchain/xdb-digitalbits-base": "^5.3.0",
     "toml": "^2.3.0",
     "tslib": "^1.10.0",
     "urijs": "^1.19.1",
-    "utility-types": "^3.7.0",
-    "xdb-digitalbits-base": "5.3.0"
+    "utility-types": "^3.7.0"
   }
 }

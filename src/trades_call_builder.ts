@@ -9,14 +9,14 @@ import { ServerApi } from "./server_api";
  * @class TradesCallBuilder
  * @extends CallBuilder
  * @constructor
- * @see [Trades](https://developers.digitalbits.io/reference/go/services/frontier/internal/docs/reference/endpoints/trades)
+ * @see [Trades](https://developers.digitalbits.io/api/resources/trades/)
  * @param {string} serverUrl serverUrl Frontier server URL.
  */
 export class TradesCallBuilder extends CallBuilder<
   ServerApi.CollectionPage<ServerApi.TradeRecord>
 > {
   constructor(serverUrl: URI) {
-    super(serverUrl);
+    super(serverUrl, "trades");
     this.url.segment("trades");
   }
 
@@ -55,13 +55,32 @@ export class TradesCallBuilder extends CallBuilder<
   }
 
   /**
+   * Filter trades by a specific type.
+   * @param {ServerApi.TradeType} tradeType the trade type to filter by.
+   * @returns {TradesCallBuilder} current TradesCallBuilder instance.
+   */
+  public forType(tradeType: ServerApi.TradeType): this {
+    this.url.setQuery("trade_type", tradeType);
+    return this;
+  }
+
+  /**
    * Filter trades for a specific account
-   * @see [Trades for Account](https://developers.digitalbits.io/reference/go/services/frontier/internal/docs/reference/endpoints/trades-for-account)
+   * @see [Trades for Account](https://developers.digitalbits.io/api/resources/accounts/trades/)
    * @param {string} accountId For example: `GBYTR4MC5JAX4ALGUBJD7EIKZVM7CUGWKXIUJMRSMK573XH2O7VAK3SR`
    * @returns {TradesCallBuilder} current TradesCallBuilder instance
    */
   public forAccount(accountId: string): this {
-    this.filter.push(["accounts", accountId, "trades"]);
-    return this;
+    return this.forEndpoint("accounts", accountId);
+  }
+
+  /**
+   * Filter trades for a specific liquidity pool
+   * @see [Trades for Liquidity Pool](https://developers.digitalbits.io/api/resources/liquiditypools/trades/)
+   * @param {string} liquidityPoolId For example: `3b476aff8a406a6ec3b61d5c038009cef85f2ddfaf616822dc4fec92845149b4`
+   * @returns {TradesCallBuilder} current TradesCallBuilder instance
+   */
+  public forLiquidityPool(liquidityPoolId: string): this {
+    return this.forEndpoint("liquidity_pools", liquidityPoolId);
   }
 }

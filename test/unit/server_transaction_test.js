@@ -4,7 +4,7 @@ describe('server.js transaction tests', function() {
   
   beforeEach(function() {
     this.server = new DigitalBitsSdk.Server(
-      'https://frontier.livenet.digitalbits.io:1337'
+      'https://frontier-live.digitalbits.io:1337'
     );
     this.axiosMock = sinon.mock(FrontierAxiosClient);
     let transaction = new DigitalBitsSdk.TransactionBuilder(account, {
@@ -42,7 +42,7 @@ describe('server.js transaction tests', function() {
     this.axiosMock
       .expects('post')
       .withArgs(
-        'https://frontier.livenet.digitalbits.io:1337/transactions',
+        'https://frontier-live.digitalbits.io:1337/transactions',
         `tx=${this.blob}`
       )
       .returns(Promise.resolve({ data: {} }));
@@ -76,7 +76,7 @@ describe('server.js transaction tests', function() {
     this.axiosMock
       .expects('post')
       .withArgs(
-        'https://frontier.livenet.digitalbits.io:1337/transactions',
+        'https://frontier-live.digitalbits.io:1337/transactions',
         `tx=${this.blob}`
       )
       .returns(Promise.resolve({ data: response }));
@@ -123,7 +123,7 @@ describe('server.js transaction tests', function() {
     this.axiosMock
       .expects('post')
       .withArgs(
-        'https://frontier.livenet.digitalbits.io:1337/transactions',
+        'https://frontier-live.digitalbits.io:1337/transactions',
         `tx=${this.blob}`
       )
       .returns(Promise.resolve({ data: response }));
@@ -168,7 +168,7 @@ describe('server.js transaction tests', function() {
     this.axiosMock
       .expects('post')
       .withArgs(
-        'https://frontier.livenet.digitalbits.io:1337/transactions',
+        'https://frontier-live.digitalbits.io:1337/transactions',
         `tx=${this.blob}`
       )
       .returns(Promise.resolve({ data: response }));
@@ -213,7 +213,7 @@ describe('server.js transaction tests', function() {
     this.axiosMock
       .expects('post')
       .withArgs(
-        'https://frontier.livenet.digitalbits.io:1337/transactions',
+        'https://frontier-live.digitalbits.io:1337/transactions',
         `tx=${this.blob}`
       )
       .returns(Promise.resolve({ data: response }));
@@ -268,7 +268,7 @@ describe('server.js transaction tests', function() {
     this.axiosMock
       .expects('post')
       .withArgs(
-        'https://frontier.livenet.digitalbits.io:1337/transactions',
+        'https://frontier-live.digitalbits.io:1337/transactions',
         `tx=${this.blob}`
       )
       .returns(Promise.resolve({ data: response }));
@@ -304,7 +304,7 @@ describe('server.js transaction tests', function() {
     this.axiosMock
       .expects('post')
       .withArgs(
-        'https://frontier.livenet.digitalbits.io:1337/transactions',
+        'https://frontier-live.digitalbits.io:1337/transactions',
         `tx=${this.blob}`
       )
       .returns(Promise.resolve({ data: response }));
@@ -330,14 +330,14 @@ describe('server.js transaction tests', function() {
     this.axiosMock
       .expects('post')
       .withArgs(
-        'https://frontier.livenet.digitalbits.io:1337/transactions',
+        'https://frontier-live.digitalbits.io:1337/transactions',
         `tx=${this.blob}`
       )
       .returns(Promise.resolve({ data: {} }));
     this.axiosMock.expects("get") 
       .withArgs(
         sinon.match(
-          'https://frontier.livenet.digitalbits.io:1337/accounts/GASOCNHNNLYFNMDJYQ3XFMI7BYHIOCFW3GJEOWRPEGK2TDPGTG2E5EDW'
+          'https://frontier-live.digitalbits.io:1337/accounts/GASOCNHNNLYFNMDJYQ3XFMI7BYHIOCFW3GJEOWRPEGK2TDPGTG2E5EDW'
         )
       )
       .returns(Promise.reject({ response: { status: 404, statusText: "NotFound", data: {} } }))
@@ -370,7 +370,7 @@ describe('server.js transaction tests', function() {
     this.axiosMock
       .expects('post')
       .withArgs(
-        'https://frontier.livenet.digitalbits.io:1337/transactions',
+        'https://frontier-live.digitalbits.io:1337/transactions',
         `tx=${this.blob}`
       )
       .returns(Promise.resolve({ data: {} }));

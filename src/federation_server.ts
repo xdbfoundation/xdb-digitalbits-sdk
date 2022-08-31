@@ -11,10 +11,10 @@ export const FEDERATION_RESPONSE_MAX_SIZE = 100 * 1024;
 
 /**
  * FederationServer handles a network connection to a
- * [federation server](https://developers.digitalbits.io/guides/docs/guides/concepts/federation)
+ * [federation server](https://developers.digitalbits.io/docs/glossary/federation/)
  * instance and exposes an interface for requests to that instance.
  * @constructor
- * @param {string} serverURL The federation server URL (ex. `https://api.livenet.digitalbits.io/federation`).
+ * @param {string} serverURL The federation server URL (ex. `https://acme.com/federation`).
  * @param {string} domain Domain this server represents
  * @param {object} [opts] options object
  * @param {boolean} [opts.allowHttp] - Allow connecting to http servers, default: `false`. This must be set to false in production deployments! You can also use {@link Config} class to set this globally.
@@ -23,7 +23,7 @@ export const FEDERATION_RESPONSE_MAX_SIZE = 100 * 1024;
  */
 export class FederationServer {
   /**
-   * The federation server URL (ex. `https://api.livenet.digitalbits.io/federation`).
+   * The federation server URL (ex. `https://acme.com/federation`).
    *
    * @memberof FederationServer
    */
@@ -47,7 +47,7 @@ export class FederationServer {
    * A helper method for handling user inputs that contain `destination` value.
    * It accepts two types of values:
    *
-   * * For DigitalBits address (ex. `bob*livenet.digitalbits.io`) it splits DigitalBits address and then tries to find information about
+   * * For DigitalBits address (ex. `bob*digitalbits.io`) it splits DigitalBits address and then tries to find information about
    * federation server in `digitalbits.toml` file for a given domain. It returns a `Promise` which resolves if federation
    * server exists and user has been found and rejects in all other cases.
    * * For Account ID (ex. `GB5XVAABEQMY63WTHDQ5RXADGYF345VWMNPTN2GFUDZT57D57ZQTJ7PS`) it returns a `Promise` which
@@ -56,7 +56,7 @@ export class FederationServer {
    *
    * Example:
    * ```js
-   * DigitalBitsSdk.FederationServer.resolve('bob*livenet.digitalbits.io')
+   * DigitalBitsSdk.FederationServer.resolve('bob*digitalbits.io')
    *  .then(federationRecord => {
    *    // {
    *    //   account_id: 'GB5XVAABEQMY63WTHDQ5RXADGYF345VWMNPTN2GFUDZT57D57ZQTJ7PS',
@@ -66,9 +66,9 @@ export class FederationServer {
    *  });
    * ```
    *
-   * @see <a href="https://developers.digitalbits.io/guides/docs/guides/anchor/3-federation-server" target="_blank">Federation doc</a>
-   * @see <a href="https://developers.digitalbits.io/guides/concepts/digitalbits-toml.html" target="_blank">digitalbits.toml doc</a>
-   * @param {string} value DigitalBits address (ex. `bob*livenet.digitalbits.io`)
+   * @see <a href="https://developers.digitalbits.io/docs/glossary/federation/" target="_blank">Federation doc</a>
+   * @see <a href="https://developers.digitalbits.io/docs/issuing-assets/publishing-asset-info/" target="_blank">DigitalBits.toml doc</a>
+   * @param {string} value DigitalBits Address (ex. `bob*digitalbits.io`)
    * @param {object} [opts] Options object
    * @param {boolean} [opts.allowHttp] - Allow connecting to http servers, default: `false`. This must be set to false in production deployments!
    * @param {number} [opts.timeout] - Allow a timeout, default: 0. Allows user to avoid nasty lag due to TOML resolve issue.
@@ -104,13 +104,13 @@ export class FederationServer {
 
   /**
    * Creates a `FederationServer` instance based on information from
-   * [digitalbits.toml](https://developers.digitalbits.io/guides/concepts/digitalbits-toml.html)
+   * [digitalbits.toml](https://developers.digitalbits.io/docs/issuing-assets/publishing-asset-info/)
    * file for a given domain.
    *
    * If `digitalbits.toml` file does not exist for a given domain or it does not
    * contain information about a federation server Promise will reject.
    * ```js
-   * DigitalBitsSdk.FederationServer.createForDomain('testnet.digitalbits.io')
+   * DigitalBitsSdk.FederationServer.createForDomain('acme.com')
    *   .then(federationServer => {
    *     // federationServer.resolveAddress('bob').then(...)
    *   })
@@ -118,7 +118,7 @@ export class FederationServer {
    *     // digitalbits.toml does not exist or it does not contain information about federation server.
    *   });
    * ```
-   * @see <a href="https://developers.digitalbits.io/guides/concepts/digitalbits-toml.html" target="_blank">digitalbits.toml doc</a>
+   * @see <a href="https://developers.digitalbits.io/docs/issuing-assets/publishing-asset-info/" target="_blank">DigitalBits.toml doc</a>
    * @param {string} domain Domain to get federation server for
    * @param {object} [opts] Options object
    * @param {boolean} [opts.allowHttp] - Allow connecting to http servers, default: `false`. This must be set to false in production deployments!
@@ -162,31 +162,31 @@ export class FederationServer {
 
   /**
    * Get the federation record if the user was found for a given DigitalBits address
-   * @see <a href="https://developers.digitalbits.io/guides/docs/guides/concepts/federation" target="_blank">Federation doc</a>
-   * @param {string} address DigitalBits address (ex. `bob*livenet.digitalbits.io`). If `FederationServer` was instantiated with `domain` param only username (ex. `bob`) can be passed.
+   * @see <a href="https://developers.digitalbits.io/docs/glossary/federation/" target="_blank">Federation doc</a>
+   * @param {string} address DigitalBits address (ex. `bob*digitalbits.io`). If `FederationServer` was instantiated with `domain` param only username (ex. `bob`) can be passed.
    * @returns {Promise} Promise that resolves to the federation record
    */
   public async resolveAddress(
     address: string,
   ): Promise<FederationServer.Record> {
-    let digitalBitsAddress = address;
+    let digitalbitsAddress = address;
     if (address.indexOf("*") < 0) {
       if (!this.domain) {
         return Promise.reject(
           new Error(
-            "Unknown domain. Make sure `address` contains a domain (ex. `bob*livenet.digitalbits.io`) or pass `domain` parameter when instantiating the server object.",
+            "Unknown domain. Make sure `address` contains a domain (ex. `bob*digitalbits.io`) or pass `domain` parameter when instantiating the server object.",
           ),
         );
       }
-      digitalBitsAddress = `${address}*${this.domain}`;
+      digitalbitsAddress = `${address}*${this.domain}`;
     }
-    const url = this.serverURL.query({ type: "name", q: digitalBitsAddress });
+    const url = this.serverURL.query({ type: "name", q: digitalbitsAddress });
     return this._sendRequest(url);
   }
 
   /**
    * Given an account ID, get their federation record if the user was found
-   * @see <a href="https://developers.digitalbits.io/guides/docs/guides/concepts/federation" target="_blank">Federation doc</a>
+   * @see <a href="https://developers.digitalbits.io/docs/glossary/federation/" target="_blank">Federation doc</a>
    * @param {string} accountId Account ID (ex. `GBYNR2QJXLBCBTRN44MRORCMI4YO7FZPFBCNOKTOBCAAFC7KC3LNPRYS`)
    * @returns {Promise} A promise that resolves to the federation record
    */
@@ -199,7 +199,7 @@ export class FederationServer {
 
   /**
    * Given a transactionId, get the federation record if the sender of the transaction was found
-   * @see <a href="https://developers.digitalbits.io/guides/docs/guides/concepts/federation" target="_blank">Federation doc</a>
+   * @see <a href="https://developers.digitalbits.io/docs/glossary/federation/" target="_blank">Federation doc</a>
    * @param {string} transactionId Transaction ID (ex. `3389e9f0f1a65f19736cacf544c2e825313e8447f569233bb8db39aa607c8889`)
    * @returns {Promise} A promise that resolves to the federation record
    */

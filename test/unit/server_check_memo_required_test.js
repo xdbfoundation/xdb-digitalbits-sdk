@@ -239,6 +239,7 @@ describe("server.js check-memo-required", function() {
 
       const usd = new DigitalBitsSdk.Asset("USD", "GBBM6BKZPEHWYO3E3YKREDPQXMS4VK35YLNU7NFBRI26RAN7GI5POFBB");
       const eur = new DigitalBitsSdk.Asset("EUR", "GDTNXRLOJD2YEBPKK7KCMR7J33AAG5VZXHAJTHIG736D6LVEFLLLKPDL");
+      const liquidityPoolAsset = new DigitalBitsSdk.LiquidityPoolAsset(eur, usd, 30);
 
       let operations = [
         DigitalBitsSdk.Operation.accountMerge({
@@ -262,6 +263,9 @@ describe("server.js check-memo-required", function() {
         }),
         DigitalBitsSdk.Operation.changeTrust({
           asset: usd
+        }),
+        DigitalBitsSdk.Operation.changeTrust({
+          asset: liquidityPoolAsset
         })
       ];
 

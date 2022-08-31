@@ -19,20 +19,20 @@ describe('digitalbits_toml_resolver.js tests', function() {
     it('returns digitalbits.toml object for valid request and digitalbits.toml file', function(done) {
       this.axiosMock
         .expects('get')
-        .withArgs(sinon.match('https://livenet.digitalbits.io/.well-known/digitalbits.toml'))
+        .withArgs(sinon.match('https://acme.com/.well-known/digitalbits.toml'))
         .returns(
           Promise.resolve({
             data: `
-#   The endpoint which clients should query to resolve DigitalBits addresses
+#   The endpoint which clients should query to resolve digitalbits addresses
 #   for users on your domain.
-FEDERATION_SERVER="https://api.livenet.digitalbits.io/federation"
+FEDERATION_SERVER="https://api.digitalbits.io/federation"
 `
           })
         );
 
-      DigitalBitsSdk.DigitalBitsTomlResolver.resolve('livenet.digitalbits.io').then((digitalBitsToml) => {
-        expect(digitalBitsToml.FEDERATION_SERVER).equals(
-          'https://api.livenet.digitalbits.io/federation'
+      DigitalBitsSdk.DigitalBitsTomlResolver.resolve('acme.com').then((digitalbitsToml) => {
+        expect(digitalbitsToml.FEDERATION_SERVER).equals(
+          'https://api.digitalbits.io/federation'
         );
         done();
       });
@@ -41,22 +41,22 @@ FEDERATION_SERVER="https://api.livenet.digitalbits.io/federation"
     it('returns digitalbits.toml object for valid request and digitalbits.toml file when allowHttp is `true`', function(done) {
       this.axiosMock
         .expects('get')
-        .withArgs(sinon.match('http://livenet.digitalbits.io/.well-known/digitalbits.toml'))
+        .withArgs(sinon.match('http://acme.com/.well-known/digitalbits.toml'))
         .returns(
           Promise.resolve({
             data: `
-#   The endpoint which clients should query to resolve DigitalBits addresses
+#   The endpoint which clients should query to resolve digitalbits addresses
 #   for users on your domain.
-FEDERATION_SERVER="http://api.livenet.digitalbits.io/federation"
+FEDERATION_SERVER="http://api.digitalbits.io/federation"
 `
           })
         );
 
-      DigitalBitsSdk.DigitalBitsTomlResolver.resolve('livenet.digitalbits.io', {
+      DigitalBitsSdk.DigitalBitsTomlResolver.resolve('acme.com', {
         allowHttp: true
-      }).then((digitalBitsToml) => {
-        expect(digitalBitsToml.FEDERATION_SERVER).equals(
-          'http://api.livenet.digitalbits.io/federation'
+      }).then((digitalbitsToml) => {
+        expect(digitalbitsToml.FEDERATION_SERVER).equals(
+          'http://api.digitalbits.io/federation'
         );
         done();
       });
@@ -67,20 +67,20 @@ FEDERATION_SERVER="http://api.livenet.digitalbits.io/federation"
 
       this.axiosMock
         .expects('get')
-        .withArgs(sinon.match('http://livenet.digitalbits.io/.well-known/digitalbits.toml'))
+        .withArgs(sinon.match('http://acme.com/.well-known/digitalbits.toml'))
         .returns(
           Promise.resolve({
             data: `
-#   The endpoint which clients should query to resolve DigitalBits addresses
+#   The endpoint which clients should query to resolve digitalbits addresses
 #   for users on your domain.
-FEDERATION_SERVER="http://api.livenet.digitalbits.io/federation"
+FEDERATION_SERVER="http://api.digitalbits.io/federation"
 `
           })
         );
 
-      DigitalBitsSdk.DigitalBitsTomlResolver.resolve('livenet.digitalbits.io').then((digitalBitsToml) => {
-        expect(digitalBitsToml.FEDERATION_SERVER).equals(
-          'http://api.livenet.digitalbits.io/federation'
+      DigitalBitsSdk.DigitalBitsTomlResolver.resolve('acme.com').then((digitalbitsToml) => {
+        expect(digitalbitsToml.FEDERATION_SERVER).equals(
+          'http://api.digitalbits.io/federation'
         );
         done();
       });
@@ -89,18 +89,18 @@ FEDERATION_SERVER="http://api.livenet.digitalbits.io/federation"
     it('rejects when digitalbits.toml file is invalid', function(done) {
       this.axiosMock
         .expects('get')
-        .withArgs(sinon.match('https://livenet.digitalbits.io/.well-known/digitalbits.toml'))
+        .withArgs(sinon.match('https://acme.com/.well-known/digitalbits.toml'))
         .returns(
           Promise.resolve({
             data: `
-/#   The endpoint which clients should query to resolve DigitalBits addresses
+/#   The endpoint which clients should query to resolve digitalbits addresses
 #   for users on your domain.
-FEDERATION_SERVER="https://api.livenet.digitalbits.io/federation"
+FEDERATION_SERVER="https://api.digitalbits.io/federation"
 `
           })
         );
 
-      DigitalBitsSdk.DigitalBitsTomlResolver.resolve('livenet.digitalbits.io')
+      DigitalBitsSdk.DigitalBitsTomlResolver.resolve('acme.com')
         .should.be.rejectedWith(/Parsing error on line/)
         .and.notify(done);
     });
@@ -108,11 +108,11 @@ FEDERATION_SERVER="https://api.livenet.digitalbits.io/federation"
     it('rejects when there was a connection error', function(done) {
       this.axiosMock
         .expects('get')
-        .withArgs(sinon.match('https://livenet.digitalbits.io/.well-known/digitalbits.toml'))
+        .withArgs(sinon.match('https://acme.com/.well-known/digitalbits.toml'))
         .returns(Promise.reject());
 
       DigitalBitsSdk.DigitalBitsTomlResolver.resolve(
-        'livenet.digitalbits.io'
+        'acme.com'
       ).should.be.rejected.and.notify(done);
     });
 
@@ -121,7 +121,7 @@ FEDERATION_SERVER="https://api.livenet.digitalbits.io/federation"
       if (typeof window != 'undefined') {
         return done();
       }
-      var response = Array(DigitalBitsSdk.DIGITALBITS_TOML_MAX_SIZE + 10).join('a');
+      var response = Array(DigitalBitsSdk.STELLAR_TOML_MAX_SIZE + 10).join('a');
       let tempServer = http
         .createServer((req, res) => {
           res.setHeader('Content-Type', 'text/x-toml; charset=UTF-8');

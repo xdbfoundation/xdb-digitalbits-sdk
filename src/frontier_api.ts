@@ -29,6 +29,21 @@ export namespace Frontier {
     max_fee: string;
   }
 
+  export interface TransactionPreconditions {
+    timebounds?: {
+      min_time: string;
+      max_time: string;
+    };
+    ledgerbounds?: {
+      min_ledger: number;
+      max_ledger: number;
+    };
+    min_account_sequence?: string;
+    min_account_sequence_age?: string;
+    min_account_sequence_ledger_gap?: number;
+    extra_signers?: string[];
+  }
+
   export interface TransactionResponse
     extends SubmitTransactionResponse,
       BaseResponse<
@@ -55,6 +70,7 @@ export namespace Frontier {
     fee_account: string;
     inner_transaction?: InnerTransactionResponse;
     fee_bump_transaction?: FeeBumpTransactionResponse;
+    preconditions?: TransactionPreconditions;
   }
 
   export interface BalanceLineNative {
@@ -62,6 +78,17 @@ export namespace Frontier {
     asset_type: AssetType.native;
     buying_liabilities: string;
     selling_liabilities: string;
+  }
+  export interface BalanceLineLiquidityPool {
+    liquidity_pool_id: string;
+    asset_type: AssetType.liquidityPoolShares;
+    balance: string;
+    limit: string;
+    last_modified_ledger: number;
+    is_authorized: boolean;
+    is_authorized_to_maintain_liabilities: boolean;
+    is_clawback_enabled: boolean;
+    sponsor?: string;
   }
   export interface BalanceLineAsset<
     T extends AssetType.credit4 | AssetType.credit12 =
@@ -78,6 +105,7 @@ export namespace Frontier {
     last_modified_ledger: number;
     is_authorized: boolean;
     is_authorized_to_maintain_liabilities: boolean;
+    is_clawback_enabled: boolean;
     sponsor?: string;
   }
   export type BalanceLine<
@@ -86,7 +114,9 @@ export namespace Frontier {
     ? BalanceLineNative
     : T extends AssetType.credit4 | AssetType.credit12
     ? BalanceLineAsset<T>
-    : BalanceLineNative | BalanceLineAsset;
+    : T extends AssetType.liquidityPoolShares
+    ? BalanceLineLiquidityPool
+    : BalanceLineNative | BalanceLineAsset | BalanceLineLiquidityPool;
 
   export interface AssetAccounts {
     authorized: number;
@@ -140,8 +170,12 @@ export namespace Frontier {
     paging_token: string;
     account_id: string;
     sequence: string;
+    sequence_ledger?: number;
+    sequence_time?: string;
     subentry_count: number;
     thresholds: AccountThresholds;
+    last_modified_ledger: number;
+    last_modified_time: string;
     flags: Flags;
     balances: BalanceLine[];
     signers: AccountSigner[];
@@ -151,6 +185,10 @@ export namespace Frontier {
     sponsor?: string;
     num_sponsoring: number;
     num_sponsored: number;
+  }
+
+  export enum LiquidityPoolType {
+    constantProduct = "constant_product",
   }
 
   export enum OperationResponseType {
@@ -176,6 +214,8 @@ export namespace Frontier {
     clawback = "clawback",
     clawbackClaimableBalance = "clawback_claimable_balance",
     setTrustLineFlags = "set_trust_line_flags",
+    liquidityPoolDeposit = "liquidity_pool_deposit",
+    liquidityPoolWithdraw = "liquidity_pool_withdraw",
   }
   export enum OperationResponseTypeI {
     createAccount = 0,
@@ -200,6 +240,8 @@ export namespace Frontier {
     clawback = 19,
     clawbackClaimableBalance = 20,
     setTrustLineFlags = 21,
+    liquidityPoolDeposit = 22,
+    liquidityPoolWithdraw = 23,
   }
   export interface BaseOperationResponse<
     T extends OperationResponseType = OperationResponseType,
@@ -340,10 +382,14 @@ export namespace Frontier {
       OperationResponseType.changeTrust,
       OperationResponseTypeI.changeTrust
     > {
-    asset_type: AssetType.credit4 | AssetType.credit12;
-    asset_code: string;
-    asset_issuer: string;
-    trustee: string;
+    asset_type:
+      | AssetType.credit4
+      | AssetType.credit12
+      | AssetType.liquidityPoolShares;
+    asset_code?: string;
+    asset_issuer?: string;
+    liquidity_pool_id?: string;
+    trustee?: string;
     trustor: string;
     limit: string;
   }
@@ -448,6 +494,7 @@ export namespace Frontier {
     offer_id?: string;
     trustline_account_id?: string;
     trustline_asset?: string;
+    trustline_liquidity_pool_id?: string;
     signer_account_id?: string;
     signer_key?: string;
   }
@@ -483,6 +530,34 @@ export namespace Frontier {
     trustor: string;
     set_flags: Array<1 | 2 | 4>;
     clear_flags: Array<1 | 2 | 4>;
+  }
+  export interface Reserve {
+    asset: string;
+    amount: string;
+  }
+  export interface DepositLiquidityOperationResponse
+    extends BaseOperationResponse<
+      OperationResponseType.liquidityPoolDeposit,
+      OperationResponseTypeI.liquidityPoolDeposit
+    > {
+    liquidity_pool_id: string;
+    reserves_max: Reserve[];
+    min_price: string;
+    min_price_r: PriceRShorthand;
+    max_price: string;
+    max_price_r: PriceRShorthand;
+    reserves_deposited: Reserve[];
+    shares_received: string;
+  }
+  export interface WithdrawLiquidityOperationResponse
+    extends BaseOperationResponse<
+      OperationResponseType.liquidityPoolWithdraw,
+      OperationResponseTypeI.liquidityPoolWithdraw
+    > {
+    liquidity_pool_id: string;
+    reserves_min: Reserve[];
+    shares: string;
+    reserves_received: Reserve[];
   }
 
   export interface ResponseCollection<T extends BaseResponse = BaseResponse> {

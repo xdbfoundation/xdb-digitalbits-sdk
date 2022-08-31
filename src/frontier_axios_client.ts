@@ -16,7 +16,7 @@ export interface ServerTime {
  * each entry will map the server domain to the last-known time and the local
  * time it was recorded, ex:
  *
- *     "frontier.testnet.digitalbits.io": {
+ *     "frontier-testnet.digitalbits.io": {
  *       serverTime: 1552513039,
  *       localTimeRecorded: 1552513052
  *     }

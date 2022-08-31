@@ -9,7 +9,7 @@ const version = require("../package.json").version;
 export * from "./frontier_api";
 export * from "./server_api";
 
-// xdb-digitalbits-sdk classes to expose
+// digitalbits-sdk classes to expose
 export * from "./account_response";
 export * from "./errors";
 export { Config } from "./config";
@@ -20,7 +20,7 @@ export {
 } from "./federation_server";
 export {
   DigitalBitsTomlResolver,
-  DIGITALBITS_TOML_MAX_SIZE,
+  STELLAR_TOML_MAX_SIZE,
 } from "./digitalbits_toml_resolver";
 export {
   default as FrontierAxiosClient,
@@ -29,7 +29,7 @@ export {
 } from "./frontier_axios_client";
 export * from "./utils";
 
-// expose classes and functions from xdb-digitalbits-base
+// expose classes and functions from digitalbits-base
 export * from "xdb-digitalbits-base";
 
 export { version };

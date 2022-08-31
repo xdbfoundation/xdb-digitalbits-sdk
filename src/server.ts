@@ -28,6 +28,7 @@ import { EffectCallBuilder } from "./effect_call_builder";
 import { FriendbotBuilder } from "./friendbot_builder";
 import { Frontier } from "./frontier_api";
 import { LedgerCallBuilder } from "./ledger_call_builder";
+import { LiquidityPoolCallBuilder } from "./liquidity_pool_call_builder";
 import { OfferCallBuilder } from "./offer_call_builder";
 import { OperationCallBuilder } from "./operation_call_builder";
 import { OrderbookCallBuilder } from "./orderbook_call_builder";
@@ -45,18 +46,18 @@ import FrontierAxiosClient, {
 
 export const SUBMIT_TRANSACTION_TIMEOUT = 60 * 1000;
 
-const NIBBS_IN_DIGITALBITS = 10000000;
+const STROOPS_IN_LUMEN = 10000000;
 
 // ACCOUNT_REQUIRES_MEMO is the base64 encoding of "1".
 // SEP 29 uses this value to define transaction memo requirements for incoming payments.
 const ACCOUNT_REQUIRES_MEMO = "MQ==";
 
 function _getAmountInLumens(amt: BigNumber) {
-  return new BigNumber(amt).div(NIBBS_IN_DIGITALBITS).toString();
+  return new BigNumber(amt).div(STROOPS_IN_LUMEN).toString();
 }
 
 /**
- * Server handles the network connection to a [Frontier](https://developers.digitalbits.io/reference)
+ * Server handles the network connection to a [Frontier](https://developers.digitalbits.io/api/introduction/)
  * instance and exposes an interface for requests to that instance.
  * @constructor
  * @param {string} serverURL Frontier Server URL (ex. `https://frontier.testnet.digitalbits.io`).
@@ -175,7 +176,7 @@ export class Server {
 
   /**
    * Fetch the fee stats endpoint.
-   * @see [Fee Stats](https://developers.digitalbits.io/reference/go/services/frontier/internal/docs/reference/endpoints/fee-stats)
+   * @see [Fee Stats](https://developers.digitalbits.io/api/aggregations/fee-stats/)
    * @returns {Promise<Frontier.FeeStatsResponse>} Promise that resolves to the fee stats returned by Frontier.
    */
   public async feeStats(): Promise<Frontier.FeeStatsResponse> {
@@ -281,11 +282,12 @@ export class Server {
    *   `amountBought` or `amountSold` have already been transferred.
    *
    * @see [Post
-   * Transaction](https://developers.digitalbits.io/reference/go/services/frontier/internal/docs/reference/endpoints/transactions-create)
+   * Transaction](https://developers.digitalbits.io/api/resources/transactions/post/)
    * @param {Transaction|FeeBumpTransaction} transaction - The transaction to submit.
    * @param {object} [opts] Options object
    * @param {boolean} [opts.skipMemoRequiredCheck] - Allow skipping memo
-   * required check, default: `false`. See SEP0029
+   * required check, default: `false`. See
+   * [SEP0029](https://github.com/xdbfoundation/digitalbits-protocol/blob/master/ecosystem/sep-0029.md).
    * @returns {Promise} Promise that resolves or rejects with response from
    * frontier.
    */
@@ -317,11 +319,11 @@ export class Server {
           return response.data;
         }
 
-        // TODO: fix xdb-digitalbits-base types.
+        // TODO: fix digitalbits-base types.
         const responseXDR: xdr.TransactionResult = (xdr.TransactionResult
           .fromXDR as any)(response.data.result_xdr, "base64");
 
-        // TODO: fix xdb-digitalbits-base types.
+        // TODO: fix digitalbits-base types.
         const results = (responseXDR as any).result().value();
 
         let offerResults;
@@ -329,7 +331,7 @@ export class Server {
 
         if (results.length) {
           offerResults = results
-            // TODO: fix xdb-digitalbits-base types.
+            // TODO: fix digitalbits-base types.
             .map((result: any, i: number) => {
               if (
                 result.value().switch().name !== "manageBuyOffer" &&
@@ -350,8 +352,35 @@ export class Server {
 
               const offersClaimed = offerSuccess
                 .offersClaimed()
-                // TODO: fix xdb-digitalbits-base types.
-                .map((offerClaimed: any) => {
+                // TODO: fix digitalbits-base types.
+                .map((offerClaimedAtom: any) => {
+                  const offerClaimed = offerClaimedAtom.value();
+
+                  let sellerId: string = "";
+                  switch (offerClaimedAtom.switch()) {
+                    case xdr.ClaimAtomType.claimAtomTypeV0():
+                      sellerId = StrKey.encodeEd25519PublicKey(
+                        offerClaimed.sellerEd25519(),
+                      );
+                      break;
+                    case xdr.ClaimAtomType.claimAtomTypeOrderBook():
+                      sellerId = StrKey.encodeEd25519PublicKey(
+                        offerClaimed.sellerId().ed25519(),
+                      );
+                      break;
+                    // It shouldn't be possible for a claimed offer to have type
+                    // claimAtomTypeLiquidityPool:
+                    //
+                    // https://github.com/xdbfoundation/digitalbits-core/blob/c5f6349b240818f716617ca6e0f08d295a6fad9a/src/transactions/TransactionUtils.cpp#L1284
+                    //
+                    // However, you can never be too careful.
+                    default:
+                      throw new Error(
+                        "Invalid offer result type: " +
+                          offerClaimedAtom.switch(),
+                      );
+                  }
+
                   const claimedOfferAmountBought = new BigNumber(
                     // amountBought is a js-xdr hyper
                     offerClaimed.amountBought().toString(),
@@ -387,9 +416,7 @@ export class Server {
                   };
 
                   return {
-                    sellerId: StrKey.encodeEd25519PublicKey(
-                      offerClaimed.sellerId().ed25519(),
-                    ),
+                    sellerId,
                     offerId: offerClaimed.offerId().toString(),
                     assetSold,
                     amountSold: _getAmountInLumens(claimedOfferAmountSold),
@@ -442,7 +469,7 @@ export class Server {
                 operationIndex: i,
                 currentOffer,
 
-                // this value is in nibbs so divide it out
+                // this value is in stroops so divide it out
                 amountBought: _getAmountInLumens(amountBought),
                 amountSold: _getAmountInLumens(amountSold),
 
@@ -456,7 +483,7 @@ export class Server {
                   !offersClaimed.length && effect === "manageOfferDeleted",
               };
             })
-            // TODO: fix xdb-digitalbits-base types.
+            // TODO: fix digitalbits-base types.
             .filter((result: any) => !!result);
         }
 
@@ -549,6 +576,14 @@ export class Server {
    */
   public operations(): OperationCallBuilder {
     return new OperationCallBuilder(URI(this.serverURL as any));
+  }
+
+  /**
+   * @returns {LiquidityPoolCallBuilder} New {@link LiquidityPoolCallBuilder}
+   *     object configured to the current Frontier server settings.
+   */
+  public liquidityPools(): LiquidityPoolCallBuilder {
+    return new LiquidityPoolCallBuilder(URI(this.serverURL));
   }
 
   /**
@@ -703,13 +738,16 @@ export class Server {
   /**
    * Check if any of the destination accounts requires a memo.
    *
-   * This function implements a memo required check as defined in SEP0029.
+   * This function implements a memo required check as defined in
+   * [SEP0029](https://github.com/xdbfoundation/digitalbits-protocol/blob/master/ecosystem/sep-0029.md).
    * It will load each account which is the destination and check if it has the
    * data field `config.memo_required` set to `"MQ=="`.
    *
    * Each account is checked sequentially instead of loading multiple accounts
    * at the same time from Frontier.
    *
+   * @see
+   * [SEP0029](https://github.com/xdbfoundation/digitalbits-protocol/blob/master/ecosystem/sep-0029.md)
    * @param {Transaction} transaction - The transaction to check.
    * @returns {Promise<void, Error>} - If any of the destination account
    * requires a memo, the promise will throw {@link AccountRequiresMemoError}.

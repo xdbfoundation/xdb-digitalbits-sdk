@@ -30,8 +30,12 @@ if (anyGlobal.EventSource) {
 } else if (isNode) {
   /* tslint:disable-next-line:no-var-requires */
   EventSource = require("eventsource");
-} else {
+} else if (anyGlobal.window.EventSource) { 
   EventSource = anyGlobal.window.EventSource;
+} else {
+  // require("eventsource") for React Native environment
+  /* tslint:disable-next-line:no-var-requires */
+  EventSource = require("eventsource");
 }
 
 /**
@@ -50,11 +54,13 @@ export class CallBuilder<
   protected url: URI;
   public filter: string[][];
   protected originalSegments: string[];
+  protected neighborRoot: string;
 
-  constructor(serverUrl: URI) {
+  constructor(serverUrl: URI, neighborRoot: string = "") {
     this.url = serverUrl.clone();
     this.filter = [];
     this.originalSegments = this.url.segment() || [];
+    this.neighborRoot = neighborRoot;
   }
 
   /**
@@ -87,7 +93,7 @@ export class CallBuilder<
   /**
    * Creates an EventSource that listens for incoming messages from the server. To stop listening for new
    * events call the function returned by this method.
-   * @see [Frontier Response Format](https://developers.digitalbits.io/reference/go/services/frontier/internal/docs/reference/responses)
+   * @see [Frontier Response Format](https://developers.digitalbits.io/api/introduction/response-format/)
    * @see [MDN EventSource](https://developer.mozilla.org/en-US/docs/Web/API/EventSource)
    * @param {object} [options] EventSource options.
    * @param {function} [options.onmessage] Callback function to handle incoming messages.
@@ -196,7 +202,7 @@ export class CallBuilder<
 
   /**
    * Sets `cursor` parameter for the current call. Returns the CallBuilder object on which this method has been called.
-   * @see [Paging](https://developers.digitalbits.io/reference/go/services/frontier/internal/docs/reference/paging)
+   * @see [Paging](https://developers.digitalbits.io/api/introduction/pagination/)
    * @param {string} cursor A cursor is a value that points to a specific location in a collection of resources.
    * @returns {object} current CallBuilder instance
    */
@@ -207,7 +213,7 @@ export class CallBuilder<
 
   /**
    * Sets `limit` parameter for the current call. Returns the CallBuilder object on which this method has been called.
-   * @see [Paging](https://developers.digitalbits.io/reference/go/services/frontier/internal/docs/reference/paging)
+   * @see [Paging](https://developers.digitalbits.io/api/introduction/pagination/)
    * @param {number} number Number of records the server should return.
    * @returns {object} current CallBuilder instance
    */
@@ -239,6 +245,29 @@ export class CallBuilder<
    */
   public join(include: "transactions"): this {
     this.url.setQuery("join", include);
+    return this;
+  }
+
+  /**
+   * A helper method to craft queries to "neighbor" endpoints.
+   *
+   *  For example, we have an `/effects` suffix endpoint on many different
+   *  "root" endpoints, such as `/transactions/:id` and `/accounts/:id`. So,
+   *  it's helpful to be able to conveniently create queries to the
+   *  `/accounts/:id/effects` endpoint:
+   *
+   *    this.forEndpoint("accounts", accountId)`.
+   *
+   * @param  {string} endpoint neighbor endpoint in question, like /operations
+   * @param  {string} param    filter parameter, like an operation ID
+   *
+   * @returns {CallBuilder} this CallBuilder instance
+   */
+  protected forEndpoint(endpoint: string, param: string): this {
+    if (this.neighborRoot === "") {
+      throw new Error("Invalid usage: neighborRoot not set in constructor");
+    }
+    this.filter.push([endpoint, param, this.neighborRoot]);
     return this;
   }
 

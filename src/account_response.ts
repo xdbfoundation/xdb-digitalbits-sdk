@@ -1,7 +1,7 @@
 /* tslint:disable:variable-name */
 
 import forIn from "lodash/forIn";
-import { Account as BaseAccount, MuxedAccount } from "xdb-digitalbits-base";
+import { Account as BaseAccount } from "xdb-digitalbits-base";
 import { Frontier } from "./frontier_api";
 import { ServerApi } from "./server_api";
 
@@ -12,7 +12,7 @@ import { ServerApi } from "./server_api";
  * The balances section in the returned JSON will also list all the trust lines this account has set up.
  * It also contains {@link Account} object and exposes it's methods so can be used in {@link TransactionBuilder}.
  *
- * @see [Account Details](https://developers.digitalbits.io/reference/go/services/frontier/internal/docs/reference/endpoints/accounts-single)
+ * @see [Account Details](https://developers.digitalbits.io/api/resources/accounts/object/)
  * @param {string} response Response from frontier account endpoint.
  * @returns {AccountResponse} AccountResponse instance
  */
@@ -21,10 +21,13 @@ export class AccountResponse {
   public readonly paging_token!: string;
   public readonly account_id!: string;
   public sequence!: string;
+  public readonly sequence_ledger?: number;
+  public readonly sequence_time?: string;
   public readonly subentry_count!: number;
   public readonly home_domain?: string;
   public readonly inflation_destination?: string;
   public readonly last_modified_ledger!: number;
+  public readonly last_modified_time!: string;
   public readonly thresholds!: Frontier.AccountThresholds;
   public readonly flags!: Frontier.Flags;
   public readonly balances!: Frontier.BalanceLine[];
@@ -82,9 +85,5 @@ export class AccountResponse {
   public incrementSequenceNumber(): void {
     this._baseAccount.incrementSequenceNumber();
     this.sequence = this._baseAccount.sequenceNumber();
-  }
-
-  public createSubaccount(id: string): MuxedAccount {
-    return this._baseAccount.createSubaccount(id);
   }
 }

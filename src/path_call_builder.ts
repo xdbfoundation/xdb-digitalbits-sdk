@@ -18,7 +18,7 @@ import { ServerApi } from "./server_api";
  * used to determine if there a given path can satisfy a payment of the desired amount.
  *
  * Do not create this object directly, use {@link Server#paths}.
- * @see [Find Payment Paths](https://developers.digitalbits.io/reference/go/services/frontier/internal/docs/reference/endpoints/path-finding)
+ * @see [Find Payment Paths](https://developers.digitalbits.io/api/aggregations/paths/)
  * @extends CallBuilder
  * @param {string} serverUrl Frontier server URL.
  * @param {string} source The sender's account ID. Any returned path must use a source that the sender can hold.

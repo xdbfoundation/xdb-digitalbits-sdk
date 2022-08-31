@@ -2,8 +2,8 @@ import axios from "axios";
 import toml from "toml";
 import { Config } from "./config";
 
-// DIGITALBITS_TOML_MAX_SIZE is the maximum size of digitalbits.toml file
-export const DIGITALBITS_TOML_MAX_SIZE = 100 * 1024;
+// STELLAR_TOML_MAX_SIZE is the maximum size of digitalbits.toml file
+export const STELLAR_TOML_MAX_SIZE = 100 * 1024;
 
 // axios timeout doesn't catch missing urls, e.g. those with no response
 // so we use the axios cancel token to ensure the timeout
@@ -16,15 +16,15 @@ export class DigitalBitsTomlResolver {
   /**
    * Returns a parsed `digitalbits.toml` file for a given domain.
    * ```js
-   * DigitalBitsSdk.DigitalBitsTomlResolver.resolve('livenet.digitalbits.io')
-   *   .then(digitalBitsToml => {
-   *     // digitalBitsToml in an object representing domain digitalbits.toml file.
+   * DigitalBitsSdk.DigitalBitsTomlResolver.resolve('acme.com')
+   *   .then(digitalbitsToml => {
+   *     // digitalbitsToml in an object representing domain digitalbits.toml file.
    *   })
    *   .catch(error => {
    *     // digitalbits.toml does not exist or is invalid
    *   });
    * ```
-   * @see <a href="https://developers.digitalbits.io/guides/concepts/digitalbits-toml.html" target="_blank">digitalbits.toml doc</a>
+   * @see <a href="https://developers.digitalbits.io/docs/issuing-assets/publishing-asset-info/" target="_blank">DigitalBits.toml doc</a>
    * @param {string} domain Domain to get digitalbits.toml file for
    * @param {object} [opts] Options object
    * @param {boolean} [opts.allowHttp] - Allow connecting to http servers, default: `false`. This must be set to false in production deployments!
@@ -47,7 +47,7 @@ export class DigitalBitsTomlResolver {
 
     return axios
       .get(`${protocol}://${domain}/.well-known/digitalbits.toml`, {
-        maxContentLength: DIGITALBITS_TOML_MAX_SIZE,
+        maxContentLength: STELLAR_TOML_MAX_SIZE,
         cancelToken: timeout
           ? new CancelToken((cancel) =>
               setTimeout(
@@ -73,7 +73,7 @@ export class DigitalBitsTomlResolver {
       .catch((err: Error) => {
         if (err.message.match(/^maxContentLength size/)) {
           throw new Error(
-            `digitalbits.toml file exceeds allowed size of ${DIGITALBITS_TOML_MAX_SIZE}`,
+            `digitalbits.toml file exceeds allowed size of ${STELLAR_TOML_MAX_SIZE}`,
           );
         } else {
           throw err;
