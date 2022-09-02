@@ -3464,11 +3464,11 @@ describe('server.js non-transaction tests', function() {
             },
             next: {
               href:
-                'https://frontier-live.digitalbits.io:1337/assets?order=asc\u0026limit=1\u0026cursor=9HORIZONS_GB2HXY7UEDCSHOWZ4553QFGFILNU73OFS2P4HU5IB3UUU66TWPBPVTGW_credit_alphanum12'
+                'https://frontier-live.digitalbits.io:1337/assets?order=asc\u0026limit=1\u0026cursor=9FRONTIERS_GB2HXY7UEDCSHOWZ4553QFGFILNU73OFS2P4HU5IB3UUU66TWPBPVTGW_credit_alphanum12'
             },
             prev: {
               href:
-                'https://frontier-live.digitalbits.io:1337/assets?order=desc\u0026limit=1\u0026cursor=9HORIZONS_GB2HXY7UEDCSHOWZ4553QFGFILNU73OFS2P4HU5IB3UUU66TWPBPVTGW_credit_alphanum12'
+                'https://frontier-live.digitalbits.io:1337/assets?order=desc\u0026limit=1\u0026cursor=9FRONTIERS_GB2HXY7UEDCSHOWZ4553QFGFILNU73OFS2P4HU5IB3UUU66TWPBPVTGW_credit_alphanum12'
             }
           },
           _embedded: {
@@ -3480,11 +3480,11 @@ describe('server.js non-transaction tests', function() {
                   },
                 },
                 asset_type: "credit_alphanum12",
-                asset_code: "9HORIZONS",
+                asset_code: "9FRONTIERS",
                 asset_issuer:
                   "GB2HXY7UEDCSHOWZ4553QFGFILNU73OFS2P4HU5IB3UUU66TWPBPVTGW",
                 paging_token:
-                  "9HORIZONS_GB2HXY7UEDCSHOWZ4553QFGFILNU73OFS2P4HU5IB3UUU66TWPBPVTGW_credit_alphanum12",
+                  "9FRONTIERS_GB2HXY7UEDCSHOWZ4553QFGFILNU73OFS2P4HU5IB3UUU66TWPBPVTGW_credit_alphanum12",
                 accounts: {
                   authorized: 2,
                   authorized_to_maintain_liabilities: 1,

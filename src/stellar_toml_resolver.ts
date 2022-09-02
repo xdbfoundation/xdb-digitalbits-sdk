@@ -2,8 +2,8 @@ import axios from "axios";
 import toml from "toml";
 import { Config } from "./config";
 
-// STELLAR_TOML_MAX_SIZE is the maximum size of digitalbits.toml file
-export const STELLAR_TOML_MAX_SIZE = 100 * 1024;
+// DIGITALBITS_TOML_MAX_SIZE is the maximum size of digitalbits.toml file
+export const DIGITALBITS_TOML_MAX_SIZE = 100 * 1024;
 
 // axios timeout doesn't catch missing urls, e.g. those with no response
 // so we use the axios cancel token to ensure the timeout
@@ -47,7 +47,7 @@ export class DigitalBitsTomlResolver {
 
     return axios
       .get(`${protocol}://${domain}/.well-known/digitalbits.toml`, {
-        maxContentLength: STELLAR_TOML_MAX_SIZE,
+        maxContentLength: DIGITALBITS_TOML_MAX_SIZE,
         cancelToken: timeout
           ? new CancelToken((cancel) =>
               setTimeout(
@@ -73,7 +73,7 @@ export class DigitalBitsTomlResolver {
       .catch((err: Error) => {
         if (err.message.match(/^maxContentLength size/)) {
           throw new Error(
-            `digitalbits.toml file exceeds allowed size of ${STELLAR_TOML_MAX_SIZE}`,
+            `digitalbits.toml file exceeds allowed size of ${DIGITALBITS_TOML_MAX_SIZE}`,
           );
         } else {
           throw err;

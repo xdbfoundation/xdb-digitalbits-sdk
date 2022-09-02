@@ -20,7 +20,7 @@ export {
 } from "./federation_server";
 export {
   DigitalBitsTomlResolver,
-  STELLAR_TOML_MAX_SIZE,
+  DIGITALBITS_TOML_MAX_SIZE,
 } from "./digitalbits_toml_resolver";
 export {
   default as FrontierAxiosClient,

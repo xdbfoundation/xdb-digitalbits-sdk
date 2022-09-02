@@ -121,7 +121,7 @@ FEDERATION_SERVER="https://api.digitalbits.io/federation"
       if (typeof window != 'undefined') {
         return done();
       }
-      var response = Array(DigitalBitsSdk.STELLAR_TOML_MAX_SIZE + 10).join('a');
+      var response = Array(DigitalBitsSdk.DIGITALBITS_TOML_MAX_SIZE + 10).join('a');
       let tempServer = http
         .createServer((req, res) => {
           res.setHeader('Content-Type', 'text/x-toml; charset=UTF-8');
