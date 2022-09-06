@@ -58,7 +58,7 @@
     "@kollavarsham/gulp-coveralls": "0.2.8",
     "@digitalbits-blockchain/prettier-config": "^1.0.1",
     "@digitalbits-blockchain/tsconfig": "^1.0.1",
-    "@digitalbits-blockchain/tslint-config": "^1.0.3",
+    "@digitalbits-blockchain/eslint-config": "^1.0.3",
     "@types/detect-node": "^2.0.0",
     "@types/lodash": "^4.14.130",
     "axios-mock-adapter": "^1.16.0",
