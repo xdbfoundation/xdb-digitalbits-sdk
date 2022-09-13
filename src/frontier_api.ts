@@ -1,4 +1,4 @@
-import { AssetType, MemoType } from "xdb-digitalbits-base";
+import { AssetType, MemoType } from "@digitalbits-blockchain/xdb-digitalbits-base";
 
 /* tslint:disable-next-line:no-namespace */
 export namespace Frontier {

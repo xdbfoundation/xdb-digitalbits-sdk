@@ -12,7 +12,7 @@ import {
   TimeoutInfinite,
   Transaction,
   TransactionBuilder,
-} from "xdb-digitalbits-base";
+} from "@digitalbits-blockchain/xdb-digitalbits-base";
 import { InvalidSep10ChallengeError } from "./errors";
 import { ServerApi } from "./server_api";
 

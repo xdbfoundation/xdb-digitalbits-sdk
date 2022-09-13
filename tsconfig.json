@@ -1,5 +1,5 @@
 {
-  "extends": "@digitalbits/tsconfig",
+  "extends": "@digitalbits-blockchain/tsconfig",
   "compilerOptions": {
     "declaration": true,
     "declarationDir": "lib",

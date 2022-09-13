@@ -30,7 +30,7 @@ export {
 export * from "./utils";
 
 // expose classes and functions from digitalbits-base
-export * from "xdb-digitalbits-base";
+export * from "@digitalbits-blockchain/xdb-digitalbits-base";
 
 export { version };
 

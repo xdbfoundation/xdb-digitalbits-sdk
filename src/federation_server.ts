@@ -1,5 +1,5 @@
 import axios from "axios";
-import { StrKey } from "xdb-digitalbits-base";
+import { StrKey } from "@digitalbits-blockchain/xdb-digitalbits-base";
 import URI from "urijs";
 
 import { Config } from "./config";

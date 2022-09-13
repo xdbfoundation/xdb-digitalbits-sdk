@@ -9,7 +9,7 @@ import {
   StrKey,
   Transaction,
   xdr,
-} from "xdb-digitalbits-base";
+} from "@digitalbits-blockchain/xdb-digitalbits-base";
 import URI from "urijs";
 
 import { CallBuilder } from "./call_builder";

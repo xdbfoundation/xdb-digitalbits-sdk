@@ -1,4 +1,4 @@
-import { Asset } from "xdb-digitalbits-base";
+import { Asset } from "@digitalbits-blockchain/xdb-digitalbits-base";
 import { Omit } from "utility-types";
 import { Frontier } from "./frontier_api";
 
