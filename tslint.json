@@ -1,6 +1,0 @@
-{
-  "extends": ["@digitalbits-blockchain/eslint-config"],
-  "rules": {
-    "max-line-length": [false]
-  }
-}
