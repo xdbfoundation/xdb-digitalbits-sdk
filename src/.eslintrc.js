@@ -2,7 +2,7 @@ module.exports = {
   env: {
     es6: true
   },
-  extends: ['airbnb-base', 'prettier','@digitalbits-blockchain/eslint-config'],
+  extends: ['airbnb-base', 'prettier'],
   plugins: ['prettier', 'prefer-import'],
   rules: {
     // OFF
