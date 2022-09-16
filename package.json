@@ -1,5 +1,5 @@
 {
-  "name": "xdb-digitalbits-sdk",
+  "name": "@digitalbits-blockchain/xdb-digitalbits-sdk",
   "version": "10.2.0-beta.0",
   "description": "xdb-digitalbits-sdk is a library for working with the DigitalBits Frontier server.",
   "main": "./lib/index.js",
