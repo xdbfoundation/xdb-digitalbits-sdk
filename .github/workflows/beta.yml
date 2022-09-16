@@ -20,8 +20,8 @@ jobs:
           registry-url: https://registry.npmjs.org/
     
       - name: Create token
-        run: echo ${{secrets.AUTH_TOKEN}} > /root/.npmrc
-        
+        run: echo ${{secrets.AUTH_TOKEN}} > .npmrc
+
       - name: Install deps
         run: yarn
       
