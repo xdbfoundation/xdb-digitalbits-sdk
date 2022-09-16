@@ -19,6 +19,9 @@ jobs:
           node-version: 12
           registry-url: https://registry.npmjs.org/
     
+      - name: Create token
+        run: echo ${{secrets.AUTH_TOKEN}} > /root/.npmrc
+        
       - name: Install deps
         run: yarn
       
