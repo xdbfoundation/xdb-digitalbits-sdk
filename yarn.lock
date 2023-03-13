@@ -123,10 +123,10 @@
   resolved "https://registry.yarnpkg.com/@digitalbits-blockchain/tsconfig/-/tsconfig-1.0.5.tgz#fc9a24e525b4620b8aa25a94c63714de4a776614"
   integrity sha512-OeLWDJdZj6hzPpXb4+/GDeOenZepPdhB5cusNYTZwqYDbbf3l0bay6BQDvpFqyhY2Ci036H28QZOlaiUN6YF9Q==
 
-"@digitalbits-blockchain/xdb-digitalbits-base@^8.1.0-beta.0":
-  version "8.1.0-beta.0"
-  resolved "https://registry.yarnpkg.com/@digitalbits-blockchain/xdb-digitalbits-base/-/xdb-digitalbits-base-8.1.0-beta.0.tgz#b98fdcae620592636f74f1798f5497b361bfc544"
-  integrity sha512-wQzlD45wGlgK/Mvl0sJwYa8fX5HPWw3dVxZ9VtfpcKgty9f3cwCLKvRUYQlqjgIZdOf85IvwNQVgsemaG2duig==
+"@digitalbits-blockchain/xdb-digitalbits-base@^8.1.0-beta.2":
+  version "8.1.0-beta.2"
+  resolved "https://registry.yarnpkg.com/@digitalbits-blockchain/xdb-digitalbits-base/-/xdb-digitalbits-base-8.1.0-beta.2.tgz#562ab7cbd4d3dd8adb656d4e465d40e94d7c4217"
+  integrity sha512-DhOg/LMxA+tWdO5Ci01SogJ4Riju3457BcdzgUaVGpQxXoWGLWsTniOQZmPnhGtKQjsMjAF57uUJiZo7z8XZiw==
   dependencies:
     base32.js "^0.1.0"
     bignumber.js "^4.0.0"
