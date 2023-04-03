@@ -28,7 +28,7 @@ using modern Javascript, but `await` calls can also be rendered with promises.
 // That site exposes a global DigitalBitsSdk object you can use.
 // To run this code in the Chrome, open the console tab in the DevTools.
 // The hotkey to open the DevTools console is Ctrl+Shift+J or (Cmd+Opt+J on Mac).
-const DigitalBitsSdk = require('xdb-digitalbits-sdk');
+const DigitalBitsSdk = require('@digitalbits-blockchain/xdb-digitalbits-sdk');
 
 // The source account is the account we will be signing and sending from.
 const sourceSecretKey = 'SCZANGBA5YHTNYVVV4C3U252E2B6P6F5T3U6MM63WBSBZATAQI3EBTQ4';
