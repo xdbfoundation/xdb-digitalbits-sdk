@@ -106,7 +106,7 @@ const server = new DigitalBitsSdk.Server('https://frontier.testnet.digitalbits.i
 Let's say you want to look at an account's transaction history.  You can use the `transactions()` command and pass in the account address to `forAccount` as the resource you're interested in.
 
 ```javascript
-const DigitalBitsSdk = require('xdb-digitalbits-sdk')
+const DigitalBitsSdk = require('@digitalbits-blockchain/xdb-digitalbits-sdk')
 const server = new DigitalBitsSdk.Server('https://frontier.testnet.digitalbits.io');
 const accountId = 'GBBORXCY3PQRRDLJ7G7DWHQBXPCJVFGJ4RGMJQVAX6ORAUH6RWSPP6FM';
 
@@ -133,7 +133,7 @@ xdb-digitalbits-sdk provides streaming support for Frontier endpoints using `Eve
 
 Try submitting a transaction (via the guide above) while running the following code example.
 ```javascript
-const DigitalBitsSdk = require('xdb-digitalbits-sdk')
+const DigitalBitsSdk = require('@digitalbits-blockchain/xdb-digitalbits-sdk')
 const server = new DigitalBitsSdk.Server('https://frontier.testnet.digitalbits.io');
 
 // Get a message any time a payment occurs. Cursor is set to "now" to be notified
