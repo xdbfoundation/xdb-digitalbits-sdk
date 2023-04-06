@@ -56,7 +56,7 @@ npm install --save @digitalbits-blockchain/xdb-digitalbits-sdk
 2. require/import it in your JavaScript:
 
 ```js
-var DigitalBitsSdk = require('xdb-digitalbits-sdk');
+var DigitalBitsSdk = require('@digitalbits-blockchain/xdb-digitalbits-sdk');
 ```
 
 ### To self host for use in the browser

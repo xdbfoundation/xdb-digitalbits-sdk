@@ -14,7 +14,7 @@ xdb-digitalbits-sdk uses the [Builder pattern](https://en.wikipedia.org/wiki/Bui
 to Frontier. Starting with a [server](https://xdbfoundation.github.io/xdb-digitalbits-sdk/Server.html) object, you can chain methods together to generate a query.
 (See the [Frontier reference](https://developers.digitalbits.io/api/) documentation for what methods are possible.)
 ```js
-var DigitalBitsSdk = require('xdb-digitalbits-sdk');
+var DigitalBitsSdk = require('@digitalbits-blockchain/xdb-digitalbits-sdk');
 var server = new DigitalBitsSdk.Server('https://frontier.testnet.digitalbits.io');
 // get a list of transactions that occurred in ledger 1400
 server.transactions()
@@ -38,7 +38,7 @@ Frontier will start sending responses from either the beginning of time or from 
 For example, to log instances of transactions from a particular account:
 
 ```javascript
-var DigitalBitsSdk = require('xdb-digitalbits-sdk')
+var DigitalBitsSdk = require('@digitalbits-blockchain/xdb-digitalbits-sdk')
 var server = new DigitalBitsSdk.Server('https://frontier.testnet.digitalbits.io');
 var lastCursor=0; // or load where you left off
 
@@ -98,7 +98,7 @@ See the [Building Transactions](https://github.com/xdbfoundation/js-digitalbits-
 ## Submitting transactions
 Once you have built your transaction, you can submit it to the DigitalBits network with `Server.submitTransaction()`.
 ```js
-const DigitalBitsSdk = require('xdb-digitalbits-sdk')
+const DigitalBitsSdk = require('@digitalbits-blockchain/xdb-digitalbits-sdk')
 const server = new DigitalBitsSdk.Server('https://frontier.testnet.digitalbits.io');
 
 (async function main() {
