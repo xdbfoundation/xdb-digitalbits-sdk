@@ -12,7 +12,7 @@ import { ServerApi } from "./server_api";
  * The balances section in the returned JSON will also list all the trust lines this account has set up.
  * It also contains {@link Account} object and exposes it's methods so can be used in {@link TransactionBuilder}.
  *
- * @see [Account Details](https://developers.digitalbits.io/api/resources/accounts/object/)
+ * @see [Account Details](https://developers.digitalbits.io/frontier/reference/endpoints/accounts-single.html)
  * @param {string} response Response from frontier account endpoint.
  * @returns {AccountResponse} AccountResponse instance
  */

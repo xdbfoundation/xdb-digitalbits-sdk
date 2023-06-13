@@ -5,7 +5,7 @@ import { ServerApi } from "./server_api";
  * Creates a new {@link LedgerCallBuilder} pointed to server defined by serverUrl.
  * Do not create this object directly, use {@link Server#ledgers}.
  *
- * @see [All Ledgers](https://developers.digitalbits.io/api/resources/ledgers/list/)
+ * @see [All Ledgers](https://developers.digitalbits.io/frontier/reference/endpoints/ledgers-all.html)
  * @constructor
  * @class LedgerCallBuilder
  * @extends CallBuilder

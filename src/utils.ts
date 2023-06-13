@@ -37,7 +37,7 @@ export namespace Utils {
    * @param {string} [clientDomain] The fully qualified domain of the client requesting the challenge. Only necessary when the the 'client_domain' parameter is passed.
    * @param {string} [clientSigningKey] The public key assigned to the SIGNING_KEY attribute specified on the digitalbits.toml hosted on the client domain. Only necessary when the 'client_domain' parameter is passed.
    * @example
-   * import { Utils, Keypair, Networks }  from 'xdb-digitalbits-sdk'
+   * import { Utils, Keypair, Networks }  from '@digitalbits-blockchain/xdb-digitalbits-sdk'
    *
    * let serverKeyPair = Keypair.fromSecret("server-secret")
    * let challenge = Utils.buildChallengeTx(serverKeyPair, "client-digitalbits-account-id", "digitalbits.io", 300, Networks.TESTNET)
@@ -355,7 +355,7 @@ export namespace Utils {
    * @returns {string[]} The list of signers public keys that have signed the transaction, excluding the server account ID, given that the threshold was met.
    * @example
    *
-   * import { Networks, TransactionBuilder, Utils }  from 'xdb-digitalbits-sdk';
+   * import { Networks, TransactionBuilder, Utils }  from '@digitalbits-blockchain/xdb-digitalbits-sdk';
    *
    * const serverKP = Keypair.random();
    * const clientKP1 = Keypair.random();
@@ -461,7 +461,7 @@ export namespace Utils {
    * @returns {string[]} The list of signers public keys that have signed the transaction, excluding the server account ID.
    * @example
    *
-   * import { Networks, TransactionBuilder, Utils }  from 'xdb-digitalbits-sdk';
+   * import { Networks, TransactionBuilder, Utils }  from '@digitalbits-blockchain/xdb-digitalbits-sdk';
    *
    * const serverKP = Keypair.random();
    * const clientKP1 = Keypair.random();

@@ -7,7 +7,7 @@ import { ServerApi } from "./server_api";
  *
  * @class EffectCallBuilder
  * @extends CallBuilder
- * @see [All Effects](https://developers.digitalbits.io/api/resources/effects/)
+ * @see [All Effects](https://developers.digitalbits.io/frontier/reference/endpoints/effects-all.html)
  * @constructor
  * @param {string} serverUrl Frontier server URL.
  */
@@ -21,7 +21,7 @@ export class EffectCallBuilder extends CallBuilder<
 
   /**
    * This endpoint represents all effects that changed a given account. It will return relevant effects from the creation of the account to the current ledger.
-   * @see [Effects for Account](https://developers.digitalbits.io/api/resources/accounts/effects/)
+   * @see [Effects for Account](https://developers.digitalbits.io/frontier/reference/endpoints/effects-for-account.html)
    * @param {string} accountId For example: `GDGQVOKHW4VEJRU2TETD6DBRKEO5ERCNF353LW5WBFW3JJWQ2BRQ6KDD`
    * @returns {EffectCallBuilder} this EffectCallBuilder instance
    */
@@ -33,7 +33,7 @@ export class EffectCallBuilder extends CallBuilder<
    * Effects are the specific ways that the ledger was changed by any operation.
    *
    * This endpoint represents all effects that occurred in the given ledger.
-   * @see [Effects for Ledger](https://developers.digitalbits.io/api/resources/ledgers/effects/)
+   * @see [Effects for Ledger](https://developers.digitalbits.io/frontier/reference/ledgers/effects/)
    * @param {number|string} sequence Ledger sequence
    * @returns {EffectCallBuilder} this EffectCallBuilder instance
    */
@@ -43,7 +43,7 @@ export class EffectCallBuilder extends CallBuilder<
 
   /**
    * This endpoint represents all effects that occurred as a result of a given transaction.
-   * @see [Effects for Transaction](https://developers.digitalbits.io/api/resources/transactions/effects/)
+   * @see [Effects for Transaction](https://developers.digitalbits.io/frontier/reference/endpoints/effects-for-transaction.html)
    * @param {string} transactionId Transaction ID
    * @returns {EffectCallBuilder} this EffectCallBuilder instance
    */
@@ -53,7 +53,7 @@ export class EffectCallBuilder extends CallBuilder<
 
   /**
    * This endpoint represents all effects that occurred as a result of a given operation.
-   * @see [Effects for Operation](https://developers.digitalbits.io/api/resources/operations/effects/)
+   * @see [Effects for Operation](https://developers.digitalbits.io/frontier/reference/endpoints/effects-for-operation.html)
    * @param {number} operationId Operation ID
    * @returns {EffectCallBuilder} this EffectCallBuilder instance
    */

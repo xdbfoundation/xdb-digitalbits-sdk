@@ -1,4 +1,4 @@
-xdb-digitalbits-sdk is a Javascript library for communicating with a
+@digitalbits-blockchain/xdb-digitalbits-sdk is a Javascript library for communicating with a
 [DigitalBits Frontier server](https://github.com/xdbfoundation/go/tree/master/services/frontier).
 It is used for building DigitalBits apps either on Node.js or in the browser.
 
@@ -9,38 +9,38 @@ It provides:
   DigitalBits Frontier instance, and for submitting transactions or querying network
   history.
 
-### xdb-digitalbits-sdk vs xdb-digitalbits-base
+### @digitalbits-blockchain/xdb-digitalbits-sdk vs @digitalbits-blockchain/xdb-digitalbits-base
 
-xdb-digitalbits-sdk is a high-level library that serves as client-side API for Frontier.
-[xdb-digitalbits-base](https://github.com/xdbfoundation/xdb-digitalbits-base) is lower-level
+@digitalbits-blockchain/xdb-digitalbits-sdk is a high-level library that serves as client-side API for Frontier.
+[@digitalbits-blockchain/xdb-digitalbits-base](https://github.com/xdbfoundation/xdb-digitalbits-base) is lower-level
 library for creating DigitalBits primitive constructs via XDR helpers and wrappers.
 
-**Most people will want digitalbits-sdk instead of digitalbits-base.** You should only
-use digitalbits-base if you know what you're doing!
+**Most people will want @digitalbits-blockchain/xdb-digitalbits-sdk instead of @digitalbits-blockchain/xdb-digitalbits-base.** You should only
+use @digitalbits-blockchain/xdb-digitalbits-base if you know what you're doing!
 
-If you add `digitalbits-sdk` to a project, **do not add `digitalbits-base`!** Mis-matching
-versions could cause weird, hard-to-find bugs. `digitalbits-sdk` automatically
-installs `digitalbits-base` and exposes all of its exports in case you need them.
+If you add `@digitalbits-blockchain/xdb-digitalbits-sdk` to a project, **do not add `@digitalbits-blockchain/xdb-digitalbits-base`!** Mis-matching
+versions could cause weird, hard-to-find bugs. `@digitalbits-blockchain/xdb-digitalbits-sdk` automatically
+installs `@digitalbits-blockchain/xdb-digitalbits-base` and exposes all of its exports in case you need them.
 
-> **Important!** The Node.js version of the `digitalbits-base` (`digitalbits-sdk` dependency) package
+> **Important!** The Node.js version of the `@digitalbits-blockchain/xdb-digitalbits-base` (`@digitalbits-blockchain/xdb-digitalbits-sdk` dependency) package
 > uses the [`sodium-native`](https://www.npmjs.com/package/sodium-native) package as
 > an [optional dependency](https://docs.npmjs.com/files/package.json#optionaldependencies). `sodium-native` is
 > a low level binding to [libsodium](https://github.com/jedisct1/libsodium),
 > (an implementation of [Ed25519](https://ed25519.cr.yp.to/) signatures).
-> If installation of `sodium-native` fails, or it is unavailable, `digitalbits-base` (and `digitalbits-sdk`) will
+> If installation of `sodium-native` fails, or it is unavailable, `@digitalbits-blockchain/xdb-digitalbits-base` (and `@digitalbits-blockchain/xdb-digitalbits-sdk`) will
 > fallback to using the [`tweetnacl`](https://www.npmjs.com/package/tweetnacl) package implementation.
 >
-> If you are using `digitalbits-sdk`/`digitalbits-base` in a browser you can ignore
+> If you are using `@digitalbits-blockchain/xdb-digitalbits-sdk`/`@digitalbits-blockchain/xdb-digitalbits-base` in a browser you can ignore
 > this. However, for production backend deployments you should be
 > using `sodium-native`. If `sodium-native` is successfully installed and working the
 > `DigitalBitsSdk.FastSigning` variable will return `true`.
 
 ## Quick start
 
-Using npm to include xdb-digitalbits-sdk in your own project:
+Using npm to include @digitalbits-blockchain/xdb-digitalbits-sdk in your own project:
 
 ```shell
-npm install --save @digitalbits-blockchain/xdb-digitalbits-sdk
+npm install --save @digitalbits-blockchain/@digitalbits-blockchain/xdb-digitalbits-sdk
 ```
 
 ## Install
@@ -58,47 +58,7 @@ npm install --save @digitalbits-blockchain/xdb-digitalbits-sdk
 ```js
 var DigitalBitsSdk = require('@digitalbits-blockchain/xdb-digitalbits-sdk');
 ```
-
-### To self host for use in the browser
-
-1. Install it using [bower](http://bower.io):
-
-```shell
-bower install @digitalbits-blockchain/xdb-digitalbits-sdk
-```
-
-2. Include it in the browser:
-
-```html
-<script src="./bower_components/xdb-digitalbits-sdk/xdb-digitalbits-sdk.js"></script>
-<script>
-  console.log(DigitalBitsSdk);
-</script>
-```
-
-If you don't want to use or install Bower, you can copy built JS files from the
-[bower-xdb-digitalbits-sdk repo](https://github.com/xdbfoundation/bower-xdb-digitalbits-sdk).
-
-### To use the [cdnjs](https://cdnjs.com/libraries/digitalbits-sdk) hosted script in the browser
-
-1. Instruct the browser to fetch the library from
-   [cdnjs](https://cdnjs.com/libraries/digitalbits-sdk), a 3rd party service that
-   hosts js libraries:
-
-```html
-<script src="https://cdnjs.cloudflare.com/ajax/libs/digitalbits-sdk/{version}/digitalbits-sdk.js"></script>
-<script>
-  console.log(DigitalBitsSdk);
-</script>
-```
-
-Note that this method relies using a third party to host the JS library. This
-may not be entirely secure.
-
-Make sure that you are using the latest version number. They can be found on the
-[releases page in Github](https://github.com/xdbfoundation/xdb-digitalbits-sdk/releases).
-
-### To develop and test xdb-digitalbits-sdk itself
+### To develop and test @digitalbits-blockchain/xdb-digitalbits-sdk itself
 
 1. Clone the repo:
 
@@ -157,7 +117,7 @@ module.exports = {
 };
 ```
 6. Add `import "./shim";` to the top of `index.js`
-7. `yarn add digitalbits-sdk`
+7. `yarn add @digitalbits-blockchain/xdb-digitalbits-sdk`
 
 There is also a [sample](https://github.com/fnando/rn-digitalbits-sdk-sample) that you can follow.
 
@@ -169,14 +129,14 @@ yarn rn-nodeify --install process,url,events,https,http,util,stream,crypto,vm,bu
 ```
 2. `yarn add -D rn-nodeify`
 3. Add `import "./shim";` to the your app's entry point (by default `./App.js`)
-4. `yarn add digitalbits-sdk`
+4. `yarn add @digitalbits-blockchain/xdb-digitalbits-sdk`
 5. `expo install expo-random`
 
 At this point, the digitalbits SDK will work, except that `DigitalBitsSdk.Keypair.random()` will throw an error. So to work around this you can create your own method to generate a random keypair like this:
 
 ```javascript
 import * as Random from 'expo-random';
-import DigitalBitsSdk from 'xdb-digitalbits-sdk';
+import DigitalBitsSdk from '@digitalbits-blockchain/xdb-digitalbits-sdk';
 
 const generateRandomKeypair = () => {
   const randomBytes = Random.getRandomBytes(32);
@@ -187,12 +147,12 @@ const generateRandomKeypair = () => {
 
 ## Usage
 
-For information on how to use xdb-digitalbits-sdk, take a look at [the
+For information on how to use @digitalbits-blockchain/xdb-digitalbits-sdk, take a look at [the
 documentation](https://xdbfoundation.github.io/xdb-digitalbits-sdk/), or [the
 examples](https://github.com/xdbfoundation/xdb-digitalbits-sdk/tree/master/docs/reference).
 
 There is also Frontier REST API Documentation
-[here](https://developers.digitalbits.io/api/introduction/).
+[here](https://developers.digitalbits.io/frontier/reference/index.html).
 
 ## Testing
 
@@ -247,6 +207,6 @@ npm >= 2.13.0 required. Read more about
 
 ## License
 
-xdb-digitalbits-sdk is licensed under an Apache-2.0 license. See the
+@digitalbits-blockchain/xdb-digitalbits-sdk is licensed under an Apache-2.0 license. See the
 [LICENSE](https://github.com/xdbfoundation/xdb-digitalbits-sdk/blob/master/LICENSE) file
 for details.

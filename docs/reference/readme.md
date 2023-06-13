@@ -3,16 +3,16 @@ title: Overview
 ---
 The JavaScript DigitalBits SDK facilitates integration with the [DigitalBits Frontier API server](https://github.com/xdbfoundation/go/tree/master/services/frontier) and submission of DigitalBits transactions, either on Node.js or in the browser. It has two main uses: [querying Frontier](#querying-frontier) and [building, signing, and submitting transactions to the DigitalBits network](#building-transactions).
 
-[Building and installing xdb-digitalbits-sdk](https://github.com/xdbfoundation/xdb-digitalbits-sdk)<br>
-[Examples of using xdb-digitalbits-sdk](./examples.md)
+[Building and installing @digitalbits-blockchain/xdb-digitalbits-sdk](https://github.com/xdbfoundation/xdb-digitalbits-sdk)<br>
+[Examples of using @digitalbits-blockchain/xdb-digitalbits-sdk](./examples.md)
 
 # Querying Frontier
-xdb-digitalbits-sdk gives you access to all the endpoints exposed by Frontier.
+@digitalbits-blockchain/xdb-digitalbits-sdk gives you access to all the endpoints exposed by Frontier.
 
 ## Building requests
-xdb-digitalbits-sdk uses the [Builder pattern](https://en.wikipedia.org/wiki/Builder_pattern) to create the requests to send
+@digitalbits-blockchain/xdb-digitalbits-sdk uses the [Builder pattern](https://en.wikipedia.org/wiki/Builder_pattern) to create the requests to send
 to Frontier. Starting with a [server](https://xdbfoundation.github.io/xdb-digitalbits-sdk/Server.html) object, you can chain methods together to generate a query.
-(See the [Frontier reference](https://developers.digitalbits.io/api/) documentation for what methods are possible.)
+(See the [Frontier reference](https://developers.digitalbits.io/frontier/reference/index.html) documentation for what methods are possible.)
 ```js
 var DigitalBitsSdk = require('@digitalbits-blockchain/xdb-digitalbits-sdk');
 var server = new DigitalBitsSdk.Server('https://frontier.testnet.digitalbits.io');
@@ -33,7 +33,7 @@ Once the request is built, it can be invoked with `.call()` or with `.stream()`.
 ## Streaming requests
 Many requests can be invoked with `stream()`. Instead of returning a promise like `call()` does, `.stream()` will return an `EventSource`.
 Frontier will start sending responses from either the beginning of time or from the point specified with `.cursor()`.
-(See the [Frontier reference](https://developers.digitalbits.io/api/introduction/streaming/) documentation to learn which endpoints support streaming.)
+(See the [Frontier reference](https://developers.digitalbits.io/frontier/reference/streaming.html) documentation to learn which endpoints support streaming.)
 
 For example, to log instances of transactions from a particular account:
 
@@ -57,7 +57,7 @@ var es = server.transactions()
 ## Handling responses
 
 ### XDR
-The transaction endpoints will return some fields in raw [XDR](https://developers.digitalbits.io/api/introduction/xdr/)
+The transaction endpoints will return some fields in raw [XDR](https://developers.digitalbits.io/frontier/reference/xdr.html)
 form. You can convert this XDR to JSON using the `.fromXDR()` method.
 
 An example of re-writing the txHandler from above to print the XDR fields as JSON:
@@ -73,7 +73,7 @@ var txHandler = function (txResponse) {
 
 
 ### Following links
-The [HAL format](https://developers.digitalbits.io/api/introduction/response-format/) links returned with the Frontier response are converted into functions you can call on the returned object.
+The [HAL format](https://developers.digitalbits.io/frontier/reference/responses.html) links returned with the Frontier response are converted into functions you can call on the returned object.
 This allows you to simply use `.next()` to page through results. It also makes fetching additional info, as in the following example, easy:
 
 ```js

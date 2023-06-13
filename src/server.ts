@@ -282,7 +282,7 @@ export class Server {
    *   `amountBought` or `amountSold` have already been transferred.
    *
    * @see [Post
-   * Transaction](https://developers.digitalbits.io/api/resources/transactions/post/)
+   * Transaction](https://developers.digitalbits.io/frontier/reference/endpoints/transactions-create.html)
    * @param {Transaction|FeeBumpTransaction} transaction - The transaction to submit.
    * @param {object} [opts] Options object
    * @param {boolean} [opts.skipMemoRequiredCheck] - Allow skipping memo
@@ -319,7 +319,7 @@ export class Server {
           return response.data;
         }
 
-        // TODO: fix digitalbits-base types.
+        // TODO: fix @digitalbits-blockchain/xdb-digitalbits-base types.
         const responseXDR: xdr.TransactionResult = (xdr.TransactionResult
           .fromXDR as any)(response.data.result_xdr, "base64");
 
@@ -331,7 +331,7 @@ export class Server {
 
         if (results.length) {
           offerResults = results
-            // TODO: fix digitalbits-base types.
+            // TODO: fix @digitalbits-blockchain/xdb-digitalbits-base types.
             .map((result: any, i: number) => {
               if (
                 result.value().switch().name !== "manageBuyOffer" &&
@@ -352,7 +352,7 @@ export class Server {
 
               const offersClaimed = offerSuccess
                 .offersClaimed()
-                // TODO: fix digitalbits-base types.
+                // TODO: fix @digitalbits-blockchain/xdb-digitalbits-base types.
                 .map((offerClaimedAtom: any) => {
                   const offerClaimed = offerClaimedAtom.value();
 
@@ -483,7 +483,7 @@ export class Server {
                   !offersClaimed.length && effect === "manageOfferDeleted",
               };
             })
-            // TODO: fix digitalbits-base types.
+            // TODO: fix @digitalbits-blockchain/xdb-digitalbits-base types.
             .filter((result: any) => !!result);
         }
 

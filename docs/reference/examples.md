@@ -8,7 +8,7 @@ title: Basic Examples
 
 ## Creating a payment transaction
 
-The `xdb-digitalbits-sdk` exposes the [`TransactionBuilder`](https://xdbfoundation.github.io/js-digitalbits-base/TransactionBuilder.html) class from `js-digitalbits-base`.  There are more examples of [building transactions here](https://github.com/xdbfoundation/js-digitalbits-base/blob/master/docs/reference/base-examples.md). All those examples can be signed and submitted to DigitalBits in a similar manner as is done below.
+The `@digitalbits-blockchain/xdb-digitalbits-sdk` exposes the [`TransactionBuilder`](https://xdbfoundation.github.io/xdb-digitalbits-sdk/TransactionBuilder.html) class from `@digitalbits-blockchain/xdb-digitalbits-base`.  There are more examples of [building transactions here](https://github.com/xdbfoundation/js-digitalbits-base/blob/master/docs/reference/base-examples.md). All those examples can be signed and submitted to DigitalBits in a similar manner as is done below.
 
 In this example, the destination account must exist. The example is written
 using modern Javascript, but `await` calls can also be rendered with promises.
@@ -20,11 +20,11 @@ using modern Javascript, but `await` calls can also be rendered with promises.
 // 1. Secret key of a funded account to be the source account
 // 2. Public key of an existing account as a recipient
 //    These two keys can be created and funded by the friendbot at
-//    https://laboratory.digitalbits.io under the heading "Quick Start: Test Account"
+//    https://laboratory.livenet.digitalbits.io/ under the heading "Quick Start: Test Account"
 // 3. Access to JS DigitalBits SDK (https://github.com/xdbfoundation/xdb-digitalbits-sdk)
 //    either through Node.js or in the browser.
 
-// This code can be run in the browser at https://laboratory.digitalbits.io
+// This code can be run in the browser at https://laboratory.livenet.digitalbits.io/
 // That site exposes a global DigitalBitsSdk object you can use.
 // To run this code in the Chrome, open the console tab in the DevTools.
 // The hotkey to open the DevTools console is Ctrl+Shift+J or (Cmd+Opt+J on Mac).
@@ -39,7 +39,7 @@ const sourcePublicKey = sourceKeypair.publicKey();
 
 const receiverPublicKey = 'GAIRISXKPLOWZBMFRPU5XRGUUX3VMA3ZEWKBM5MSNRU3CHV6P4PYZ74D';
 
-// Configure DigitalBitsSdk to talk to the frontier instance hosted by DigitalBits.org
+// Configure DigitalBitsSdk to talk to the frontier instance hosted by DigitalBits.io
 // To use the live network, set the hostname to 'frontier.digitalbits.io'
 const server = new DigitalBitsSdk.Server('https://frontier.testnet.digitalbits.io');
 
@@ -74,7 +74,7 @@ const server = new DigitalBitsSdk.Server('https://frontier.testnet.digitalbits.i
     }))
     // Make this transaction valid for the next 30 seconds only
     .setTimeout(30)
-    // Uncomment to add a memo (https://developers.digitalbits.io/docs/glossary/transactions/)
+    // Uncomment to add a memo (https://developers.digitalbits.io/guides/concepts/transactions.html)
     // .addMemo(DigitalBitsSdk.Memo.text('Hello world!'))
     .build();
 
@@ -129,7 +129,7 @@ server.transactions()
 
 ## Streaming payment events
 
-xdb-digitalbits-sdk provides streaming support for Frontier endpoints using `EventSource`.  You can pass a function to handle any events that occur on the stream.
+@digitalbits-blockchain/xdb-digitalbits-sdk provides streaming support for Frontier endpoints using `EventSource`.  You can pass a function to handle any events that occur on the stream.
 
 Try submitting a transaction (via the guide above) while running the following code example.
 ```javascript
@@ -148,4 +148,4 @@ const es = server.payments()
   })
 ```
 
-For more on streaming events, please check out [the Frontier documentation](https://developers.digitalbits.io/api/introduction/streaming/) and this [guide to server-sent events](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events).
+For more on streaming events, please check out [the Frontier documentation](https://developers.digitalbits.io/frontier/reference/streaming.html) and this [guide to server-sent events](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events).
