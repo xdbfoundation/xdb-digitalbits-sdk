@@ -134,7 +134,7 @@ export namespace Utils {
    * @memberof Utils
    * @param {string} challengeTx SEP0010 challenge transaction in base64.
    * @param {string} serverAccountID The server's digitalbits account (public key).
-   * @param {string} networkPassphrase The network passphrase, e.g.: 'Test SDF Network ; September 2015'.
+   * @param {string} networkPassphrase The network passphrase, e.g.: 'TestNet Global DigitalBits Network ; December 2020'.
    * @param {string|string[]} [homeDomains] The home domain that is expected to be included in the first Manage Data operation's string key. If an array is provided, one of the domain names in the array must match.
    * @param {string} webAuthDomain The home domain that is expected to be included as the value of the Manage Data operation with the 'web_auth_domain' key. If no such operation is included, this parameter is not used.
    * @returns {Transaction|string|string|string} The actual transaction and the digitalbits public key (master key) used to sign the Manage Data operation, the matched home domain, and the memo attached to the transaction, which will be null if not present.
@@ -347,7 +347,7 @@ export namespace Utils {
    * @memberof Utils
    * @param {string} challengeTx SEP0010 challenge transaction in base64.
    * @param {string} serverAccountID The server's digitalbits account (public key).
-   * @param {string} networkPassphrase The network passphrase, e.g.: 'Test SDF Network ; September 2015'.
+   * @param {string} networkPassphrase The network passphrase, e.g.: 'TestNet Global DigitalBits Network ; December 2020'.
    * @param {number} threshold The required signatures threshold for verifying this transaction.
    * @param {ServerApi.AccountRecordSigners[]} signerSummary a map of all authorized signers to their weights. It's used to validate if the transaction signatures have met the given threshold.
    * @param {string|string[]} [homeDomains] The home domain(s) that should be included in the first Manage Data operation's string key. Required in verifyChallengeTxSigners() => readChallengeTx().
@@ -454,7 +454,7 @@ export namespace Utils {
    * @memberof Utils
    * @param {string} challengeTx SEP0010 challenge transaction in base64.
    * @param {string} serverAccountID The server's digitalbits account (public key).
-   * @param {string} networkPassphrase The network passphrase, e.g.: 'Test SDF Network ; September 2015'.
+   * @param {string} networkPassphrase The network passphrase, e.g.: 'TestNet Global DigitalBits Network ; December 2020'.
    * @param {string[]} signers The signers public keys. This list should contain the public keys for all signers that have signed the transaction.
    * @param {string|string[]} [homeDomains] The home domain(s) that should be included in the first Manage Data operation's string key. Required in readChallengeTx().
    * @param {string} webAuthDomain The home domain that is expected to be included as the value of the Manage Data operation with the 'web_auth_domain' key, if present. Used in readChallengeTx().

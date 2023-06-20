@@ -67,7 +67,7 @@ export class FederationServer {
    * ```
    *
    * @see <a href="https://developers.digitalbits.io/docs/glossary/federation/" target="_blank">Federation doc</a>
-   * @see <a href="https://developers.digitalbits.io/docs/issuing-assets/publishing-asset-info/" target="_blank">DigitalBits.toml doc</a>
+   * @see <a href="https://developers.digitalbits.io/guides/concepts/digitalbits-toml.html" target="_blank">digitalbits.toml doc</a>
    * @param {string} value DigitalBits Address (ex. `bob*digitalbits.io`)
    * @param {object} [opts] Options object
    * @param {boolean} [opts.allowHttp] - Allow connecting to http servers, default: `false`. This must be set to false in production deployments!
@@ -104,7 +104,7 @@ export class FederationServer {
 
   /**
    * Creates a `FederationServer` instance based on information from
-   * [digitalbits.toml](https://developers.digitalbits.io/docs/issuing-assets/publishing-asset-info/)
+   * [digitalbits.toml](https://developers.digitalbits.io/guides/concepts/digitalbits-toml.html)
    * file for a given domain.
    *
    * If `digitalbits.toml` file does not exist for a given domain or it does not
@@ -118,7 +118,7 @@ export class FederationServer {
    *     // digitalbits.toml does not exist or it does not contain information about federation server.
    *   });
    * ```
-   * @see <a href="https://developers.digitalbits.io/docs/issuing-assets/publishing-asset-info/" target="_blank">DigitalBits.toml doc</a>
+   * @see <a href="https://developers.digitalbits.io/guides/concepts/digitalbits-toml.html" target="_blank">digitalbits.toml doc</a>
    * @param {string} domain Domain to get federation server for
    * @param {object} [opts] Options object
    * @param {boolean} [opts.allowHttp] - Allow connecting to http servers, default: `false`. This must be set to false in production deployments!

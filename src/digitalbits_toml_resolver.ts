@@ -24,7 +24,7 @@ export class DigitalBitsTomlResolver {
    *     // digitalbits.toml does not exist or is invalid
    *   });
    * ```
-   * @see <a href="https://developers.digitalbits.io/docs/issuing-assets/publishing-asset-info/" target="_blank">DigitalBits.toml doc</a>
+   * @see <a href="https://developers.digitalbits.io/guides/concepts/digitalbits-toml.html" target="_blank">digitalbits.toml doc</a>
    * @param {string} domain Domain to get digitalbits.toml file for
    * @param {object} [opts] Options object
    * @param {boolean} [opts.allowHttp] - Allow connecting to http servers, default: `false`. This must be set to false in production deployments!

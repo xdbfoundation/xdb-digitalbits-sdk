@@ -3,7 +3,7 @@ const MockAdapter = require("axios-mock-adapter");
 describe("Server - CallBuilder#join", function() {
   beforeEach(function() {
     this.server = new DigitalBitsSdk.Server(
-      "https://frontier-live.digitalbits.io:1337",
+      "https://frontier.livenet.digitalbits.io:1337",
     );
     this.axiosMock = sinon.mock(FrontierAxiosClient);
   });
@@ -19,32 +19,32 @@ describe("Server - CallBuilder#join", function() {
       _links: {
         self: {
           href:
-            "https://frontier-live.digitalbits.io:1337/transactions/de8ca055af7972f817e9d3f7c7a0b480de82593bc378f0e48f83b8e31985e4e5",
+            "https://frontier.livenet.digitalbits.io:1337/transactions/de8ca055af7972f817e9d3f7c7a0b480de82593bc378f0e48f83b8e31985e4e5",
         },
         account: {
           href:
-            "https://frontier-live.digitalbits.io:1337/accounts/GBIABVWR2LOKFDMAI6QA2NGT4G54O3BC577GAWDQ6QMOUP5E3ULBBGYX",
+            "https://frontier.livenet.digitalbits.io:1337/accounts/GBIABVWR2LOKFDMAI6QA2NGT4G54O3BC577GAWDQ6QMOUP5E3ULBBGYX",
         },
         ledger: {
-          href: "https://frontier-live.digitalbits.io:1337/ledgers/679846",
+          href: "https://frontier.livenet.digitalbits.io:1337/ledgers/679846",
         },
         operations: {
           href:
-            "https://frontier-live.digitalbits.io:1337/transactions/de8ca055af7972f817e9d3f7c7a0b480de82593bc378f0e48f83b8e31985e4e5/operations{?cursor,limit,order}",
+            "https://frontier.livenet.digitalbits.io:1337/transactions/de8ca055af7972f817e9d3f7c7a0b480de82593bc378f0e48f83b8e31985e4e5/operations{?cursor,limit,order}",
           templated: true,
         },
         effects: {
           href:
-            "https://frontier-live.digitalbits.io:1337/transactions/de8ca055af7972f817e9d3f7c7a0b480de82593bc378f0e48f83b8e31985e4e5/effects{?cursor,limit,order}",
+            "https://frontier.livenet.digitalbits.io:1337/transactions/de8ca055af7972f817e9d3f7c7a0b480de82593bc378f0e48f83b8e31985e4e5/effects{?cursor,limit,order}",
           templated: true,
         },
         precedes: {
           href:
-            "https://frontier-live.digitalbits.io:1337/transactions?order=asc\u0026cursor=2919916336320512",
+            "https://frontier.livenet.digitalbits.io:1337/transactions?order=asc\u0026cursor=2919916336320512",
         },
         succeeds: {
           href:
-            "https://frontier-live.digitalbits.io:1337/transactions?order=desc\u0026cursor=2919916336320512",
+            "https://frontier.livenet.digitalbits.io:1337/transactions?order=desc\u0026cursor=2919916336320512",
         },
       },
       id: "de8ca055af7972f817e9d3f7c7a0b480de82593bc378f0e48f83b8e31985e4e5",
@@ -76,15 +76,15 @@ describe("Server - CallBuilder#join", function() {
       _links: {
         self: {
           href:
-            "https://frontier-live.digitalbits.io:1337/operations?cursor=\u0026join=transactions\u0026limit=10\u0026order=asc",
+            "https://frontier.livenet.digitalbits.io:1337/operations?cursor=\u0026join=transactions\u0026limit=10\u0026order=asc",
         },
         next: {
           href:
-            "https://frontier-live.digitalbits.io:1337/operations?cursor=2919916336320518\u0026join=transactions\u0026limit=10\u0026order=asc",
+            "https://frontier.livenet.digitalbits.io:1337/operations?cursor=2919916336320518\u0026join=transactions\u0026limit=10\u0026order=asc",
         },
         prev: {
           href:
-            "https://frontier-live.digitalbits.io:1337/operations?cursor=2919916336320518\u0026join=transactions\u0026limit=1\u0026order=asc",
+            "https://frontier.livenet.digitalbits.io:1337/operations?cursor=2919916336320518\u0026join=transactions\u0026limit=1\u0026order=asc",
         },
       },
       _embedded: {
@@ -93,23 +93,23 @@ describe("Server - CallBuilder#join", function() {
             _links: {
               self: {
                 href:
-                  "https://frontier-live.digitalbits.io:1337/operations/2919916336320518",
+                  "https://frontier.livenet.digitalbits.io:1337/operations/2919916336320518",
               },
               transaction: {
                 href:
-                  "https://frontier-live.digitalbits.io:1337/transactions/de8ca055af7972f817e9d3f7c7a0b480de82593bc378f0e48f83b8e31985e4e5",
+                  "https://frontier.livenet.digitalbits.io:1337/transactions/de8ca055af7972f817e9d3f7c7a0b480de82593bc378f0e48f83b8e31985e4e5",
               },
               effects: {
                 href:
-                  "https://frontier-live.digitalbits.io:1337/operations/2919916336320518/effects",
+                  "https://frontier.livenet.digitalbits.io:1337/operations/2919916336320518/effects",
               },
               succeeds: {
                 href:
-                  "https://frontier-live.digitalbits.io:1337/effects?order=desc\u0026cursor=2919916336320518",
+                  "https://frontier.livenet.digitalbits.io:1337/effects?order=desc\u0026cursor=2919916336320518",
               },
               precedes: {
                 href:
-                  "https://frontier-live.digitalbits.io:1337/effects?order=asc\u0026cursor=2919916336320518",
+                  "https://frontier.livenet.digitalbits.io:1337/effects?order=asc\u0026cursor=2919916336320518",
               },
             },
             id: "2919916336320518",
@@ -160,7 +160,7 @@ describe("Server - CallBuilder#join", function() {
         .expects("get")
         .withArgs(
           sinon.match(
-            "https://frontier-live.digitalbits.io:1337/operations?join=transactions",
+            "https://frontier.livenet.digitalbits.io:1337/operations?join=transactions",
           ),
         )
         .returns(Promise.resolve({ data: operationsResponse }));

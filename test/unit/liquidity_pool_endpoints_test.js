@@ -3,7 +3,7 @@ function copyJson(js) {
   return JSON.parse(JSON.stringify(js));
 }
 
-const BASE_URL = "https://frontier-live.digitalbits.io:1337";
+const BASE_URL = "https://frontier.livenet.digitalbits.io:1337";
 const LP_URL = BASE_URL + "/liquidity_pools"
 
 

@@ -119,8 +119,6 @@ module.exports = {
 6. Add `import "./shim";` to the top of `index.js`
 7. `yarn add @digitalbits-blockchain/xdb-digitalbits-sdk`
 
-There is also a [sample](https://github.com/fnando/rn-digitalbits-sdk-sample) that you can follow.
-
 #### Using in an Expo managed workflow
 
 1. Add the following postinstall script:
@@ -188,11 +186,6 @@ cd jsdoc && serve .
 
 Documentation for this repo lives in
 [Developers site](https://github.com/xdbfoundation/xdb-digitalbits-sdk/blob/master/docs/reference/readme.md).
-
-## Contributing
-
-For information on how to contribute, please refer to our
-[contribution guide](https://github.com/xdbfoundation/xdb-digitalbits-sdk/blob/master/CONTRIBUTING.md).
 
 ## Publishing to npm
 

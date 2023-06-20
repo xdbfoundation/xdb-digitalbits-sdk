@@ -1,7 +1,7 @@
 import { Frontier } from "./../frontier_api";
 import { OfferAsset } from "./offer";
 
-// Reference: GO SDK https://github.com/xdbfoundation/go/blob/ec5600bd6b2b6900d26988ff670b9ca7992313b8/services/frontier/internal/resourceadapter/effects.go
+// Reference: GO SDK https://github.com/xdbfoundation/go/blob/master/services/frontier/internal/resourceadapter/effects.go
 export enum EffectType {
   // account effects
   account_created = 0,

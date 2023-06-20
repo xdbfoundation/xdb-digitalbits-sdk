@@ -149,8 +149,8 @@ export namespace ServerApi {
     max_tx_set_size: number;
     protocol_version: number;
     header_xdr: string;
-    base_fee_in_stroops: number;
-    base_reserve_in_stroops: number;
+    base_fee_in_nibbs: number;
+    base_reserve_in_nibbs: number;
     /**
      * @deprecated  This will be removed in the next major version: the property
      *     no longer exists on the Frontier API

@@ -46,18 +46,18 @@ import FrontierAxiosClient, {
 
 export const SUBMIT_TRANSACTION_TIMEOUT = 60 * 1000;
 
-const STROOPS_IN_LUMEN = 10000000;
+const NIBBS_IN_DIGITALBITS = 10000000;
 
 // ACCOUNT_REQUIRES_MEMO is the base64 encoding of "1".
 // SEP 29 uses this value to define transaction memo requirements for incoming payments.
 const ACCOUNT_REQUIRES_MEMO = "MQ==";
 
 function _getAmountInNibbs(amt: BigNumber) {
-  return new BigNumber(amt).div(STROOPS_IN_LUMEN).toString();
+  return new BigNumber(amt).div(NIBBS_IN_DIGITALBITS).toString();
 }
 
 /**
- * Server handles the network connection to a [Frontier](https://developers.digitalbits.io/api/introduction/)
+ * Server handles the network connection to a [Frontier](https://developers.digitalbits.io/reference/)
  * instance and exposes an interface for requests to that instance.
  * @constructor
  * @param {string} serverURL Frontier Server URL (ex. `https://frontier.testnet.digitalbits.io`).
@@ -469,7 +469,7 @@ export class Server {
                 operationIndex: i,
                 currentOffer,
 
-                // this value is in stroops so divide it out
+                // this value is in nibbs so divide it out
                 amountBought: _getAmountInNibbs(amountBought),
                 amountSold: _getAmountInNibbs(amountSold),
 

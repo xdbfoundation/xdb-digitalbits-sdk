@@ -3,7 +3,7 @@ const MockAdapter = require('axios-mock-adapter');
 describe('server.js non-transaction tests', function() {
   beforeEach(function() {
     this.server = new DigitalBitsSdk.Server(
-      'https://frontier-live.digitalbits.io:1337'
+      'https://frontier.livenet.digitalbits.io:1337'
     );
     this.axiosMock = sinon.mock(FrontierAxiosClient);
     DigitalBitsSdk.Config.setDefault();
@@ -17,14 +17,14 @@ describe('server.js non-transaction tests', function() {
   describe('Server.constructor', function() {
     it('throws error for insecure server', function() {
       expect(
-        () => new DigitalBitsSdk.Server('http://frontier-live.digitalbits.io:1337')
+        () => new DigitalBitsSdk.Server('http://frontier.livenet.digitalbits.io:1337')
       ).to.throw(/Cannot connect to insecure frontier server/);
     });
 
     it('allow insecure server when opts.allowHttp flag is set', function() {
       expect(
         () =>
-          new DigitalBitsSdk.Server('http://frontier-live.digitalbits.io:1337', {
+          new DigitalBitsSdk.Server('http://frontier.livenet.digitalbits.io:1337', {
             allowHttp: true
           })
       ).to.not.throw();
@@ -33,7 +33,7 @@ describe('server.js non-transaction tests', function() {
     it('allow insecure server when global Config.allowHttp flag is set', function() {
       DigitalBitsSdk.Config.setAllowHttp(true);
       expect(
-        () => new DigitalBitsSdk.Server('http://frontier-live.digitalbits.io:1337')
+        () => new DigitalBitsSdk.Server('http://frontier.livenet.digitalbits.io:1337')
       ).to.not.throw();
     });
   });
@@ -59,7 +59,7 @@ describe('server.js non-transaction tests', function() {
     // don't change the order!!
     it('fetches falls back to local time if fetch is bad', function(done) {
       this.axiosMockAdapter
-        .onGet('https://frontier-live.digitalbits.io:1337/')
+        .onGet('https://frontier.livenet.digitalbits.io:1337/')
         .reply(200, {}, {});
 
       this.server
@@ -75,7 +75,7 @@ describe('server.js non-transaction tests', function() {
 
     it('fetches if nothing is recorded', function(done) {
       this.axiosMockAdapter
-        .onGet('https://frontier-live.digitalbits.io:1337/')
+        .onGet('https://frontier.livenet.digitalbits.io:1337/')
         .reply(
           200,
           {},
@@ -143,7 +143,7 @@ describe('server.js non-transaction tests', function() {
     it('returns the base reserve', function(done) {
       this.axiosMock
         .expects('get')
-        .withArgs(sinon.match('https://frontier-live.digitalbits.io:1337/fee_stats'))
+        .withArgs(sinon.match('https://frontier.livenet.digitalbits.io:1337/fee_stats'))
         .returns(Promise.resolve({ data: response }));
 
       this.server
@@ -160,7 +160,7 @@ describe('server.js non-transaction tests', function() {
     it('returns default value (100) if last_ledger_base_fee is missing', function(done) {
       this.axiosMock
         .expects('get')
-        .withArgs(sinon.match('https://frontier-live.digitalbits.io:1337/fee_stats'))
+        .withArgs(sinon.match('https://frontier.livenet.digitalbits.io:1337/fee_stats'))
         .returns(Promise.resolve({ data: {} }));
 
       this.server
@@ -217,7 +217,7 @@ describe('server.js non-transaction tests', function() {
     it('returns the base reserve', function(done) {
       this.axiosMock
         .expects('get')
-        .withArgs(sinon.match('https://frontier-live.digitalbits.io:1337/fee_stats'))
+        .withArgs(sinon.match('https://frontier.livenet.digitalbits.io:1337/fee_stats'))
         .returns(Promise.resolve({ data: response }));
 
       this.server
@@ -319,7 +319,7 @@ describe('server.js non-transaction tests', function() {
         .expects('get')
         .withArgs(
           sinon.match(
-            'https://frontier-live.digitalbits.io:1337/accounts/GBAH7FQMC3CZJ4WD6GE7G7YXCIU36LC2IHXQ7D5MQAUO4PODOWIVLSFS'
+            'https://frontier.livenet.digitalbits.io:1337/accounts/GBAH7FQMC3CZJ4WD6GE7G7YXCIU36LC2IHXQ7D5MQAUO4PODOWIVLSFS'
           )
         )
         .returns(Promise.resolve({ data: accountResponse }));
@@ -406,7 +406,7 @@ describe('server.js non-transaction tests', function() {
           this.axiosMock
             .expects('get')
             .withArgs(
-              sinon.match('https://frontier-live.digitalbits.io:1337/ledgers')
+              sinon.match('https://frontier.livenet.digitalbits.io:1337/ledgers')
             )
             .returns(Promise.resolve({ data: ledgersResponse }));
 
@@ -433,7 +433,7 @@ describe('server.js non-transaction tests', function() {
             .expects('get')
             .withArgs(
               sinon.match(
-                'https://frontier-live.digitalbits.io:1337/ledgers?limit=1&cursor=b&order=asc'
+                'https://frontier.livenet.digitalbits.io:1337/ledgers?limit=1&cursor=b&order=asc'
               )
             )
             .returns(Promise.resolve({ data: ledgersResponse }));
@@ -461,7 +461,7 @@ describe('server.js non-transaction tests', function() {
             .expects('get')
             .withArgs(
               sinon.match(
-                'https://frontier-live.digitalbits.io:1337/ledgers?order=asc&limit=1&cursor=4294967296'
+                'https://frontier.livenet.digitalbits.io:1337/ledgers?order=asc&limit=1&cursor=4294967296'
               )
             )
             .returns(Promise.resolve({ data: ledgersResponse }));
@@ -521,7 +521,7 @@ describe('server.js non-transaction tests', function() {
           this.axiosMock
             .expects('get')
             .withArgs(
-              sinon.match('https://frontier-live.digitalbits.io:1337/ledgers/1')
+              sinon.match('https://frontier.livenet.digitalbits.io:1337/ledgers/1')
             )
             .returns(Promise.reject({ response: { status: 404, statusText: 'NotFound', data: {} } }));
 
@@ -546,7 +546,7 @@ describe('server.js non-transaction tests', function() {
           this.axiosMock
             .expects('get')
             .withArgs(
-              sinon.match('https://frontier-live.digitalbits.io:1337/ledgers/1')
+              sinon.match('https://frontier.livenet.digitalbits.io:1337/ledgers/1')
             )
             .returns(Promise.resolve({ data: singleLedgerResponse }));
 
@@ -570,7 +570,7 @@ describe('server.js non-transaction tests', function() {
             .expects('get')
             .withArgs(
               sinon.match(
-                'https://frontier-live.digitalbits.io:1337/ledgers/1?limit=1&cursor=b&order=asc'
+                'https://frontier.livenet.digitalbits.io:1337/ledgers/1?limit=1&cursor=b&order=asc'
               )
             )
             .returns(Promise.resolve({ data: singleLedgerResponse }));
@@ -679,7 +679,7 @@ describe('server.js non-transaction tests', function() {
             .expects('get')
             .withArgs(
               sinon.match(
-                'https://frontier-live.digitalbits.io:1337/ledgers/7952722/transactions'
+                'https://frontier.livenet.digitalbits.io:1337/ledgers/7952722/transactions'
               )
             )
             .returns(Promise.resolve({ data: transactionsResponse }));
@@ -688,7 +688,7 @@ describe('server.js non-transaction tests', function() {
             .expects('get')
             .withArgs(
               sinon.match(
-                /^https:\/\/frontier.digitalbits.io\/transactions\/c585b8764b28be678c482f8b6e87e76e4b5f28043c53f4dcb7b724b4b2efebc1\/operations/
+                /^https:\/\/frontier.livenet.digitalbits.io\/transactions\/c585b8764b28be678c482f8b6e87e76e4b5f28043c53f4dcb7b724b4b2efebc1\/operations/
               )
             )
             .returns(Promise.resolve({ data: { operations: [] } }));
@@ -727,7 +727,7 @@ describe('server.js non-transaction tests', function() {
             .expects('get')
             .withArgs(
               sinon.match(
-                'https://frontier-live.digitalbits.io:1337/ledgers/7952722/transactions?cursor=b&limit=1&order=asc'
+                'https://frontier.livenet.digitalbits.io:1337/ledgers/7952722/transactions?cursor=b&limit=1&order=asc'
               )
             )
             .returns(Promise.resolve({ data: transactionsResponse }));
@@ -736,7 +736,7 @@ describe('server.js non-transaction tests', function() {
             .expects('get')
             .withArgs(
               sinon.match(
-                /^https:\/\/frontier.digitalbits.io\/transactions\/c585b8764b28be678c482f8b6e87e76e4b5f28043c53f4dcb7b724b4b2efebc1\/operations\?limit=1/
+                /^https:\/\/frontier.livenet.digitalbits.io\/transactions\/c585b8764b28be678c482f8b6e87e76e4b5f28043c53f4dcb7b724b4b2efebc1\/operations\?limit=1/
               )
             )
             .returns(Promise.resolve({ data: { operations: [] } }));
@@ -842,7 +842,7 @@ describe('server.js non-transaction tests', function() {
           .expects('get')
           .withArgs(
             sinon.match(
-              'https://frontier-live.digitalbits.io:1337/transactions/6bbd8cbd90498a26210a21ec599702bead8f908f412455da300318aba36831b0'
+              'https://frontier.livenet.digitalbits.io:1337/transactions/6bbd8cbd90498a26210a21ec599702bead8f908f412455da300318aba36831b0'
             )
           )
           .returns(Promise.resolve({ data: singleTranssactionResponse }));
@@ -1024,7 +1024,7 @@ describe('server.js non-transaction tests', function() {
           .expects('get')
           .withArgs(
             sinon.match(
-              'https://frontier-live.digitalbits.io:1337/claimable_balances/000000000102030000000000000000000000000000000000000000000000000000000000/transactions'
+              'https://frontier.livenet.digitalbits.io:1337/claimable_balances/000000000102030000000000000000000000000000000000000000000000000000000000/transactions'
             )
           )
           .returns(Promise.resolve({ data: transactionsResponse }));
@@ -1116,7 +1116,7 @@ describe('server.js non-transaction tests', function() {
           .expects('get')
           .withArgs(
             sinon.match(
-              'https://frontier-live.digitalbits.io:1337/accounts/GBS43BF24ENNS3KPACUZVKK2VYPOZVBQO2CISGZ777RYGOPYC2FT6S3K'
+              'https://frontier.livenet.digitalbits.io:1337/accounts/GBS43BF24ENNS3KPACUZVKK2VYPOZVBQO2CISGZ777RYGOPYC2FT6S3K'
             )
           )
           .returns(Promise.resolve({ data: singleAccountResponse }));
@@ -1237,7 +1237,7 @@ describe('server.js non-transaction tests', function() {
           .expects('get')
           .withArgs(
             sinon.match(
-              'https://frontier-live.digitalbits.io:1337/accounts?signer=GBCR5OVQ54S2EKHLBZMK6VYMTXZHXN3T45Y6PRX4PX4FXDMJJGY4FD42'
+              'https://frontier.livenet.digitalbits.io:1337/accounts?signer=GBCR5OVQ54S2EKHLBZMK6VYMTXZHXN3T45Y6PRX4PX4FXDMJJGY4FD42'
             )
           )
           .returns(Promise.resolve({ data: accountsForSignerResponse }));
@@ -1362,7 +1362,7 @@ describe('server.js non-transaction tests', function() {
           .expects('get')
           .withArgs(
             sinon.match(
-              'https://frontier-live.digitalbits.io:1337/accounts?asset=USD%3AGDGQVOKHW4VEJRU2TETD6DBRKEO5ERCNF353LW5WBFW3JJWQ2BRQ6KDD'
+              'https://frontier.livenet.digitalbits.io:1337/accounts?asset=USD%3AGDGQVOKHW4VEJRU2TETD6DBRKEO5ERCNF353LW5WBFW3JJWQ2BRQ6KDD'
             )
           )
           .returns(Promise.resolve({ data: accountsForAssetResponse }));
@@ -1490,7 +1490,7 @@ describe('server.js non-transaction tests', function() {
           .expects('get')
           .withArgs(
             sinon.match(
-              'https://frontier-live.digitalbits.io:1337/accounts?sponsor=GBCR5OVQ54S2EKHLBZMK6VYMTXZHXN3T45Y6PRX4PX4FXDMJJGY4FD42'
+              'https://frontier.livenet.digitalbits.io:1337/accounts?sponsor=GBCR5OVQ54S2EKHLBZMK6VYMTXZHXN3T45Y6PRX4PX4FXDMJJGY4FD42'
             )
           )
           .returns(Promise.resolve({ data: accountsForSponsor }));
@@ -1640,7 +1640,7 @@ describe('server.js non-transaction tests', function() {
           .expects('get')
           .withArgs(
             sinon.match(
-              'https://frontier-live.digitalbits.io:1337/accounts?liquidity_pool=dd7b1ab831c273310ddbec6f97870aa83c2fbd78ce22aded37ecbf4f3380fac7'
+              'https://frontier.livenet.digitalbits.io:1337/accounts?liquidity_pool=dd7b1ab831c273310ddbec6f97870aa83c2fbd78ce22aded37ecbf4f3380fac7'
             )
           )
           .returns(Promise.resolve({ data: accountsForAssetResponse }));
@@ -1689,7 +1689,7 @@ describe('server.js non-transaction tests', function() {
           .expects('get')
           .withArgs(
             sinon.match(
-              'https://frontier-live.digitalbits.io:1337/offers?order=asc'
+              'https://frontier.livenet.digitalbits.io:1337/offers?order=asc'
             )
           )
           .returns(Promise.resolve({ data: offersResponse }));
@@ -1745,7 +1745,7 @@ describe('server.js non-transaction tests', function() {
           .expects('get')
           .withArgs(
             sinon.match(
-              'https://frontier-live.digitalbits.io:1337/offers/12345'
+              'https://frontier.livenet.digitalbits.io:1337/offers/12345'
             )
           )
           .returns(Promise.resolve({ data: offerResponse }));
@@ -1771,7 +1771,7 @@ describe('server.js non-transaction tests', function() {
           .expects('get')
           .withArgs(
             sinon.match(
-              'https://frontier-live.digitalbits.io:1337/accounts/GBS43BF24ENNS3KPACUZVKK2VYPOZVBQO2CISGZ777RYGOPYC2FT6S3K/offers?order=asc'
+              'https://frontier.livenet.digitalbits.io:1337/accounts/GBS43BF24ENNS3KPACUZVKK2VYPOZVBQO2CISGZ777RYGOPYC2FT6S3K/offers?order=asc'
             )
           )
           .returns(Promise.resolve({ data: offersResponse }));
@@ -1803,7 +1803,7 @@ describe('server.js non-transaction tests', function() {
           .expects('get')
           .withArgs(
             sinon.match(
-              'https://frontier-live.digitalbits.io:1337/offers?selling_asset_type=credit_alphanum4&selling_asset_code=USD&selling_asset_issuer=GDVDKQFP665JAO7A2LSHNLQIUNYNAAIGJ6FYJVMG4DT3YJQQJSRBLQDG&order=asc'
+              'https://frontier.livenet.digitalbits.io:1337/offers?selling_asset_type=credit_alphanum4&selling_asset_code=USD&selling_asset_issuer=GDVDKQFP665JAO7A2LSHNLQIUNYNAAIGJ6FYJVMG4DT3YJQQJSRBLQDG&order=asc'
             )
           )
           .returns(Promise.resolve({ data: offersResponse }));
@@ -1835,7 +1835,7 @@ describe('server.js non-transaction tests', function() {
           .expects('get')
           .withArgs(
             sinon.match(
-              'https://frontier-live.digitalbits.io:1337/offers?buying_asset_type=credit_alphanum4&buying_asset_code=COP&buying_asset_issuer=GDVDKQFP665JAO7A2LSHNLQIUNYNAAIGJ6FYJVMG4DT3YJQQJSRBLQDG&order=asc'
+              'https://frontier.livenet.digitalbits.io:1337/offers?buying_asset_type=credit_alphanum4&buying_asset_code=COP&buying_asset_issuer=GDVDKQFP665JAO7A2LSHNLQIUNYNAAIGJ6FYJVMG4DT3YJQQJSRBLQDG&order=asc'
             )
           )
           .returns(Promise.resolve({ data: offersResponse }));
@@ -1862,7 +1862,7 @@ describe('server.js non-transaction tests', function() {
           .expects('get')
           .withArgs(
             sinon.match(
-              'https://frontier-live.digitalbits.io:1337/offers?sponsor=GDVDKQFP665JAO7A2LSHNLQIUNYNAAIGJ6FYJVMG4DT3YJQQJSRBLQDG&order=asc'
+              'https://frontier.livenet.digitalbits.io:1337/offers?sponsor=GDVDKQFP665JAO7A2LSHNLQIUNYNAAIGJ6FYJVMG4DT3YJQQJSRBLQDG&order=asc'
             )
           )
           .returns(Promise.resolve({ data: offersResponse }));
@@ -1908,7 +1908,7 @@ describe('server.js non-transaction tests', function() {
           .expects('get')
           .withArgs(
             sinon.match(
-              'https://frontier-live.digitalbits.io:1337/order_book?selling_asset_type=native&buying_asset_type=credit_alphanum4&buying_asset_code=USD&buying_asset_issuer=GDVDKQFP665JAO7A2LSHNLQIUNYNAAIGJ6FYJVMG4DT3YJQQJSRBLQDG'
+              'https://frontier.livenet.digitalbits.io:1337/order_book?selling_asset_type=native&buying_asset_type=credit_alphanum4&buying_asset_code=USD&buying_asset_issuer=GDVDKQFP665JAO7A2LSHNLQIUNYNAAIGJ6FYJVMG4DT3YJQQJSRBLQDG'
             )
           )
           .returns(Promise.resolve({ data: orderBookResponse }));
@@ -1936,7 +1936,7 @@ describe('server.js non-transaction tests', function() {
           .expects('get')
           .withArgs(
             sinon.match(
-              'https://frontier-live.digitalbits.io:1337/order_book?selling_asset_type=credit_alphanum4&selling_asset_code=USD&selling_asset_issuer=GDVDKQFP665JAO7A2LSHNLQIUNYNAAIGJ6FYJVMG4DT3YJQQJSRBLQDG&buying_asset_type=native'
+              'https://frontier.livenet.digitalbits.io:1337/order_book?selling_asset_type=credit_alphanum4&selling_asset_code=USD&selling_asset_issuer=GDVDKQFP665JAO7A2LSHNLQIUNYNAAIGJ6FYJVMG4DT3YJQQJSRBLQDG&buying_asset_type=native'
             )
           )
           .returns(Promise.resolve({ data: orderBookResponse }));
@@ -1966,15 +1966,15 @@ describe('server.js non-transaction tests', function() {
           _links: {
             self: {
               href:
-                'https://frontier-live.digitalbits.io:1337/trades?order=asc&limit=200&cursor='
+                'https://frontier.livenet.digitalbits.io:1337/trades?order=asc&limit=200&cursor='
             },
             next: {
               href:
-                'https://frontier-live.digitalbits.io:1337/trades?order=asc&limit=200&cursor=64199539053039617-0'
+                'https://frontier.livenet.digitalbits.io:1337/trades?order=asc&limit=200&cursor=64199539053039617-0'
             },
             prev: {
               href:
-                'https://frontier-live.digitalbits.io:1337/trades?order=desc&limit=200&cursor=64199539053039617-0'
+                'https://frontier.livenet.digitalbits.io:1337/trades?order=desc&limit=200&cursor=64199539053039617-0'
             }
           },
           _embedded: {
@@ -1983,15 +1983,15 @@ describe('server.js non-transaction tests', function() {
                 _links: {
                   base: {
                     href:
-                      'https://frontier-live.digitalbits.io:1337/accounts/GB7JKG66CJN3ACX5DX43FOZTTSOI7GZUP547I3BSXIJVUX3NRYUXHE6W'
+                      'https://frontier.livenet.digitalbits.io:1337/accounts/GB7JKG66CJN3ACX5DX43FOZTTSOI7GZUP547I3BSXIJVUX3NRYUXHE6W'
                   },
                   counter: {
                     href:
-                      'https://frontier-live.digitalbits.io:1337/accounts/GC6APVH2HCFB7QLSTG3U55IYSW7ZRNSCTOZZYZJCNHWX2FONCNJNULYN'
+                      'https://frontier.livenet.digitalbits.io:1337/accounts/GC6APVH2HCFB7QLSTG3U55IYSW7ZRNSCTOZZYZJCNHWX2FONCNJNULYN'
                   },
                   operation: {
                     href:
-                      'https://frontier-live.digitalbits.io:1337/operations/64199539053039617'
+                      'https://frontier.livenet.digitalbits.io:1337/operations/64199539053039617'
                   }
                 },
                 id: '64199539053039617-0',
@@ -2022,7 +2022,7 @@ describe('server.js non-transaction tests', function() {
 
         this.axiosMock
           .expects('get')
-          .withArgs(sinon.match('https://frontier-live.digitalbits.io:1337/trades'))
+          .withArgs(sinon.match('https://frontier.livenet.digitalbits.io:1337/trades'))
           .returns(Promise.resolve({ data: tradesResponse }));
 
         this.server
@@ -2044,15 +2044,15 @@ describe('server.js non-transaction tests', function() {
           _links: {
             self: {
               href:
-                'https://frontier-live.digitalbits.io:1337/trades?base_asset_type=native&counter_asset_type=credit_alphanum4&counter_asset_code=JPY&counter_asset_issuer=GBVAOIACNSB7OVUXJYC5UE2D4YK2F7A24T7EE5YOMN4CE6GCHUTOUQXM&order=asc&limit=10&cursor='
+                'https://frontier.livenet.digitalbits.io:1337/trades?base_asset_type=native&counter_asset_type=credit_alphanum4&counter_asset_code=JPY&counter_asset_issuer=GBVAOIACNSB7OVUXJYC5UE2D4YK2F7A24T7EE5YOMN4CE6GCHUTOUQXM&order=asc&limit=10&cursor='
             },
             next: {
               href:
-                'https://frontier-live.digitalbits.io:1337/trades?base_asset_type=native&counter_asset_type=credit_alphanum4&counter_asset_code=JPY&counter_asset_issuer=GBVAOIACNSB7OVUXJYC5UE2D4YK2F7A24T7EE5YOMN4CE6GCHUTOUQXM&order=asc&limit=10&cursor=64199539053039617-0'
+                'https://frontier.livenet.digitalbits.io:1337/trades?base_asset_type=native&counter_asset_type=credit_alphanum4&counter_asset_code=JPY&counter_asset_issuer=GBVAOIACNSB7OVUXJYC5UE2D4YK2F7A24T7EE5YOMN4CE6GCHUTOUQXM&order=asc&limit=10&cursor=64199539053039617-0'
             },
             prev: {
               href:
-                'https://frontier-live.digitalbits.io:1337/trades?base_asset_type=native&counter_asset_type=credit_alphanum4&counter_asset_code=JPY&counter_asset_issuer=GBVAOIACNSB7OVUXJYC5UE2D4YK2F7A24T7EE5YOMN4CE6GCHUTOUQXM&order=desc&limit=10&cursor=64199539053039617-0'
+                'https://frontier.livenet.digitalbits.io:1337/trades?base_asset_type=native&counter_asset_type=credit_alphanum4&counter_asset_code=JPY&counter_asset_issuer=GBVAOIACNSB7OVUXJYC5UE2D4YK2F7A24T7EE5YOMN4CE6GCHUTOUQXM&order=desc&limit=10&cursor=64199539053039617-0'
             }
           },
           _embedded: {
@@ -2061,15 +2061,15 @@ describe('server.js non-transaction tests', function() {
                 _links: {
                   base: {
                     href:
-                      'https://frontier-live.digitalbits.io:1337/accounts/GB7JKG66CJN3ACX5DX43FOZTTSOI7GZUP547I3BSXIJVUX3NRYUXHE6W'
+                      'https://frontier.livenet.digitalbits.io:1337/accounts/GB7JKG66CJN3ACX5DX43FOZTTSOI7GZUP547I3BSXIJVUX3NRYUXHE6W'
                   },
                   counter: {
                     href:
-                      'https://frontier-live.digitalbits.io:1337/accounts/GC6APVH2HCFB7QLSTG3U55IYSW7ZRNSCTOZZYZJCNHWX2FONCNJNULYN'
+                      'https://frontier.livenet.digitalbits.io:1337/accounts/GC6APVH2HCFB7QLSTG3U55IYSW7ZRNSCTOZZYZJCNHWX2FONCNJNULYN'
                   },
                   operation: {
                     href:
-                      'https://frontier-live.digitalbits.io:1337/operations/64199539053039617'
+                      'https://frontier.livenet.digitalbits.io:1337/operations/64199539053039617'
                   }
                 },
                 id: '64199539053039617-0',
@@ -2102,7 +2102,7 @@ describe('server.js non-transaction tests', function() {
           .expects('get')
           .withArgs(
             sinon.match(
-              'https://frontier-live.digitalbits.io:1337/trades?base_asset_type=native&counter_asset_type=credit_alphanum4&counter_asset_code=JPY&counter_asset_issuer=GBVAOIACNSB7OVUXJYC5UE2D4YK2F7A24T7EE5YOMN4CE6GCHUTOUQXM'
+              'https://frontier.livenet.digitalbits.io:1337/trades?base_asset_type=native&counter_asset_type=credit_alphanum4&counter_asset_code=JPY&counter_asset_issuer=GBVAOIACNSB7OVUXJYC5UE2D4YK2F7A24T7EE5YOMN4CE6GCHUTOUQXM'
             )
           )
           .returns(Promise.resolve({ data: tradesResponse }));
@@ -2133,15 +2133,15 @@ describe('server.js non-transaction tests', function() {
           _links: {
             self: {
               href:
-                'https://frontier-live.digitalbits.io:1337/trades?offer_id=278232&order=asc&limit=10&cursor='
+                'https://frontier.livenet.digitalbits.io:1337/trades?offer_id=278232&order=asc&limit=10&cursor='
             },
             next: {
               href:
-                'https://frontier-live.digitalbits.io:1337/trades?offer_id=278232&order=asc&limit=10&cursor=64199539053039617-0'
+                'https://frontier.livenet.digitalbits.io:1337/trades?offer_id=278232&order=asc&limit=10&cursor=64199539053039617-0'
             },
             prev: {
               href:
-                'https://frontier-live.digitalbits.io:1337/trades?offer_id=278232&order=desc&limit=10&cursor=64199539053039617-0'
+                'https://frontier.livenet.digitalbits.io:1337/trades?offer_id=278232&order=desc&limit=10&cursor=64199539053039617-0'
             }
           },
           _embedded: {
@@ -2150,15 +2150,15 @@ describe('server.js non-transaction tests', function() {
                 _links: {
                   base: {
                     href:
-                      'https://frontier-live.digitalbits.io:1337/accounts/GB7JKG66CJN3ACX5DX43FOZTTSOI7GZUP547I3BSXIJVUX3NRYUXHE6W'
+                      'https://frontier.livenet.digitalbits.io:1337/accounts/GB7JKG66CJN3ACX5DX43FOZTTSOI7GZUP547I3BSXIJVUX3NRYUXHE6W'
                   },
                   counter: {
                     href:
-                      'https://frontier-live.digitalbits.io:1337/accounts/GC6APVH2HCFB7QLSTG3U55IYSW7ZRNSCTOZZYZJCNHWX2FONCNJNULYN'
+                      'https://frontier.livenet.digitalbits.io:1337/accounts/GC6APVH2HCFB7QLSTG3U55IYSW7ZRNSCTOZZYZJCNHWX2FONCNJNULYN'
                   },
                   operation: {
                     href:
-                      'https://frontier-live.digitalbits.io:1337/operations/64199539053039617'
+                      'https://frontier.livenet.digitalbits.io:1337/operations/64199539053039617'
                   }
                 },
                 id: '64199539053039617-0',
@@ -2191,7 +2191,7 @@ describe('server.js non-transaction tests', function() {
           .expects('get')
           .withArgs(
             sinon.match(
-              'https://frontier-live.digitalbits.io:1337/trades?offer_id=278232'
+              'https://frontier.livenet.digitalbits.io:1337/trades?offer_id=278232'
             )
           )
           .returns(Promise.resolve({ data: tradesResponse }));
@@ -2216,15 +2216,15 @@ describe('server.js non-transaction tests', function() {
           _links: {
             self: {
               href:
-                'https://frontier-live.digitalbits.io:1337/accounts/GABJBA4HI4LVKWAYORE7SOAAZMVXDHI566JBSD25O5TRDM7LVID6YOXY/trades?cursor=&limit=10&order=asc'
+                'https://frontier.livenet.digitalbits.io:1337/accounts/GABJBA4HI4LVKWAYORE7SOAAZMVXDHI566JBSD25O5TRDM7LVID6YOXY/trades?cursor=&limit=10&order=asc'
             },
             next: {
               href:
-                'https://frontier-live.digitalbits.io:1337/accounts/GABJBA4HI4LVKWAYORE7SOAAZMVXDHI566JBSD25O5TRDM7LVID6YOXY/trades?cursor=77434489365606401-1&limit=10&order=asc'
+                'https://frontier.livenet.digitalbits.io:1337/accounts/GABJBA4HI4LVKWAYORE7SOAAZMVXDHI566JBSD25O5TRDM7LVID6YOXY/trades?cursor=77434489365606401-1&limit=10&order=asc'
             },
             prev: {
               href:
-                'https://frontier-live.digitalbits.io:1337/accounts/GABJBA4HI4LVKWAYORE7SOAAZMVXDHI566JBSD25O5TRDM7LVID6YOXY/trades?cursor=77434489365606401-1&limit=10&order=desc'
+                'https://frontier.livenet.digitalbits.io:1337/accounts/GABJBA4HI4LVKWAYORE7SOAAZMVXDHI566JBSD25O5TRDM7LVID6YOXY/trades?cursor=77434489365606401-1&limit=10&order=desc'
             }
           },
           _embedded: {
@@ -2236,15 +2236,15 @@ describe('server.js non-transaction tests', function() {
                   },
                   seller: {
                     href:
-                      'https://frontier-live.digitalbits.io:1337/accounts/GBDTBUKFHJOEAFAVNPGIY65CBIH75DYEZ5VQXOE7YHZM7AJKDNEOW5JG'
+                      'https://frontier.livenet.digitalbits.io:1337/accounts/GBDTBUKFHJOEAFAVNPGIY65CBIH75DYEZ5VQXOE7YHZM7AJKDNEOW5JG'
                   },
                   buyer: {
                     href:
-                      'https://frontier-live.digitalbits.io:1337/accounts/GABJBA4HI4LVKWAYORE7SOAAZMVXDHI566JBSD25O5TRDM7LVID6YOXY'
+                      'https://frontier.livenet.digitalbits.io:1337/accounts/GABJBA4HI4LVKWAYORE7SOAAZMVXDHI566JBSD25O5TRDM7LVID6YOXY'
                   },
                   operation: {
                     href:
-                      'https://frontier-live.digitalbits.io:1337/operations/77434489365606401'
+                      'https://frontier.livenet.digitalbits.io:1337/operations/77434489365606401'
                   }
                 },
                 id: '77434489365606401-1',
@@ -2269,7 +2269,7 @@ describe('server.js non-transaction tests', function() {
           .expects('get')
           .withArgs(
             sinon.match(
-              'https://frontier-live.digitalbits.io:1337/accounts/GABJBA4HI4LVKWAYORE7SOAAZMVXDHI566JBSD25O5TRDM7LVID6YOXY/trades'
+              'https://frontier.livenet.digitalbits.io:1337/accounts/GABJBA4HI4LVKWAYORE7SOAAZMVXDHI566JBSD25O5TRDM7LVID6YOXY/trades'
             )
           )
           .returns(Promise.resolve({ data: tradesResponse }));
@@ -2296,15 +2296,15 @@ describe('server.js non-transaction tests', function() {
           _links: {
             self: {
               href:
-                'https://frontier-live.digitalbits.io:1337/trades?order=asc&limit=1&cursor=64199539053039617-0'
+                'https://frontier.livenet.digitalbits.io:1337/trades?order=asc&limit=1&cursor=64199539053039617-0'
             },
             next: {
               href:
-                'https://frontier-live.digitalbits.io:1337/trades?order=asc&limit=1&cursor=64199676491993090-0'
+                'https://frontier.livenet.digitalbits.io:1337/trades?order=asc&limit=1&cursor=64199676491993090-0'
             },
             prev: {
               href:
-                'https://frontier-live.digitalbits.io:1337/trades?order=desc&limit=1&cursor=64199676491993090-0'
+                'https://frontier.livenet.digitalbits.io:1337/trades?order=desc&limit=1&cursor=64199676491993090-0'
             }
           },
           _embedded: {
@@ -2313,15 +2313,15 @@ describe('server.js non-transaction tests', function() {
                 _links: {
                   base: {
                     href:
-                      'https://frontier-live.digitalbits.io:1337/accounts/GBBHSWC3XSUFKEFDPQO346BCLM3EAJHICWRVSVIQOG4YBIH3A2VCJ6G2'
+                      'https://frontier.livenet.digitalbits.io:1337/accounts/GBBHSWC3XSUFKEFDPQO346BCLM3EAJHICWRVSVIQOG4YBIH3A2VCJ6G2'
                   },
                   counter: {
                     href:
-                      'https://frontier-live.digitalbits.io:1337/accounts/GDBXANSAUQ5WBFSA6LFQXR5PYVYAQ3T4KI4LHZ3YAAEFI3BS2Z3SFRVG'
+                      'https://frontier.livenet.digitalbits.io:1337/accounts/GDBXANSAUQ5WBFSA6LFQXR5PYVYAQ3T4KI4LHZ3YAAEFI3BS2Z3SFRVG'
                   },
                   operation: {
                     href:
-                      'https://frontier-live.digitalbits.io:1337/operations/64199676491993090'
+                      'https://frontier.livenet.digitalbits.io:1337/operations/64199676491993090'
                   }
                 },
                 id: '64199676491993090-0',
@@ -2357,7 +2357,7 @@ describe('server.js non-transaction tests', function() {
           .expects('get')
           .withArgs(
             sinon.match(
-              'https://frontier-live.digitalbits.io:1337/trades?order=asc&limit=1&cursor=64199539053039617-0'
+              'https://frontier.livenet.digitalbits.io:1337/trades?order=asc&limit=1&cursor=64199539053039617-0'
             )
           )
           .returns(Promise.resolve({ data: tradesResponse }));
@@ -2384,15 +2384,15 @@ describe('server.js non-transaction tests', function() {
           _links: {
             self: {
               href:
-                'https://frontier-live.digitalbits.io:1337/trades?order=asc&limit=200&trade_type=orderbook&cursor='
+                'https://frontier.livenet.digitalbits.io:1337/trades?order=asc&limit=200&trade_type=orderbook&cursor='
             },
             next: {
               href:
-                'https://frontier-live.digitalbits.io:1337/trades?order=asc&limit=200&trade_type=orderbook&cursor=64199539053039617-0'
+                'https://frontier.livenet.digitalbits.io:1337/trades?order=asc&limit=200&trade_type=orderbook&cursor=64199539053039617-0'
             },
             prev: {
               href:
-                'https://frontier-live.digitalbits.io:1337/trades?order=desc&limit=200&trade_type=orderbook&cursor=64199539053039617-0'
+                'https://frontier.livenet.digitalbits.io:1337/trades?order=desc&limit=200&trade_type=orderbook&cursor=64199539053039617-0'
             }
           },
           _embedded: {
@@ -2401,15 +2401,15 @@ describe('server.js non-transaction tests', function() {
                 _links: {
                   base: {
                     href:
-                      'https://frontier-live.digitalbits.io:1337/accounts/GB7JKG66CJN3ACX5DX43FOZTTSOI7GZUP547I3BSXIJVUX3NRYUXHE6W'
+                      'https://frontier.livenet.digitalbits.io:1337/accounts/GB7JKG66CJN3ACX5DX43FOZTTSOI7GZUP547I3BSXIJVUX3NRYUXHE6W'
                   },
                   counter: {
                     href:
-                      'https://frontier-live.digitalbits.io:1337/accounts/GC6APVH2HCFB7QLSTG3U55IYSW7ZRNSCTOZZYZJCNHWX2FONCNJNULYN'
+                      'https://frontier.livenet.digitalbits.io:1337/accounts/GC6APVH2HCFB7QLSTG3U55IYSW7ZRNSCTOZZYZJCNHWX2FONCNJNULYN'
                   },
                   operation: {
                     href:
-                      'https://frontier-live.digitalbits.io:1337/operations/64199539053039617'
+                      'https://frontier.livenet.digitalbits.io:1337/operations/64199539053039617'
                   }
                 },
                 id: '64199539053039617-0',
@@ -2440,7 +2440,7 @@ describe('server.js non-transaction tests', function() {
 
         this.axiosMock
           .expects('get')
-          .withArgs(sinon.match('https://frontier-live.digitalbits.io:1337/trades?trade_type=orderbook'))
+          .withArgs(sinon.match('https://frontier.livenet.digitalbits.io:1337/trades?trade_type=orderbook'))
           .returns(Promise.resolve({ data: tradesResponse }));
 
         this.server
@@ -2463,15 +2463,15 @@ describe('server.js non-transaction tests', function() {
           _links: {
             self: {
               href:
-                'https://frontier-live.digitalbits.io:1337/trades?order=asc&limit=200&trade_type=liquidity_pool&cursor='
+                'https://frontier.livenet.digitalbits.io:1337/trades?order=asc&limit=200&trade_type=liquidity_pool&cursor='
             },
             next: {
               href:
-                'https://frontier-live.digitalbits.io:1337/trades?order=asc&limit=200&trade_type=liquidity_pool&cursor=64199539053039617-0'
+                'https://frontier.livenet.digitalbits.io:1337/trades?order=asc&limit=200&trade_type=liquidity_pool&cursor=64199539053039617-0'
             },
             prev: {
               href:
-                'https://frontier-live.digitalbits.io:1337/trades?order=desc&limit=200&trade_type=liquidity_pool&cursor=64199539053039617-0'
+                'https://frontier.livenet.digitalbits.io:1337/trades?order=desc&limit=200&trade_type=liquidity_pool&cursor=64199539053039617-0'
             }
           },
           _embedded: {
@@ -2480,15 +2480,15 @@ describe('server.js non-transaction tests', function() {
                 _links: {
                   base: {
                     href:
-                      'https://frontier-live.digitalbits.io:1337/accounts/GB7JKG66CJN3ACX5DX43FOZTTSOI7GZUP547I3BSXIJVUX3NRYUXHE6W'
+                      'https://frontier.livenet.digitalbits.io:1337/accounts/GB7JKG66CJN3ACX5DX43FOZTTSOI7GZUP547I3BSXIJVUX3NRYUXHE6W'
                   },
                   counter: {
                     href:
-                      'https://frontier-live.digitalbits.io:1337/liquidity_pool/dd7b1ab831c273310ddbec6f97870aa83c2fbd78ce22aded37ecbf4f3380fac7'
+                      'https://frontier.livenet.digitalbits.io:1337/liquidity_pool/dd7b1ab831c273310ddbec6f97870aa83c2fbd78ce22aded37ecbf4f3380fac7'
                   },
                   operation: {
                     href:
-                      'https://frontier-live.digitalbits.io:1337/operations/64199539053039617'
+                      'https://frontier.livenet.digitalbits.io:1337/operations/64199539053039617'
                   }
                 },
                 id: '64199539053039617-0',
@@ -2520,7 +2520,7 @@ describe('server.js non-transaction tests', function() {
 
         this.axiosMock
           .expects('get')
-          .withArgs(sinon.match('https://frontier-live.digitalbits.io:1337/trades?trade_type=liquidity_pool'))
+          .withArgs(sinon.match('https://frontier.livenet.digitalbits.io:1337/trades?trade_type=liquidity_pool'))
           .returns(Promise.resolve({ data: tradesResponse }));
 
         this.server
@@ -2616,7 +2616,7 @@ describe('server.js non-transaction tests', function() {
           .expects('get')
           .withArgs(
             sinon.match(
-              'https://frontier-live.digitalbits.io:1337/paths/strict-receive?source_account=GARSFJNXJIHO6ULUBK3DBYKVSIZE7SC72S5DYBCHU7DKL22UXKVD7MXP&destination_amount=20.0&destination_asset_type=credit_alphanum4&destination_asset_code=EUR&destination_asset_issuer=GDSBCQO34HWPGUGQSP3QBFEXVTSR2PW46UIGTHVWGWJGQKH3AFNHXHXN'
+              'https://frontier.livenet.digitalbits.io:1337/paths/strict-receive?source_account=GARSFJNXJIHO6ULUBK3DBYKVSIZE7SC72S5DYBCHU7DKL22UXKVD7MXP&destination_amount=20.0&destination_asset_type=credit_alphanum4&destination_asset_code=EUR&destination_asset_issuer=GDSBCQO34HWPGUGQSP3QBFEXVTSR2PW46UIGTHVWGWJGQKH3AFNHXHXN'
             )
           )
           .returns(Promise.resolve({ data: pathsResponse }));
@@ -2648,7 +2648,7 @@ describe('server.js non-transaction tests', function() {
           .expects('get')
           .withArgs(
             sinon.match(
-              `https://frontier-live.digitalbits.io:1337/paths/strict-receive?source_assets=${destinationAssets}&destination_amount=20.0&destination_asset_type=credit_alphanum4&destination_asset_code=EUR&destination_asset_issuer=GDSBCQO34HWPGUGQSP3QBFEXVTSR2PW46UIGTHVWGWJGQKH3AFNHXHXN`
+              `https://frontier.livenet.digitalbits.io:1337/paths/strict-receive?source_assets=${destinationAssets}&destination_amount=20.0&destination_asset_type=credit_alphanum4&destination_asset_code=EUR&destination_asset_issuer=GDSBCQO34HWPGUGQSP3QBFEXVTSR2PW46UIGTHVWGWJGQKH3AFNHXHXN`
             )
           )
           .returns(Promise.resolve({ data: pathsResponse }));
@@ -2766,7 +2766,7 @@ describe('server.js non-transaction tests', function() {
           .expects('get')
           .withArgs(
             sinon.match(
-              'https://frontier-live.digitalbits.io:1337/paths/strict-send?source_asset_type=credit_alphanum4&source_asset_code=EUR&source_asset_issuer=GDSBCQO34HWPGUGQSP3QBFEXVTSR2PW46UIGTHVWGWJGQKH3AFNHXHXN&source_amount=20.0&destination_account=GAEDTJ4PPEFVW5XV2S7LUXBEHNQMX5Q2GM562RJGOQG7GVCE5H3HIB4V'
+              'https://frontier.livenet.digitalbits.io:1337/paths/strict-send?source_asset_type=credit_alphanum4&source_asset_code=EUR&source_asset_issuer=GDSBCQO34HWPGUGQSP3QBFEXVTSR2PW46UIGTHVWGWJGQKH3AFNHXHXN&source_amount=20.0&destination_account=GAEDTJ4PPEFVW5XV2S7LUXBEHNQMX5Q2GM562RJGOQG7GVCE5H3HIB4V'
             )
           )
           .returns(Promise.resolve({ data: pathsResponse }));
@@ -2799,7 +2799,7 @@ describe('server.js non-transaction tests', function() {
           .expects('get')
           .withArgs(
             sinon.match(
-              `https://frontier-live.digitalbits.io:1337/paths/strict-send?source_asset_type=credit_alphanum4&source_asset_code=EUR&source_asset_issuer=GDSBCQO34HWPGUGQSP3QBFEXVTSR2PW46UIGTHVWGWJGQKH3AFNHXHXN&source_amount=20.0&destination_assets=${destinationAssets}`
+              `https://frontier.livenet.digitalbits.io:1337/paths/strict-send?source_asset_type=credit_alphanum4&source_asset_code=EUR&source_asset_issuer=GDSBCQO34HWPGUGQSP3QBFEXVTSR2PW46UIGTHVWGWJGQKH3AFNHXHXN&source_amount=20.0&destination_assets=${destinationAssets}`
             )
           )
           .returns(Promise.resolve({ data: pathsResponse }));
@@ -2883,7 +2883,7 @@ describe('server.js non-transaction tests', function() {
           .expects('get')
           .withArgs(
             sinon.match(
-              'https://frontier-live.digitalbits.io:1337/effects?cursor=b'
+              'https://frontier.livenet.digitalbits.io:1337/effects?cursor=b'
             )
           )
           .returns(Promise.resolve({ data: effectsResponse }));
@@ -2910,7 +2910,7 @@ describe('server.js non-transaction tests', function() {
           .expects('get')
           .withArgs(
             sinon.match(
-              'https://frontier-live.digitalbits.io:1337/accounts/GCGHCFUB6JKQE42C76BK2LYB3EHKP4WQJE624WTSL3CU2PPDYE5RBMJE/effects'
+              'https://frontier.livenet.digitalbits.io:1337/accounts/GCGHCFUB6JKQE42C76BK2LYB3EHKP4WQJE624WTSL3CU2PPDYE5RBMJE/effects'
             )
           )
           .returns(Promise.resolve({ data: effectsResponse }));
@@ -2939,7 +2939,7 @@ describe('server.js non-transaction tests', function() {
           .expects('get')
           .withArgs(
             sinon.match(
-              'https://frontier-live.digitalbits.io:1337/transactions/ef37d6770c40c3bdb6adba80759f2819971396d1c3dfb7b5611f63ad72a9a4ae/effects'
+              'https://frontier.livenet.digitalbits.io:1337/transactions/ef37d6770c40c3bdb6adba80759f2819971396d1c3dfb7b5611f63ad72a9a4ae/effects'
             )
           )
           .returns(Promise.resolve({ data: effectsResponse }));
@@ -3029,7 +3029,7 @@ describe('server.js non-transaction tests', function() {
           .expects('get')
           .withArgs(
             sinon.match(
-              'https://frontier-live.digitalbits.io:1337/operations/123456789'
+              'https://frontier.livenet.digitalbits.io:1337/operations/123456789'
             )
           )
           .returns(Promise.resolve({ data: operationsResponse }));
@@ -3056,7 +3056,7 @@ describe('server.js non-transaction tests', function() {
           .expects('get')
           .withArgs(
             sinon.match(
-              'https://frontier-live.digitalbits.io:1337/accounts/GCGHCFUB6JKQE42C76BK2LYB3EHKP4WQJE624WTSL3CU2PPDYE5RBMJE/operations'
+              'https://frontier.livenet.digitalbits.io:1337/accounts/GCGHCFUB6JKQE42C76BK2LYB3EHKP4WQJE624WTSL3CU2PPDYE5RBMJE/operations'
             )
           )
           .returns(Promise.resolve({ data: operationsResponse }));
@@ -3085,7 +3085,7 @@ describe('server.js non-transaction tests', function() {
           .expects('get')
           .withArgs(
             sinon.match(
-              'https://frontier-live.digitalbits.io:1337/claimable_balances/000000000102030000000000000000000000000000000000000000000000000000000000/operations'
+              'https://frontier.livenet.digitalbits.io:1337/claimable_balances/000000000102030000000000000000000000000000000000000000000000000000000000/operations'
             )
           )
           .returns(Promise.resolve({ data: operationsResponse }));
@@ -3114,7 +3114,7 @@ describe('server.js non-transaction tests', function() {
           .expects('get')
           .withArgs(
             sinon.match(
-              'https://frontier-live.digitalbits.io:1337/ledgers/123456789/operations'
+              'https://frontier.livenet.digitalbits.io:1337/ledgers/123456789/operations'
             )
           )
           .returns(Promise.resolve({ data: operationsResponse }));
@@ -3141,7 +3141,7 @@ describe('server.js non-transaction tests', function() {
           .expects('get')
           .withArgs(
             sinon.match(
-              'https://frontier-live.digitalbits.io:1337/transactions/blah/operations'
+              'https://frontier.livenet.digitalbits.io:1337/transactions/blah/operations'
             )
           )
           .returns(Promise.resolve({ data: operationsResponse }));
@@ -3218,7 +3218,7 @@ describe('server.js non-transaction tests', function() {
           .expects('get')
           .withArgs(
             sinon.match(
-              'https://frontier-live.digitalbits.io:1337/accounts/GBS43BF24ENNS3KPACUZVKK2VYPOZVBQO2CISGZ777RYGOPYC2FT6S3K/payments'
+              'https://frontier.livenet.digitalbits.io:1337/accounts/GBS43BF24ENNS3KPACUZVKK2VYPOZVBQO2CISGZ777RYGOPYC2FT6S3K/payments'
             )
           )
           .returns(Promise.resolve({ data: paymentsResponse }));
@@ -3247,7 +3247,7 @@ describe('server.js non-transaction tests', function() {
           .expects('get')
           .withArgs(
             sinon.match(
-              'https://frontier-live.digitalbits.io:1337/ledgers/123456789/payments'
+              'https://frontier.livenet.digitalbits.io:1337/ledgers/123456789/payments'
             )
           )
           .returns(Promise.resolve({ data: paymentsResponse }));
@@ -3274,7 +3274,7 @@ describe('server.js non-transaction tests', function() {
           .expects('get')
           .withArgs(
             sinon.match(
-              'https://frontier-live.digitalbits.io:1337/transactions/77277606902d80a03a892536ebff8466726a4e55c3923ec2d3eeb3aa5bdc3731/payments'
+              'https://frontier.livenet.digitalbits.io:1337/transactions/77277606902d80a03a892536ebff8466726a4e55c3923ec2d3eeb3aa5bdc3731/payments'
             )
           )
           .returns(Promise.resolve({ data: paymentsResponse }));
@@ -3309,7 +3309,7 @@ describe('server.js non-transaction tests', function() {
           .expects('get')
           .withArgs(
             sinon.match(
-              'https://frontier-live.digitalbits.io:1337/friendbot?addr=GBS43BF24ENNS3KPACUZVKK2VYPOZVBQO2CISGZ777RYGOPYC2FT6S3K'
+              'https://frontier.livenet.digitalbits.io:1337/friendbot?addr=GBS43BF24ENNS3KPACUZVKK2VYPOZVBQO2CISGZ777RYGOPYC2FT6S3K'
             )
           )
           .returns(Promise.resolve({ data: friendbotResponse }));
@@ -3386,7 +3386,7 @@ describe('server.js non-transaction tests', function() {
           .expects('get')
           .withArgs(
             sinon.match(
-              'https://frontier-live.digitalbits.io:1337/trade_aggregations?base_asset_type=native&counter_asset_type=credit_alphanum4&counter_asset_code=BTC&counter_asset_issuer=GATEMHCCKCY67ZUCKTROYN24ZYT5GK4EQZ65JJLDHKHRUZI3EUEKMTCH&start_time=1512689100000&end_time=1512775500000&resolution=300000'
+              'https://frontier.livenet.digitalbits.io:1337/trade_aggregations?base_asset_type=native&counter_asset_type=credit_alphanum4&counter_asset_code=BTC&counter_asset_issuer=GATEMHCCKCY67ZUCKTROYN24ZYT5GK4EQZ65JJLDHKHRUZI3EUEKMTCH&start_time=1512689100000&end_time=1512775500000&resolution=300000'
             )
           )
           .returns(Promise.resolve({ data: tradeAggregationResponse }));
@@ -3422,7 +3422,7 @@ describe('server.js non-transaction tests', function() {
           .expects('get')
           .withArgs(
             sinon.match(
-              'https://frontier-live.digitalbits.io:1337/trade_aggregations?base_asset_type=credit_alphanum4&base_asset_code=BTC&base_asset_issuer=GATEMHCCKCY67ZUCKTROYN24ZYT5GK4EQZ65JJLDHKHRUZI3EUEKMTCH&counter_asset_type=native&start_time=1512689100000&end_time=1512775500000&resolution=300000'
+              'https://frontier.livenet.digitalbits.io:1337/trade_aggregations?base_asset_type=credit_alphanum4&base_asset_code=BTC&base_asset_issuer=GATEMHCCKCY67ZUCKTROYN24ZYT5GK4EQZ65JJLDHKHRUZI3EUEKMTCH&counter_asset_type=native&start_time=1512689100000&end_time=1512775500000&resolution=300000'
             )
           )
           .returns(Promise.resolve({ data: tradeAggregationResponse }));
@@ -3460,15 +3460,15 @@ describe('server.js non-transaction tests', function() {
           _links: {
             self: {
               href:
-                'https://frontier-live.digitalbits.io:1337/assets?order=asc\u0026limit=1\u0026cursor='
+                'https://frontier.livenet.digitalbits.io:1337/assets?order=asc\u0026limit=1\u0026cursor='
             },
             next: {
               href:
-                'https://frontier-live.digitalbits.io:1337/assets?order=asc\u0026limit=1\u0026cursor=9FRONTIERS_GB2HXY7UEDCSHOWZ4553QFGFILNU73OFS2P4HU5IB3UUU66TWPBPVTGW_credit_alphanum12'
+                'https://frontier.livenet.digitalbits.io:1337/assets?order=asc\u0026limit=1\u0026cursor=9FRONTIERS_GB2HXY7UEDCSHOWZ4553QFGFILNU73OFS2P4HU5IB3UUU66TWPBPVTGW_credit_alphanum12'
             },
             prev: {
               href:
-                'https://frontier-live.digitalbits.io:1337/assets?order=desc\u0026limit=1\u0026cursor=9FRONTIERS_GB2HXY7UEDCSHOWZ4553QFGFILNU73OFS2P4HU5IB3UUU66TWPBPVTGW_credit_alphanum12'
+                'https://frontier.livenet.digitalbits.io:1337/assets?order=desc\u0026limit=1\u0026cursor=9FRONTIERS_GB2HXY7UEDCSHOWZ4553QFGFILNU73OFS2P4HU5IB3UUU66TWPBPVTGW_credit_alphanum12'
             }
           },
           _embedded: {
@@ -3513,7 +3513,7 @@ describe('server.js non-transaction tests', function() {
         this.axiosMock
           .expects('get')
           .withArgs(
-            sinon.match('https://frontier-live.digitalbits.io:1337/assets?limit=1')
+            sinon.match('https://frontier.livenet.digitalbits.io:1337/assets?limit=1')
           )
           .returns(Promise.resolve({ data: assetsResponse }));
 
@@ -3537,15 +3537,15 @@ describe('server.js non-transaction tests', function() {
           _links: {
             self: {
               href:
-                'https://frontier-live.digitalbits.io:1337/assets?order=asc\u0026limit=1\u0026cursor=\u0026asset_code=USD'
+                'https://frontier.livenet.digitalbits.io:1337/assets?order=asc\u0026limit=1\u0026cursor=\u0026asset_code=USD'
             },
             next: {
               href:
-                'https://frontier-live.digitalbits.io:1337/assets?order=asc\u0026limit=1\u0026cursor=USD_GCYK67DDGBOANS6UODJ62QWGLEB2A7JQ3XUV25HCMLT7CI23PMMK3W6R_credit_alphanum4\u0026asset_code=USD'
+                'https://frontier.livenet.digitalbits.io:1337/assets?order=asc\u0026limit=1\u0026cursor=USD_GCYK67DDGBOANS6UODJ62QWGLEB2A7JQ3XUV25HCMLT7CI23PMMK3W6R_credit_alphanum4\u0026asset_code=USD'
             },
             prev: {
               href:
-                'https://frontier-live.digitalbits.io:1337/assets?order=desc\u0026limit=1\u0026cursor=USD_GCYK67DDGBOANS6UODJ62QWGLEB2A7JQ3XUV25HCMLT7CI23PMMK3W6R_credit_alphanum4\u0026asset_code=USD'
+                'https://frontier.livenet.digitalbits.io:1337/assets?order=desc\u0026limit=1\u0026cursor=USD_GCYK67DDGBOANS6UODJ62QWGLEB2A7JQ3XUV25HCMLT7CI23PMMK3W6R_credit_alphanum4\u0026asset_code=USD'
             }
           },
           _embedded: {
@@ -3590,7 +3590,7 @@ describe('server.js non-transaction tests', function() {
           .expects('get')
           .withArgs(
             sinon.match(
-              'https://frontier-live.digitalbits.io:1337/assets?asset_code=USD&limit=1'
+              'https://frontier.livenet.digitalbits.io:1337/assets?asset_code=USD&limit=1'
             )
           )
           .returns(Promise.resolve({ data: assetsCodeResponse }));
@@ -3616,15 +3616,15 @@ describe('server.js non-transaction tests', function() {
           _links: {
             self: {
               href:
-                'http://frontier-testnet.digitalbits.io:1337/assets?order=asc\u0026limit=10\u0026cursor=\u0026asset_issuer=GCOGPF7IRVXUCJZAQWXVFQEE4HAOCTDGZI2QZSMKLM5BTTGRLY6GDOJN'
+                'http://frontier.testnet.digitalbits.io:1337/assets?order=asc\u0026limit=10\u0026cursor=\u0026asset_issuer=GCOGPF7IRVXUCJZAQWXVFQEE4HAOCTDGZI2QZSMKLM5BTTGRLY6GDOJN'
             },
             next: {
               href:
-                'http://frontier-testnet.digitalbits.io:1337/assets?order=asc\u0026limit=10\u0026cursor=00acc1_GCOGPF7IRVXUCJZAQWXVFQEE4HAOCTDGZI2QZSMKLM5BTTGRLY6GDOJN_credit_alphanum12\u0026asset_issuer=GCOGPF7IRVXUCJZAQWXVFQEE4HAOCTDGZI2QZSMKLM5BTTGRLY6GDOJN'
+                'http://frontier.testnet.digitalbits.io:1337/assets?order=asc\u0026limit=10\u0026cursor=00acc1_GCOGPF7IRVXUCJZAQWXVFQEE4HAOCTDGZI2QZSMKLM5BTTGRLY6GDOJN_credit_alphanum12\u0026asset_issuer=GCOGPF7IRVXUCJZAQWXVFQEE4HAOCTDGZI2QZSMKLM5BTTGRLY6GDOJN'
             },
             prev: {
               href:
-                'http://frontier-testnet.digitalbits.io:1337/assets?order=desc\u0026limit=10\u0026cursor=004d40_GCOGPF7IRVXUCJZAQWXVFQEE4HAOCTDGZI2QZSMKLM5BTTGRLY6GDOJN_credit_alphanum12\u0026asset_issuer=GCOGPF7IRVXUCJZAQWXVFQEE4HAOCTDGZI2QZSMKLM5BTTGRLY6GDOJN'
+                'http://frontier.testnet.digitalbits.io:1337/assets?order=desc\u0026limit=10\u0026cursor=004d40_GCOGPF7IRVXUCJZAQWXVFQEE4HAOCTDGZI2QZSMKLM5BTTGRLY6GDOJN_credit_alphanum12\u0026asset_issuer=GCOGPF7IRVXUCJZAQWXVFQEE4HAOCTDGZI2QZSMKLM5BTTGRLY6GDOJN'
             }
           },
           _embedded: {
@@ -3669,7 +3669,7 @@ describe('server.js non-transaction tests', function() {
           .expects('get')
           .withArgs(
             sinon.match(
-              'https://frontier-live.digitalbits.io:1337/assets?asset_issuer=GCOGPF7IRVXUCJZAQWXVFQEE4HAOCTDGZI2QZSMKLM5BTTGRLY6GDOJN&limit=1'
+              'https://frontier.livenet.digitalbits.io:1337/assets?asset_issuer=GCOGPF7IRVXUCJZAQWXVFQEE4HAOCTDGZI2QZSMKLM5BTTGRLY6GDOJN&limit=1'
             )
           )
           .returns(Promise.resolve({ data: assetIssuerResponse }));
@@ -3694,15 +3694,15 @@ describe('server.js non-transaction tests', function() {
         _links: {
           self: {
             href:
-              'http://frontier-testnet.digitalbits.io/assets?order=asc\u0026limit=10\u0026cursor=\u0026asset_code=USD\u0026asset_issuer=GBW3EZBZKRERB4JUDWGQPIBGHKJ4XPOFG2VQ2WTFR4F7TYC5WS7F3XGR'
+              'http://frontier.testnet.digitalbits.io/assets?order=asc\u0026limit=10\u0026cursor=\u0026asset_code=USD\u0026asset_issuer=GBW3EZBZKRERB4JUDWGQPIBGHKJ4XPOFG2VQ2WTFR4F7TYC5WS7F3XGR'
           },
           next: {
             href:
-              'http://frontier-testnet.digitalbits.io/assets?order=asc\u0026limit=10\u0026cursor=USD_GBW3EZBZKRERB4JUDWGQPIBGHKJ4XPOFG2VQ2WTFR4F7TYC5WS7F3XGR_credit_alphanum4\u0026asset_code=USD\u0026asset_issuer=GBW3EZBZKRERB4JUDWGQPIBGHKJ4XPOFG2VQ2WTFR4F7TYC5WS7F3XGR'
+              'http://frontier.testnet.digitalbits.io/assets?order=asc\u0026limit=10\u0026cursor=USD_GBW3EZBZKRERB4JUDWGQPIBGHKJ4XPOFG2VQ2WTFR4F7TYC5WS7F3XGR_credit_alphanum4\u0026asset_code=USD\u0026asset_issuer=GBW3EZBZKRERB4JUDWGQPIBGHKJ4XPOFG2VQ2WTFR4F7TYC5WS7F3XGR'
           },
           prev: {
             href:
-              'http://frontier-testnet.digitalbits.io/assets?order=desc\u0026limit=10\u0026cursor=USD_GBW3EZBZKRERB4JUDWGQPIBGHKJ4XPOFG2VQ2WTFR4F7TYC5WS7F3XGR_credit_alphanum4\u0026asset_code=USD\u0026asset_issuer=GBW3EZBZKRERB4JUDWGQPIBGHKJ4XPOFG2VQ2WTFR4F7TYC5WS7F3XGR'
+              'http://frontier.testnet.digitalbits.io/assets?order=desc\u0026limit=10\u0026cursor=USD_GBW3EZBZKRERB4JUDWGQPIBGHKJ4XPOFG2VQ2WTFR4F7TYC5WS7F3XGR_credit_alphanum4\u0026asset_code=USD\u0026asset_issuer=GBW3EZBZKRERB4JUDWGQPIBGHKJ4XPOFG2VQ2WTFR4F7TYC5WS7F3XGR'
           }
         },
         _embedded: {
@@ -3748,7 +3748,7 @@ describe('server.js non-transaction tests', function() {
           .expects('get')
           .withArgs(
             sinon.match(
-              'https://frontier-live.digitalbits.io:1337/assets?asset_issuer=GBW3EZBZKRERB4JUDWGQPIBGHKJ4XPOFG2VQ2WTFR4F7TYC5WS7F3XGR&asset_code=USD'
+              'https://frontier.livenet.digitalbits.io:1337/assets?asset_issuer=GBW3EZBZKRERB4JUDWGQPIBGHKJ4XPOFG2VQ2WTFR4F7TYC5WS7F3XGR&asset_code=USD'
             )
           )
           .returns(Promise.resolve({ data: assetCodeIssuerResponse }));
@@ -3774,7 +3774,7 @@ describe('server.js non-transaction tests', function() {
           .expects('get')
           .withArgs(
             sinon.match(
-              'https://frontier-live.digitalbits.io:1337/assets?asset_code=USD&asset_issuer=GBW3EZBZKRERB4JUDWGQPIBGHKJ4XPOFG2VQ2WTFR4F7TYC5WS7F3XGR'
+              'https://frontier.livenet.digitalbits.io:1337/assets?asset_code=USD&asset_issuer=GBW3EZBZKRERB4JUDWGQPIBGHKJ4XPOFG2VQ2WTFR4F7TYC5WS7F3XGR'
             )
           )
           .returns(Promise.resolve({ data: assetCodeIssuerResponse }));
@@ -3802,7 +3802,7 @@ describe('server.js non-transaction tests', function() {
           .expects('get')
           .withArgs(
             sinon.match(
-              'https://frontier-live.digitalbits.io:1337/accounts/GBS43BF24ENNS3KPACUZVKK2VYPOZVBQO2CISGZ777RYGOPYC2FT6S3K/effects'
+              'https://frontier.livenet.digitalbits.io:1337/accounts/GBS43BF24ENNS3KPACUZVKK2VYPOZVBQO2CISGZ777RYGOPYC2FT6S3K/effects'
             )
           )
           .returns(Promise.resolve({ data: {} }));

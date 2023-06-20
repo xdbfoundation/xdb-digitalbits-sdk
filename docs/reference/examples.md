@@ -40,7 +40,7 @@ const sourcePublicKey = sourceKeypair.publicKey();
 const receiverPublicKey = 'GAIRISXKPLOWZBMFRPU5XRGUUX3VMA3ZEWKBM5MSNRU3CHV6P4PYZ74D';
 
 // Configure DigitalBitsSdk to talk to the frontier instance hosted by DigitalBits.io
-// To use the live network, set the hostname to 'frontier.digitalbits.io'
+// To use the live network, set the hostname to 'frontier.livenet.digitalbits.io'
 const server = new DigitalBitsSdk.Server('https://frontier.testnet.digitalbits.io');
 
 (async function main() {
