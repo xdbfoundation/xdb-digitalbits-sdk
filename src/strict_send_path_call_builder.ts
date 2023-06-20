@@ -1,4 +1,4 @@
-import { Asset } from "xdb-digitalbits-base";
+import { Asset } from "@digitalbits-blockchain/xdb-digitalbits-base";
 import { CallBuilder } from "./call_builder";
 import { ServerApi } from "./server_api";
 
@@ -21,7 +21,7 @@ import { ServerApi } from "./server_api";
  * amount.
  *
  * Do not create this object directly, use {@link Server#strictSendPaths}.
- * @see [Find Payment Paths](https://developers.digitalbits.io/reference/go/services/frontier/internal/docs/reference/endpoints/path-finding)
+ * @see [Find Payment Paths](https://developers.digitalbits.io/api/aggregations/paths/)
  * @extends CallBuilder
  * @param {string} serverUrl Frontier server URL.
  * @param {Asset} sourceAsset The asset to be sent.

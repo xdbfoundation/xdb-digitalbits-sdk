@@ -151,13 +151,13 @@ describe('frontier path tests', function() {
   let serverUrls = [];
 
   //server url without folder path.
-  serverUrls.push('https://livenet.digitalbits.io:1337');
+  serverUrls.push('https://acme.com:1337');
 
   //server url folder path.
-  serverUrls.push('https://livenet.digitalbits.io:1337/folder');
+  serverUrls.push('https://acme.com:1337/folder');
 
   //server url folder and subfolder path.
-  serverUrls.push('https://livenet.digitalbits.io:1337/folder/subfolder');
+  serverUrls.push('https://acme.com:1337/folder/subfolder');
 
   for (var index = 0; index < serverUrls.length; index++) {
     var serverUrl = serverUrls[index];

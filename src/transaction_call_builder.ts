@@ -7,7 +7,7 @@ import { ServerApi } from "./server_api";
  *
  * @class TransactionCallBuilder
  * @extends CallBuilder
- * @see [All Transactions](https://developers.digitalbits.io/reference/go/services/frontier/internal/docs/reference/endpoints/transactions-all)
+ * @see [All Transactions](https://developers.digitalbits.io/frontier/reference/endpoints/transactions-all.html)
  * @constructor
  * @param {string} serverUrl Frontier server URL.
  */
@@ -15,13 +15,13 @@ export class TransactionCallBuilder extends CallBuilder<
   ServerApi.CollectionPage<ServerApi.TransactionRecord>
 > {
   constructor(serverUrl: URI) {
-    super(serverUrl);
+    super(serverUrl, "transactions");
     this.url.segment("transactions");
   }
 
   /**
    * The transaction details endpoint provides information on a single transaction. The transaction hash provided in the hash argument specifies which transaction to load.
-   * @see [Transaction Details](https://developers.digitalbits.io/reference/go/services/frontier/internal/docs/reference/endpoints/transactions-single)
+   * @see [Transaction Details](https://developers.digitalbits.io/frontier/reference/endpoints/transactions-single.html)
    * @param {string} transactionId Transaction ID
    * @returns {CallBuilder} a CallBuilder instance
    */
@@ -37,38 +37,42 @@ export class TransactionCallBuilder extends CallBuilder<
 
   /**
    * This endpoint represents all transactions that affected a given account.
-   * @see [Transactions for Account](https://developers.digitalbits.io/reference/go/services/frontier/internal/docs/reference/endpoints/transactions-for-account)
+   * @see [Transactions for Account](https://developers.digitalbits.io/frontier/reference/endpoints/transactions-for-account.html)
    * @param {string} accountId For example: `GDGQVOKHW4VEJRU2TETD6DBRKEO5ERCNF353LW5WBFW3JJWQ2BRQ6KDD`
    * @returns {TransactionCallBuilder} current TransactionCallBuilder instance
    */
   public forAccount(accountId: string): this {
-    this.filter.push(["accounts", accountId, "transactions"]);
-    return this;
+    return this.forEndpoint("accounts", accountId);
   }
 
   /**
    * This endpoint represents all transactions that reference a given claimable_balance.
-   * @see [Operations for Claimable Balance](https://developers.digitalbits.io/reference/go/services/frontier/internal/docs/reference/endpoints/transactions-for-claimable-balance)
+   * @see [Operations for Claimable Balance](https://developers.digitalbits.io/frontier/reference/endpoints/transactions-for-claimablebalance.html)
    * @param {string} claimableBalanceId Claimable Balance ID
    * @returns {TransactionCallBuilder} this TransactionCallBuilder instance
    */
   public forClaimableBalance(claimableBalanceId: string): this {
-    this.filter.push(["claimable_balances", claimableBalanceId, "transactions"]);
-    return this;
+    return this.forEndpoint("claimable_balances", claimableBalanceId);
   }
 
   /**
    * This endpoint represents all transactions in a given ledger.
-   * @see [Transactions for Ledger](https://developers.digitalbits.io/reference/go/services/frontier/internal/docs/reference/endpoints/transactions-for-ledger)
+   * @see [Transactions for Ledger](https://developers.digitalbits.io/frontier/reference/endpoints/transactions-for-ledger.html)
    * @param {number|string} sequence Ledger sequence
    * @returns {TransactionCallBuilder} current TransactionCallBuilder instance
    */
   public forLedger(sequence: number | string): this {
-    const ledgerSequence =
-      typeof sequence === "number" ? sequence.toString() : sequence;
+    return this.forEndpoint("ledgers", sequence.toString());
+  }
 
-    this.filter.push(["ledgers", ledgerSequence, "transactions"]);
-    return this;
+  /**
+   * This endpoint represents all transactions involving a particular liquidity pool.
+   *
+   * @param {string} poolId   liquidity pool ID
+   * @returns {TransactionCallBuilder} this TransactionCallBuilder instance
+   */
+  public forLiquidityPool(poolId: string): this {
+    return this.forEndpoint("liquidity_pools", poolId);
   }
 
   /**

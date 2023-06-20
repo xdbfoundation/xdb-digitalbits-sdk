@@ -27,7 +27,7 @@ let config = clone(defaultConfig);
  *
  * Usage node:
  * ```
- * import {Config} from 'xdb-digitalbits-sdk';
+ * import {Config} from '@digitalbits-blockchain/xdb-digitalbits-sdk';
  * Config.setAllowHttp(true);
  * Config.setTimeout(5000);
  * ```

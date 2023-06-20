@@ -1,4 +1,4 @@
-import { Asset } from "xdb-digitalbits-base";
+import { Asset } from "@digitalbits-blockchain/xdb-digitalbits-base";
 import { CallBuilder } from "./call_builder";
 import { ServerApi } from "./server_api";
 
@@ -6,7 +6,7 @@ import { ServerApi } from "./server_api";
  * Creates a new {@link OfferCallBuilder} pointed to server defined by serverUrl.
  * Do not create this object directly, use {@link Server#offers}.
  *
- * @see [Offers](https://developers.digitalbits.io/reference/go/services/frontier/internal/docs/reference/endpoints/offers-for-account)
+ * @see [Offers](https://developers.digitalbits.io/frontier/reference/endpoints/offers.html)
  * @class OfferCallBuilder
  * @constructor
  * @extends CallBuilder
@@ -16,14 +16,14 @@ export class OfferCallBuilder extends CallBuilder<
   ServerApi.CollectionPage<ServerApi.OfferRecord>
 > {
   constructor(serverUrl: URI) {
-    super(serverUrl);
+    super(serverUrl, "offers");
     this.url.segment("offers");
   }
 
   /**
    * The offer details endpoint provides information on a single offer. The offer ID provided in the id
    * argument specifies which offer to load.
-   * @see [Offer Details](https://developers.digitalbits.io/reference/go/services/frontier/internal/docs/reference/endpoints/offer-details)
+   * @see [Offer Details](https://developers.digitalbits.io/frontier/reference/endpoints/offer-details.html)
    * @param {string} offerId Offer ID
    * @returns {CallBuilder<ServerApi.OfferRecord>} CallBuilder<ServerApi.OfferRecord> OperationCallBuilder instance
    */
@@ -34,22 +34,21 @@ export class OfferCallBuilder extends CallBuilder<
   }
 
   /**
-   * Returns all offers where the given account is the seller.
+   * Returns all offers where the given account is involved.
    *
-   * @see [Offers](https://developers.digitalbits.io/reference/go/services/frontier/internal/docs/reference/endpoints/offers-for-account)
+   * @see [Offers](https://developers.digitalbits.io/frontier/reference/endpoints/offers-for-account.html)
    * @param {string} id For example: `GDGQVOKHW4VEJRU2TETD6DBRKEO5ERCNF353LW5WBFW3JJWQ2BRQ6KDD`
    * @returns {OfferCallBuilder} current OfferCallBuilder instance
    */
   public forAccount(id: string): this {
-    this.filter.push(["accounts", id, "offers"]);
-    return this;
+    return this.forEndpoint("accounts", id);
   }
 
   /**
    * Returns all offers buying an asset.
-   * @see [Offers](https://developers.digitalbits.io/reference/go/services/frontier/internal/docs/reference/endpoints/offers-for-account)
+   * @see [Offers](https://developers.digitalbits.io/frontier/reference/endpoints/offers.html)
    * @see Asset
-   * @param {Asset} value For example: `new Asset('USD','GDGQVOKHW4VEJRU2TETD6DBRKEO5ERCNF353LW5WBFW3JJWQ2BRQ6KDD')`
+   * @param {Asset} asset For example: `new Asset('USD','GDGQVOKHW4VEJRU2TETD6DBRKEO5ERCNF353LW5WBFW3JJWQ2BRQ6KDD')`
    * @returns {OfferCallBuilder} current OfferCallBuilder instance
    */
   public buying(asset: Asset): this {
@@ -65,9 +64,9 @@ export class OfferCallBuilder extends CallBuilder<
 
   /**
    * Returns all offers selling an asset.
-   * @see [Offers](https://developers.digitalbits.io/reference/go/services/frontier/internal/docs/reference/endpoints/offers-for-account)
+   * @see [Offers](https://developers.digitalbits.io/frontier/reference/endpoints/offers.html)
    * @see Asset
-   * @param {Asset} value For example: `new Asset('EUR','GDGQVOKHW4VEJRU2TETD6DBRKEO5ERCNF353LW5WBFW3JJWQ2BRQ6KDD')`
+   * @param {Asset} asset For example: `new Asset('EUR','GDGQVOKHW4VEJRU2TETD6DBRKEO5ERCNF353LW5WBFW3JJWQ2BRQ6KDD')`
    * @returns {OfferCallBuilder} current OfferCallBuilder instance
    */
   public selling(asset: Asset): this {
@@ -83,12 +82,24 @@ export class OfferCallBuilder extends CallBuilder<
 
   /**
    * This endpoint filters offers where the given account is sponsoring the offer entry.
-   * @see [Offers](https://developers.digitalbits.io/reference/go/services/frontier/internal/docs/reference/endpoints/offers-for-account)
-   * @param {string} value For example: `GDGQVOKHW4VEJRU2TETD6DBRKEO5ERCNF353LW5WBFW3JJWQ2BRQ6KDD`
+   * @see [Offers](https://developers.digitalbits.io/frontier/reference/endpoints/offers.html)
+   * @param {string} id For example: `GDGQVOKHW4VEJRU2TETD6DBRKEO5ERCNF353LW5WBFW3JJWQ2BRQ6KDD`
    * @returns {OfferCallBuilder} current OfferCallBuilder instance
    */
   public sponsor(id: string): this {
     this.url.setQuery("sponsor", id);
+    return this;
+  }
+
+  /**
+   * This endpoint filters offers where the given account is the seller.
+   *
+   * @see [Offers](https://developers.digitalbits.io/frontier/reference/endpoints/offers.html)
+   * @param {string} seller For example: `GDGQVOKHW4VEJRU2TETD6DBRKEO5ERCNF353LW5WBFW3JJWQ2BRQ6KDD`
+   * @returns {OfferCallBuilder} current OfferCallBuilder instance
+   */
+  public seller(seller: string): this {
+    this.url.setQuery("seller", seller);
     return this;
   }
 }

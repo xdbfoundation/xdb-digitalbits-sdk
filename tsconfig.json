@@ -1,4 +1,5 @@
 {
+  "extends": "@digitalbits-blockchain/tsconfig",
   "compilerOptions": {
     "declaration": true,
     "declarationDir": "lib",
@@ -6,27 +7,7 @@
     "moduleResolution": "node",
     "rootDir": "src",
     "outDir": "lib",
-    "target": "es5",
-    "emitDecoratorMetadata": false,
-    "experimentalDecorators": false,
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "importHelpers": true,
-    "noFallthroughCasesInSwitch": true,
-    "noImplicitAny": true,
-    "noImplicitReturns": true,
-    "noImplicitThis": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "pretty": true,
-    "preserveWatchOutput": false,
-    "removeComments": true,
-    "resolveJsonModule": true,
-    "sourceMap": true,
-    "skipLibCheck": true,
-    "strict": true,
-    "strictNullChecks": false,
-    "stripInternal": true
+    "target": "es5"
   },
   "include": ["src"]
 }

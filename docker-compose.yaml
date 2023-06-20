@@ -1,0 +1,9 @@
+version: '3'
+services:
+  sdk: 
+    image: node:12
+    volumes:
+      - "$PWD/:/app"
+      - "~/.npmrc:/root/.npmrc"
+    working_dir: /app
+    command: yarn

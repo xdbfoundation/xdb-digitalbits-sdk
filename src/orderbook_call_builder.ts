@@ -1,4 +1,4 @@
-import { Asset } from "xdb-digitalbits-base";
+import { Asset } from "@digitalbits-blockchain/xdb-digitalbits-base";
 import { CallBuilder } from "./call_builder";
 import { ServerApi } from "./server_api";
 
@@ -6,7 +6,7 @@ import { ServerApi } from "./server_api";
  * Creates a new {@link OrderbookCallBuilder} pointed to server defined by serverUrl.
  *
  * Do not create this object directly, use {@link Server#orderbook}.
- * @see [Orderbook Details](https://developers.digitalbits.io/reference/go/services/frontier/internal/docs/reference/endpoints/orderbook-details)
+ * @see [Orderbook Details](https://developers.digitalbits.io/api/aggregations/order-books/)
  * @param {string} serverUrl serverUrl Frontier server URL.
  * @param {Asset} selling Asset being sold
  * @param {Asset} buying Asset being bought

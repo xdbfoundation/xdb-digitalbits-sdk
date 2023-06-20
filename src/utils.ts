@@ -5,11 +5,14 @@ import {
   BASE_FEE,
   FeeBumpTransaction,
   Keypair,
+  Memo,
+  MemoID,
+  MemoNone,
   Operation,
   TimeoutInfinite,
   Transaction,
   TransactionBuilder,
-} from "xdb-digitalbits-base";
+} from "@digitalbits-blockchain/xdb-digitalbits-base";
 import { InvalidSep10ChallengeError } from "./errors";
 import { ServerApi } from "./server_api";
 
@@ -18,21 +21,26 @@ import { ServerApi } from "./server_api";
  */
 export namespace Utils {
   /**
-   * Returns a valid SEP0010 challenge transaction which you can use for DigitalBits Web Authentication.
+   * Returns a valid [SEP0010](https://github.com/xdbfoundation/digitalbits-protocol/blob/master/ecosystem/sep-0010.md)
+   * challenge transaction which you can use for DigitalBits Web Authentication.
    *
+   * @see [SEP0010: DigitalBits Web Authentication](https://github.com/xdbfoundation/digitalbits-protocol/blob/master/ecosystem/sep-0010.md).
    * @function
    * @memberof Utils
    * @param {Keypair} serverKeypair Keypair for server's signing account.
-   * @param {string} clientAccountID The DigitalBits account that the wallet wishes to authenticate with the server.
+   * @param {string} clientAccountID The digitalbits account (G...) or muxed account (M...) that the wallet wishes to authenticate with the server.
    * @param {string} homeDomain The fully qualified domain name of the service requiring authentication
    * @param {number} [timeout=300] Challenge duration (default to 5 minutes).
    * @param {string} networkPassphrase The network passphrase. If you pass this argument then timeout is required.
    * @param {string} webAuthDomain The fully qualified domain name of the service issuing the challenge.
+   * @param {string} [memo] The memo to attach to the challenge transaction. The memo must be of type `id`. If the `clientaccountID` is a muxed account, memos cannot be used.
+   * @param {string} [clientDomain] The fully qualified domain of the client requesting the challenge. Only necessary when the the 'client_domain' parameter is passed.
+   * @param {string} [clientSigningKey] The public key assigned to the SIGNING_KEY attribute specified on the digitalbits.toml hosted on the client domain. Only necessary when the 'client_domain' parameter is passed.
    * @example
-   * import { Utils, Keypair, Networks }  from 'xdb-digitalbits-sdk'
+   * import { Utils, Keypair, Networks }  from '@digitalbits-blockchain/xdb-digitalbits-sdk'
    *
    * let serverKeyPair = Keypair.fromSecret("server-secret")
-   * let challenge = Utils.buildChallengeTx(serverKeyPair, "client-digitalbits-account-id", "testnet.digitalbits.io", 300, Networks.TESTNET)
+   * let challenge = Utils.buildChallengeTx(serverKeyPair, "client-digitalbits-account-id", "digitalbits.io", 300, Networks.TESTNET)
    * @returns {string} A base64 encoded string of the raw TransactionEnvelope xdr struct for the transaction.
    */
   export function buildChallengeTx(
@@ -42,11 +50,12 @@ export namespace Utils {
     timeout: number = 300,
     networkPassphrase: string,
     webAuthDomain: string,
+    memo: string | null = null,
+    clientDomain: string | null = null,
+    clientSigningKey: string | null = null,
   ): string {
-    if (clientAccountID.startsWith("M")) {
-      throw Error(
-        "Invalid clientAccountID: multiplexed accounts are not supported.",
-      );
+    if (clientAccountID.startsWith("M") && memo) {
+      throw Error("memo cannot be used if clientAccountID is a muxed account");
     }
 
     const account = new Account(serverKeypair.publicKey(), "-1");
@@ -59,7 +68,7 @@ export namespace Utils {
     // turned into binary represents 8 bits = 1 bytes.
     const value = randomBytes(48).toString("base64");
 
-    const transaction = new TransactionBuilder(account, {
+    const builder = new TransactionBuilder(account, {
       fee: BASE_FEE,
       networkPassphrase,
       timebounds: {
@@ -80,9 +89,26 @@ export namespace Utils {
           value: webAuthDomain,
           source: account.accountId(),
         }),
-      )
-      .build();
+      );
 
+    if (clientDomain) {
+      if (!clientSigningKey) {
+        throw Error("clientSigningKey is required if clientDomain is provided");
+      }
+      builder.addOperation(
+        Operation.manageData({
+          name: `client_domain`,
+          value: clientDomain,
+          source: clientSigningKey,
+        }),
+      );
+    }
+
+    if (memo) {
+      builder.addMemo(Memo.id(memo));
+    }
+
+    const transaction = builder.build();
     transaction.sign(serverKeypair);
 
     return transaction
@@ -103,14 +129,15 @@ export namespace Utils {
    * - verifyChallengeTxThreshold
    * - verifyChallengeTxSigners
    *
+   * @see [SEP0010: DigitalBits Web Authentication](https://github.com/xdbfoundation/digitalbits-protocol/blob/master/ecosystem/sep-0010.md).
    * @function
    * @memberof Utils
    * @param {string} challengeTx SEP0010 challenge transaction in base64.
-   * @param {string} serverAccountID The server's DigitalBits account (public key).
-   * @param {string} networkPassphrase The network passphrase, e.g.: 'Test SDF Network ; September 2015'.
+   * @param {string} serverAccountID The server's digitalbits account (public key).
+   * @param {string} networkPassphrase The network passphrase, e.g.: 'TestNet Global DigitalBits Network ; December 2020'.
    * @param {string|string[]} [homeDomains] The home domain that is expected to be included in the first Manage Data operation's string key. If an array is provided, one of the domain names in the array must match.
    * @param {string} webAuthDomain The home domain that is expected to be included as the value of the Manage Data operation with the 'web_auth_domain' key. If no such operation is included, this parameter is not used.
-   * @returns {Transaction|string|string} The actual transaction and the DigitalBits public key (master key) used to sign the Manage Data operation, and matched home domain.
+   * @returns {Transaction|string|string|string} The actual transaction and the digitalbits public key (master key) used to sign the Manage Data operation, the matched home domain, and the memo attached to the transaction, which will be null if not present.
    */
   export function readChallengeTx(
     challengeTx: string,
@@ -118,19 +145,29 @@ export namespace Utils {
     networkPassphrase: string,
     homeDomains: string | string[],
     webAuthDomain: string,
-  ): { tx: Transaction; clientAccountID: string; matchedHomeDomain: string } {
+  ): {
+    tx: Transaction;
+    clientAccountID: string;
+    matchedHomeDomain: string;
+    memo: string | null;
+  } {
     if (serverAccountID.startsWith("M")) {
       throw Error(
         "Invalid serverAccountID: multiplexed accounts are not supported.",
       );
     }
 
-    const transaction = TransactionBuilder.fromXDR(
-      challengeTx,
-      networkPassphrase,
-    );
-
-    if (!(transaction instanceof Transaction)) {
+    let transaction;
+    try {
+      transaction = new Transaction(challengeTx, networkPassphrase);
+    } catch {
+      try {
+        transaction = new FeeBumpTransaction(challengeTx, networkPassphrase);
+      } catch {
+        throw new InvalidSep10ChallengeError(
+          "Invalid challenge: unable to deserialize challengeTx transaction string",
+        );
+      }
       throw new InvalidSep10ChallengeError(
         "Invalid challenge: expected a Transaction but received a FeeBumpTransaction",
       );
@@ -168,6 +205,21 @@ export namespace Utils {
     }
     const clientAccountID: string = operation.source!;
 
+    let memo: string | null = null;
+    if (transaction.memo.type !== MemoNone) {
+      if (clientAccountID.startsWith("M")) {
+        throw new InvalidSep10ChallengeError(
+          "The transaction has a memo but the client account ID is a muxed account",
+        );
+      }
+      if (transaction.memo.type !== MemoID) {
+        throw new InvalidSep10ChallengeError(
+          "The transaction's memo must be of type `id`",
+        );
+      }
+      memo = transaction.memo.value as string;
+    }
+
     if (operation.type !== "manageData") {
       throw new InvalidSep10ChallengeError(
         "The transaction's operation type should be 'manageData'",
@@ -184,7 +236,8 @@ export namespace Utils {
       );
     }
 
-    if (!validateTimebounds(transaction)) {
+    // give a small grace period for the transaction time to account for clock drift
+    if (!validateTimebounds(transaction, 60 * 5)) {
       throw new InvalidSep10ChallengeError("The transaction has expired");
     }
 
@@ -243,7 +296,7 @@ export namespace Utils {
           "The transaction has operations that are not of type 'manageData'",
         );
       }
-      if (op.source !== serverAccountID) {
+      if (op.source !== serverAccountID && op.name !== "client_domain") {
         throw new InvalidSep10ChallengeError(
           "The transaction has operations that are unrecognized",
         );
@@ -262,7 +315,13 @@ export namespace Utils {
       }
     }
 
-    return { tx: transaction, clientAccountID, matchedHomeDomain };
+    if (!verifyTxSignedBy(transaction, serverAccountID)) {
+      throw new InvalidSep10ChallengeError(
+        `Transaction not signed by server: '${serverAccountID}'`,
+      );
+    }
+
+    return { tx: transaction, clientAccountID, matchedHomeDomain, memo };
   }
 
   /**
@@ -283,11 +342,12 @@ export namespace Utils {
    *    server account or one of the signers provided in the arguments.
    *  - The signatures are all valid but do not meet the threshold.
    *
+   * @see [SEP0010: DigitalBits Web Authentication](https://github.com/xdbfoundation/digitalbits-protocol/blob/master/ecosystem/sep-0010.md).
    * @function
    * @memberof Utils
    * @param {string} challengeTx SEP0010 challenge transaction in base64.
-   * @param {string} serverAccountID The server's DigitalBits account (public key).
-   * @param {string} networkPassphrase The network passphrase, e.g.: 'Test SDF Network ; September 2015'.
+   * @param {string} serverAccountID The server's digitalbits account (public key).
+   * @param {string} networkPassphrase The network passphrase, e.g.: 'TestNet Global DigitalBits Network ; December 2020'.
    * @param {number} threshold The required signatures threshold for verifying this transaction.
    * @param {ServerApi.AccountRecordSigners[]} signerSummary a map of all authorized signers to their weights. It's used to validate if the transaction signatures have met the given threshold.
    * @param {string|string[]} [homeDomains] The home domain(s) that should be included in the first Manage Data operation's string key. Required in verifyChallengeTxSigners() => readChallengeTx().
@@ -295,7 +355,7 @@ export namespace Utils {
    * @returns {string[]} The list of signers public keys that have signed the transaction, excluding the server account ID, given that the threshold was met.
    * @example
    *
-   * import { Networks, TransactionBuilder, Utils }  from 'xdb-digitalbits-sdk';
+   * import { Networks, TransactionBuilder, Utils }  from '@digitalbits-blockchain/xdb-digitalbits-sdk';
    *
    * const serverKP = Keypair.random();
    * const clientKP1 = Keypair.random();
@@ -389,18 +449,19 @@ export namespace Utils {
    *  - One or more signatures in the transaction are not identifiable as the
    *    server account or one of the signers provided in the arguments.
    *
+   * @see [SEP0010: DigitalBits Web Authentication](https://github.com/xdbfoundation/digitalbits-protocol/blob/master/ecosystem/sep-0010.md).
    * @function
    * @memberof Utils
    * @param {string} challengeTx SEP0010 challenge transaction in base64.
-   * @param {string} serverAccountID The server's DigitalBits account (public key).
-   * @param {string} networkPassphrase The network passphrase, e.g.: 'Test SDF Network ; September 2015'.
+   * @param {string} serverAccountID The server's digitalbits account (public key).
+   * @param {string} networkPassphrase The network passphrase, e.g.: 'TestNet Global DigitalBits Network ; December 2020'.
    * @param {string[]} signers The signers public keys. This list should contain the public keys for all signers that have signed the transaction.
    * @param {string|string[]} [homeDomains] The home domain(s) that should be included in the first Manage Data operation's string key. Required in readChallengeTx().
    * @param {string} webAuthDomain The home domain that is expected to be included as the value of the Manage Data operation with the 'web_auth_domain' key, if present. Used in readChallengeTx().
    * @returns {string[]} The list of signers public keys that have signed the transaction, excluding the server account ID.
    * @example
    *
-   * import { Networks, TransactionBuilder, Utils }  from 'xdb-digitalbits-sdk';
+   * import { Networks, TransactionBuilder, Utils }  from '@digitalbits-blockchain/xdb-digitalbits-sdk';
    *
    * const serverKP = Keypair.random();
    * const clientKP1 = Keypair.random();
@@ -484,6 +545,18 @@ export namespace Utils {
       );
     }
 
+    let clientSigningKey;
+    for (const op of tx.operations) {
+      if (op.type === "manageData" && op.name === "client_domain") {
+        if (clientSigningKey) {
+          throw new InvalidSep10ChallengeError(
+            "Found more than one client_domain operation",
+          );
+        }
+        clientSigningKey = op.source;
+      }
+    }
+
     // Verify all the transaction's signers (server and client) in one
     // hit. We do this in one hit here even though the server signature was
     // checked in the ReadChallengeTx to ensure that every signature and signer
@@ -492,13 +565,35 @@ export namespace Utils {
       serverKP.publicKey(),
       ...Array.from(clientSigners),
     ];
+    if (clientSigningKey) {
+      allSigners.push(clientSigningKey);
+    }
 
     const signersFound: string[] = gatherTxSigners(tx, allSigners);
 
+    let serverSignatureFound = false;
+    let clientSigningKeySignatureFound = false;
+    for (const signer of signersFound) {
+      if (signer === serverKP.publicKey()) {
+        serverSignatureFound = true;
+      }
+      if (signer === clientSigningKey) {
+        clientSigningKeySignatureFound = true;
+      }
+    }
+
     // Confirm we matched a signature to the server signer.
-    if (signersFound.indexOf(serverKP.publicKey()) === -1) {
+    if (!serverSignatureFound) {
       throw new InvalidSep10ChallengeError(
         "Transaction not signed by server: '" + serverKP.publicKey() + "'",
+      );
+    }
+
+    // Confirm we matched a signature to the client domain's signer
+    if (clientSigningKey && !clientSigningKeySignatureFound) {
+      throw new InvalidSep10ChallengeError(
+        "Transaction not signed by the source account of the 'client_domain' " +
+          "ManageData operation",
       );
     }
 
@@ -518,6 +613,10 @@ export namespace Utils {
 
     // Remove the server public key before returning
     signersFound.splice(signersFound.indexOf(serverKP.publicKey()), 1);
+    if (clientSigningKey) {
+      // Remove the client domain public key public key before returning
+      signersFound.splice(signersFound.indexOf(clientSigningKey), 1);
+    }
 
     return signersFound;
   }
@@ -620,7 +719,10 @@ export namespace Utils {
    * @param {Transaction} transaction the transaction whose timebonds will be validated.
    * @returns {boolean} returns true if the current time is within the transaction's [minTime, maxTime] range.
    */
-  function validateTimebounds(transaction: Transaction): boolean {
+  function validateTimebounds(
+    transaction: Transaction,
+    gracePeriod: number = 0,
+  ): boolean {
     if (!transaction.timeBounds) {
       return false;
     }
@@ -629,7 +731,8 @@ export namespace Utils {
     const { minTime, maxTime } = transaction.timeBounds;
 
     return (
-      now >= Number.parseInt(minTime, 10) && now <= Number.parseInt(maxTime, 10)
+      now >= Number.parseInt(minTime, 10) - gracePeriod &&
+      now <= Number.parseInt(maxTime, 10) + gracePeriod
     );
   }
 }

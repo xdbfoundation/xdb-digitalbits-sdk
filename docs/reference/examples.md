@@ -8,39 +8,38 @@ title: Basic Examples
 
 ## Creating a payment transaction
 
-The `xdb-digitalbits-sdk` exposes the `TransactionBuilder` class from `xdb-digitalbits-base`.  There are more examples of [building transactions here](https://developers.digitalbits.io/xdb-digitalbits-base/reference/base-examples.html). All those examples can be signed and submitted to DigitalBits in a similar manner as is done below.
+The `@digitalbits-blockchain/xdb-digitalbits-sdk` exposes the [`TransactionBuilder`](https://xdbfoundation.github.io/xdb-digitalbits-sdk/TransactionBuilder.html) class from `@digitalbits-blockchain/xdb-digitalbits-base`.  There are more examples of [building transactions here](https://github.com/xdbfoundation/js-digitalbits-base/blob/master/docs/reference/base-examples.md). All those examples can be signed and submitted to DigitalBits in a similar manner as is done below.
 
 In this example, the destination account must exist. The example is written
 using modern Javascript, but `await` calls can also be rendered with promises.
 
 ```javascript
-// Create, sign, and submit a transaction using XDB DigitalBits SDK.
+// Create, sign, and submit a transaction using JS DigitalBits SDK.
 
 // Assumes that you have the following items:
 // 1. Secret key of a funded account to be the source account
 // 2. Public key of an existing account as a recipient
 //    These two keys can be created and funded by the friendbot at
-//    https://laboratory.livenet.digitalbits.io/#account-creator?network=test under 
-//    the heading "Quick Start: Test Account"
-// 3. Access to XDB DigitalBits SDK (https://github.com/xdbfoundation/xdb-digitalbits-sdk)
+//    https://laboratory.livenet.digitalbits.io/ under the heading "Quick Start: Test Account"
+// 3. Access to JS DigitalBits SDK (https://github.com/xdbfoundation/xdb-digitalbits-sdk)
 //    either through Node.js or in the browser.
 
-// This code can be run in the browser at ttps://laboratory.livenet.digitalbits.io
+// This code can be run in the browser at https://laboratory.livenet.digitalbits.io/
 // That site exposes a global DigitalBitsSdk object you can use.
 // To run this code in the Chrome, open the console tab in the DevTools.
 // The hotkey to open the DevTools console is Ctrl+Shift+J or (Cmd+Opt+J on Mac).
-const DigitalBitsSdk = require('xdb-digitalbits-sdk');
+const DigitalBitsSdk = require('@digitalbits-blockchain/xdb-digitalbits-sdk');
 
 // The source account is the account we will be signing and sending from.
-const sourceSecretKey = 'SC422IJ7VPKGII4APQIWJIY6TPQDOU72MWWCQW6L6BQ7URZWHOZJN6W7';
+const sourceSecretKey = 'SCZANGBA5YHTNYVVV4C3U252E2B6P6F5T3U6MM63WBSBZATAQI3EBTQ4';
 
 // Derive Keypair object and public key (that starts with a G) from the secret
 const sourceKeypair = DigitalBitsSdk.Keypair.fromSecret(sourceSecretKey);
 const sourcePublicKey = sourceKeypair.publicKey();
 
-const receiverPublicKey = 'GATYL2JFZSFM6CV5HFGUJQMK3QN3DHG57EWNVP37RVUV5GHZDDG2M7C6';
+const receiverPublicKey = 'GAIRISXKPLOWZBMFRPU5XRGUUX3VMA3ZEWKBM5MSNRU3CHV6P4PYZ74D';
 
-// Configure DigitalBitsSdk to talk to the frontier instance hosted by digitalbits.io
+// Configure DigitalBitsSdk to talk to the frontier instance hosted by DigitalBits.io
 // To use the live network, set the hostname to 'frontier.livenet.digitalbits.io'
 const server = new DigitalBitsSdk.Server('https://frontier.testnet.digitalbits.io');
 
@@ -66,16 +65,16 @@ const server = new DigitalBitsSdk.Server('https://frontier.testnet.digitalbits.i
     // Add a payment operation to the transaction
     .addOperation(DigitalBitsSdk.Operation.payment({
       destination: receiverPublicKey,
-      // The term native asset refers to digitalbits
+      // The term native asset refers to nibbs
       asset: DigitalBitsSdk.Asset.native(),
-      // Specify 350.1234567 digitalbits. Digitalbits are divisible to seven digits past
+      // Specify 350.1234567 nibbs. Nibbs are divisible to seven digits past
       // the decimal. They are represented in JS DigitalBits SDK in string format
       // to avoid errors from the use of the JavaScript Number data structure.
       amount: '350.1234567',
     }))
     // Make this transaction valid for the next 30 seconds only
     .setTimeout(30)
-    // Uncomment to add a memo (hhttps://developers.digitalbits.io/guides/concepts/transactions.html)
+    // Uncomment to add a memo (https://developers.digitalbits.io/guides/concepts/transactions.html)
     // .addMemo(DigitalBitsSdk.Memo.text('Hello world!'))
     .build();
 
@@ -107,9 +106,9 @@ const server = new DigitalBitsSdk.Server('https://frontier.testnet.digitalbits.i
 Let's say you want to look at an account's transaction history.  You can use the `transactions()` command and pass in the account address to `forAccount` as the resource you're interested in.
 
 ```javascript
-const DigitalBitsSdk = require('xdb-digitalbits-sdk')
+const DigitalBitsSdk = require('@digitalbits-blockchain/xdb-digitalbits-sdk')
 const server = new DigitalBitsSdk.Server('https://frontier.testnet.digitalbits.io');
-const accountId = 'GDS5URKDAYKYSITEKIW6P2YS2HUXPBTF4FMRTEII7DRF2ZMMR6SFHLQE';
+const accountId = 'GBBORXCY3PQRRDLJ7G7DWHQBXPCJVFGJ4RGMJQVAX6ORAUH6RWSPP6FM';
 
 server.transactions()
     .forAccount(accountId)
@@ -130,12 +129,11 @@ server.transactions()
 
 ## Streaming payment events
 
-xdb-digitalbits-sdk provides streaming support for Frontier endpoints using `EventSource`.  You can pass a function to handle any events that occur on the stream.
+@digitalbits-blockchain/xdb-digitalbits-sdk provides streaming support for Frontier endpoints using `EventSource`.  You can pass a function to handle any events that occur on the stream.
 
 Try submitting a transaction (via the guide above) while running the following code example.
-
 ```javascript
-const DigitalBitsSdk = require('xdb-digitalbits-sdk')
+const DigitalBitsSdk = require('@digitalbits-blockchain/xdb-digitalbits-sdk')
 const server = new DigitalBitsSdk.Server('https://frontier.testnet.digitalbits.io');
 
 // Get a message any time a payment occurs. Cursor is set to "now" to be notified
@@ -150,4 +148,4 @@ const es = server.payments()
   })
 ```
 
-For more on streaming events, please check out [the Frontier documentation](https://developers.digitalbits.io/frontier/reference/index.html) and this [guide to server-sent events](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events).
+For more on streaming events, please check out [the Frontier documentation](https://developers.digitalbits.io/frontier/reference/streaming.html) and this [guide to server-sent events](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events).

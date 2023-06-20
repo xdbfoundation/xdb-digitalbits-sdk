@@ -37,7 +37,7 @@ gulp.task('clean', function clean() {
 gulp.task(
   'build:node',
   gulp.series(
-    async function buildNode(done) {
+    function buildNode(done) {
       // TODO: Gulp-ify using `gulp-typescript`.
       try {
         cp.execSync(`npx tsc`, {stdio: 'inherit'})
@@ -67,6 +67,7 @@ gulp.task(
 gulp.task(
   'build:browser',
   gulp.parallel(
+    'lint:src',
     async function buildBrowser() {
       return gulp
         .src('src/browser.ts')
@@ -157,8 +158,6 @@ gulp.task(
   gulp.series('build:node', 'test:init-istanbul', function testIntegration() {
     return gulp
       .src([
-        'test/test-nodejs.js',
-        'test/unit/**/*.js',
         'test/integration/**/*.js'
       ])
       .pipe(
@@ -178,7 +177,7 @@ gulp.task('build', gulp.series('clean', 'build:node', 'build:browser'));
 
 gulp.task(
   'test',
-  gulp.series('clean', 'test:unit', 'test:browser', function test(done) {
+  gulp.series('clean', 'test:unit', 'test:browser', 'test:integration', function test(done) {
     done();
   })
 );

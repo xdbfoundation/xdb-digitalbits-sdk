@@ -20,48 +20,108 @@ describe('Utils', function() {
   });
 
   describe('Utils.buildChallengeTx', function() {
-    it('requires a non-muxed account', function() {
+    it('allows non-muxed accounts', function() {
       let keypair = DigitalBitsSdk.Keypair.random();
-
+      let muxedAddress = "MAAAAAAAAAAAAAB7BQ2L7E5NBWMXDUCMZSIPOBKRDSBYVLMXGSSKF6YNPIB7Y77ITLVL6";
+      let challenge;
       expect(() =>
-        DigitalBitsSdk.Utils.buildChallengeTx(
+        challenge = DigitalBitsSdk.Utils.buildChallengeTx(
           keypair,
           "MAAAAAAAAAAAAAB7BQ2L7E5NBWMXDUCMZSIPOBKRDSBYVLMXGSSKF6YNPIB7Y77ITLVL6",
-          "testanchor.testnet.digitalbits.io",
+          "testanchor.digitalbits.io",
           300,
           DigitalBitsSdk.Networks.TESTNET,
-          "testanchor.testnet.digitalbits.io"
+          "testanchor.digitalbits.io"
+        )
+      ).not.to.throw();
+      const transaction = new DigitalBitsSdk.Transaction(
+        challenge, DigitalBitsSdk.Networks.TESTNET, true
+      );
+      expect(transaction.operations[0].source).to.equal(muxedAddress);
+    });
+
+    it('allows ID memos', function() {
+      let keypair = DigitalBitsSdk.Keypair.random();
+      let challenge;
+      expect(() =>
+        challenge = DigitalBitsSdk.Utils.buildChallengeTx(
+          keypair,
+          DigitalBitsSdk.Keypair.random().publicKey(),
+          "testanchor.digitalbits.io",
+          300,
+          DigitalBitsSdk.Networks.TESTNET,
+          "testanchor.digitalbits.io",
+          "8884404377665521220"
+        )
+      ).not.to.throw();
+      const transaction = new DigitalBitsSdk.Transaction(
+        challenge, DigitalBitsSdk.Networks.TESTNET, true
+      );
+      expect(transaction.memo.value).to.equal("8884404377665521220");
+    });
+
+    it('disallows non-ID memos', function() {
+      let keypair = DigitalBitsSdk.Keypair.random();
+      expect(() =>
+        challenge = DigitalBitsSdk.Utils.buildChallengeTx(
+          keypair,
+          DigitalBitsSdk.Keypair.random().publicKey(),
+          "testanchor.digitalbits.io",
+          300,
+          DigitalBitsSdk.Networks.TESTNET,
+          "testanchor.digitalbits.io",
+          "memo text"
+        )
+      ).to.throw();
+    });
+
+    it('disallows memos with muxed accounts', function() {
+      let keypair = DigitalBitsSdk.Keypair.random();
+      const muxedAddress = "MAAAAAAAAAAAAAB7BQ2L7E5NBWMXDUCMZSIPOBKRDSBYVLMXGSSKF6YNPIB7Y77ITLVL6";
+      expect(() =>
+        challenge = DigitalBitsSdk.Utils.buildChallengeTx(
+          keypair,
+          muxedAddress,
+          "testanchor.digitalbits.io",
+          300,
+          DigitalBitsSdk.Networks.TESTNET,
+          "testanchor.digitalbits.io",
+          "8884404377665521220"
         )
       ).to.throw(
-        /Invalid clientAccountID: multiplexed accounts are not supported./
+        /memo cannot be used if clientAccountID is a muxed account/
       );
     });
 
     it('returns challenge which follows SEP0010 spec', function() {
       let keypair = DigitalBitsSdk.Keypair.random();
+      let clientSigningKeypair = DigitalBitsSdk.Keypair.random();
 
       const challenge = DigitalBitsSdk.Utils.buildChallengeTx(
         keypair,
         "GBDIT5GUJ7R5BXO3GJHFXJ6AZ5UQK6MNOIDMPQUSMXLIHTUNR2Q5CFNF",
-        "testanchor.testnet.digitalbits.io",
+        "testanchor.digitalbits.io",
         300,
         DigitalBitsSdk.Networks.TESTNET,
-        "testanchor.testnet.digitalbits.io"
+        "testanchor.digitalbits.io",
+        null,
+        "testdomain",
+        clientSigningKeypair.publicKey()
       );
 
       const transaction = new DigitalBitsSdk.Transaction(challenge, DigitalBitsSdk.Networks.TESTNET);
 
       expect(transaction.sequence).to.eql("0");
       expect(transaction.source).to.eql(keypair.publicKey());
-      expect(transaction.operations.length).to.eql(2);
+      expect(transaction.operations.length).to.eql(3);
 
       const { maxTime, minTime } = transaction.timeBounds;
 
       expect(parseInt(maxTime) - parseInt(minTime)).to.eql(300);
 
-      const [ operation1, operation2 ] =  transaction.operations;
+      const [ operation1, operation2, operation3 ] =  transaction.operations;
 
-      expect(operation1.name).to.eql("testanchor.testnet.digitalbits.io auth");
+      expect(operation1.name).to.eql("testanchor.digitalbits.io auth");
       expect(operation1.source).to.eql("GBDIT5GUJ7R5BXO3GJHFXJ6AZ5UQK6MNOIDMPQUSMXLIHTUNR2Q5CFNF");
       expect(operation1.type).to.eql("manageData");
       expect(operation1.value.length).to.eql(64);
@@ -70,7 +130,12 @@ describe('Utils', function() {
       expect(operation2.name).to.equal("web_auth_domain");
       expect(operation2.source).to.eql(keypair.publicKey());
       expect(operation2.type).to.eql("manageData");
-      expect(operation2.value.toString()).to.eql("testanchor.testnet.digitalbits.io");
+      expect(operation2.value.toString()).to.eql("testanchor.digitalbits.io");
+
+      expect(operation3.name).to.eql("client_domain");
+      expect(operation3.source).to.eql(clientSigningKeypair.publicKey());
+      expect(operation3.type).to.eql("manageData");
+      expect(operation3.value.toString()).to.eql("testdomain");
     });
 
     it('uses the passed-in timeout', function() {
@@ -79,10 +144,10 @@ describe('Utils', function() {
       const challenge = DigitalBitsSdk.Utils.buildChallengeTx(
         keypair,
         "GBDIT5GUJ7R5BXO3GJHFXJ6AZ5UQK6MNOIDMPQUSMXLIHTUNR2Q5CFNF",
-        "testanchor.testnet.digitalbits.io",
+        "testanchor.digitalbits.io",
         600,
         DigitalBitsSdk.Networks.TESTNET,
-        "testanchor.testnet.digitalbits.io"
+        "testanchor.digitalbits.io"
       );
 
       const transaction = new DigitalBitsSdk.Transaction(challenge, DigitalBitsSdk.Networks.TESTNET);
@@ -94,24 +159,46 @@ describe('Utils', function() {
       expect(maxTime).to.eql(600);
       expect(maxTime - minTime).to.eql(600);
     });
+
+    it("throws an error if a muxed account and memo is passed", function () {
+      let keypair = DigitalBitsSdk.Keypair.random();
+      const muxedAddress = "MCQQMHTBRF2NPCEJWO2JMDT2HBQ2FGDCYREY2YIBSHLTXDG54Y3KTWX3R7NBER62VBELC";
+      expect(() =>
+        DigitalBitsSdk.Utils.buildChallengeTx(
+          keypair,
+          muxedAddress,
+          "testanchor.digitalbits.io",
+          600,
+          DigitalBitsSdk.Networks.TESTNET,
+          "testanchor.digitalbits.io",
+          "10154623012567072189"
+        )
+      ).to.throw(
+        /memo cannot be used if clientAccountID is a muxed account/
+      );
+    });
+
+    it("throws an error if clientSigningKey is not passed", function() {
+      expect(() =>
+        DigitalBitsSdk.Utils.buildChallengeTx(
+          DigitalBitsSdk.Keypair.random(),
+          DigitalBitsSdk.Keypair.random().publicKey(),
+          "testanchor.digitalbits.io",
+          600,
+          DigitalBitsSdk.Networks.TESTNET,
+          "testanchor.digitalbits.io",
+          null,
+          "testdomain",
+          null
+        )
+      ).to.throw(
+        /clientSigningKey is required if clientDomain is provided/
+      );
+    });
+
   });
 
   describe("Utils.readChallengeTx", function() {
-    it('requires a non-muxed account', function() {
-      expect(() =>
-        DigitalBitsSdk.Utils.readChallengeTx(
-          "avalidtx",
-          "MAAAAAAAAAAAAAB7BQ2L7E5NBWMXDUCMZSIPOBKRDSBYVLMXGSSKF6YNPIB7Y77ITLVL6",
-          "SDF",
-          300,
-          DigitalBitsSdk.Networks.TESTNET,
-          "testanchor.testnet.digitalbits.io",
-          "testanchor.testnet.digitalbits.io"
-        )
-      ).to.throw(
-        /Invalid serverAccountID: multiplexed accounts are not supported./
-      );
-    });
     it("requires a envelopeTypeTxV0 or envelopeTypeTx", function(){
       let serverKP = DigitalBitsSdk.Keypair.random();
       let clientKP = DigitalBitsSdk.Keypair.random();
@@ -122,7 +209,7 @@ describe('Utils', function() {
         "SDF",
         300,
         DigitalBitsSdk.Networks.TESTNET,
-        "testanchor.testnet.digitalbits.io"
+        "testanchor.digitalbits.io"
       );
 
       const innerTx = new DigitalBitsSdk.TransactionBuilder(new DigitalBitsSdk.Account(clientKP.publicKey(), "0"), {
@@ -155,7 +242,7 @@ describe('Utils', function() {
           serverKP.publicKey(),
           DigitalBitsSdk.Networks.TESTNET,
           "SDF",
-          "testanchor.testnet.digitalbits.io"
+          "testanchor.digitalbits.io"
         )
       ).to.throw(
         DigitalBitsSdk.InvalidSep10ChallengeError,
@@ -168,7 +255,7 @@ describe('Utils', function() {
           serverKP.publicKey(),
           DigitalBitsSdk.Networks.TESTNET,
           "SDF",
-          "testanchor.testnet.digitalbits.io"
+          "testanchor.digitalbits.io"
         )
       ).to.not.throw(DigitalBitsSdk.InvalidSep10ChallengeError);
       expect(() =>
@@ -177,7 +264,7 @@ describe('Utils', function() {
           serverKP.publicKey(),
           DigitalBitsSdk.Networks.TESTNET,
           "SDF",
-          "testanchor.testnet.digitalbits.io"
+          "testanchor.digitalbits.io"
         )
       ).to.not.throw(DigitalBitsSdk.InvalidSep10ChallengeError);
     });
@@ -191,7 +278,7 @@ describe('Utils', function() {
         "SDF",
         300,
         DigitalBitsSdk.Networks.TESTNET,
-        "testanchor.testnet.digitalbits.io"
+        "testanchor.digitalbits.io"
       );
 
       clock.tick(200);
@@ -207,13 +294,166 @@ describe('Utils', function() {
           serverKP.publicKey(),
           DigitalBitsSdk.Networks.TESTNET,
           "SDF",
-          "testanchor.testnet.digitalbits.io"
+          "testanchor.digitalbits.io"
         )
       ).to.eql({
         tx: transaction,
         clientAccountID: clientKP.publicKey(),
         matchedHomeDomain: "SDF",
+        memo: null
       });
+    });
+
+    it("returns the clientAccountID and memo if the challenge includes a memo", function() {
+      let serverKP = DigitalBitsSdk.Keypair.random();
+      let clientKP = DigitalBitsSdk.Keypair.random();
+      let clientMemo = "7659725268483412096";
+
+      const challenge = DigitalBitsSdk.Utils.buildChallengeTx(
+        serverKP,
+        clientKP.publicKey(),
+        "SDF",
+        300,
+        DigitalBitsSdk.Networks.TESTNET,
+        "testanchor.digitalbits.io",
+        clientMemo
+      );
+
+      clock.tick(200);
+
+      const transaction = new DigitalBitsSdk.Transaction(
+        challenge,
+        DigitalBitsSdk.Networks.TESTNET
+      );
+
+      expect(
+        DigitalBitsSdk.Utils.readChallengeTx(
+          challenge,
+          serverKP.publicKey(),
+          DigitalBitsSdk.Networks.TESTNET,
+          "SDF",
+          "testanchor.digitalbits.io"
+        )
+      ).to.eql({
+        tx: transaction,
+        clientAccountID: clientKP.publicKey(),
+        matchedHomeDomain: "SDF",
+        memo: clientMemo
+      });
+    });
+
+    it("returns the muxed clientAccountID if included in the challenge", function() {
+      let serverKP = DigitalBitsSdk.Keypair.random();
+      let muxedAddress = "MCQQMHTBRF2NPCEJWO2JMDT2HBQ2FGDCYREY2YIBSHLTXDG54Y3KTWX3R7NBER62VBELC";
+
+      const challenge = DigitalBitsSdk.Utils.buildChallengeTx(
+        serverKP,
+        muxedAddress,
+        "SDF",
+        300,
+        DigitalBitsSdk.Networks.TESTNET,
+        "testanchor.digitalbits.io",
+      );
+
+      clock.tick(200);
+
+      const transaction = new DigitalBitsSdk.Transaction(challenge, DigitalBitsSdk.Networks.TESTNET, true);
+
+      expect(
+        DigitalBitsSdk.Utils.readChallengeTx(
+          challenge,
+          serverKP.publicKey(),
+          DigitalBitsSdk.Networks.TESTNET,
+          "SDF",
+          "testanchor.digitalbits.io"
+        )
+      ).to.eql({
+        tx: transaction,
+        clientAccountID: muxedAddress,
+        matchedHomeDomain: "SDF",
+        memo: null
+      });
+    });
+
+    it("throws an error if the transaction uses a muxed account and has a memo", function () {
+      let serverKP = DigitalBitsSdk.Keypair.random();
+      let clientKP = DigitalBitsSdk.Keypair.random();
+      const serverAccount = new DigitalBitsSdk.Account(serverKP.publicKey(), "-1");
+      const clientMuxedAddress = "MCQQMHTBRF2NPCEJWO2JMDT2HBQ2FGDCYREY2YIBSHLTXDG54Y3KTWX3R7NBER62VBELC";
+      const transaction = new DigitalBitsSdk.TransactionBuilder(
+        serverAccount,
+        txBuilderOpts,
+      )
+        .addOperation(
+          DigitalBitsSdk.Operation.manageData({
+            source: clientMuxedAddress,
+            name: "testanchor.digitalbits.io auth",
+            value: randomBytes(48).toString("base64"),
+            withMuxing: true
+          }),
+        )
+        .addMemo(new DigitalBitsSdk.Memo.id("5842698851377328257"))
+        .setTimeout(30)
+        .build();
+
+      transaction.sign(serverKP);
+      const challenge = transaction
+        .toEnvelope()
+        .toXDR("base64")
+        .toString();
+
+      const transactionRoundTripped = new DigitalBitsSdk.Transaction(
+        challenge,
+        DigitalBitsSdk.Networks.TESTNET
+      );
+
+      expect(() =>
+        DigitalBitsSdk.Utils.readChallengeTx(
+          challenge,
+          serverKP.publicKey(),
+          DigitalBitsSdk.Networks.TESTNET,
+          "testanchor.digitalbits.io",
+          "testanchor.digitalbits.io"
+        ),
+      ).to.throw(
+        DigitalBitsSdk.InvalidSep10ChallengeError,
+        /The transaction has a memo but the client account ID is a muxed account/
+      )
+    })
+
+    it("throws an error if the server hasn't signed the transaction", function () {
+      let serverKP = DigitalBitsSdk.Keypair.random();
+      let clientKP = DigitalBitsSdk.Keypair.random();
+
+      const transaction = new DigitalBitsSdk.TransactionBuilder(
+        new DigitalBitsSdk.Account(serverKP.publicKey(), "-1"),
+        { fee: 100, networkPassphrase: DigitalBitsSdk.Networks.TESTNET },
+      )
+        .addOperation(DigitalBitsSdk.Operation.manageData({
+          source: clientKP.publicKey(),
+          name: "SDF-test auth",
+          value: randomBytes(48).toString("base64"),
+        }))
+        .setTimeout(30)
+        .build();
+
+      const challenge = transaction
+        .toEnvelope()
+        .toXDR("base64")
+        .toString();
+
+      expect(() =>
+        DigitalBitsSdk.Utils.readChallengeTx(
+          challenge,
+          serverKP.publicKey(),
+          DigitalBitsSdk.Networks.TESTNET,
+          "SDF-test",
+          "testanchor.digitalbits.io"
+        ),
+      ).to.throw(
+        DigitalBitsSdk.InvalidSep10ChallengeError,
+        "Transaction not signed by server: '" + serverKP.publicKey() + "'",
+      );
     });
 
     it("throws an error if transaction sequenceNumber is different to zero", function() {
@@ -238,7 +478,7 @@ describe('Utils', function() {
           keypair.publicKey(),
           DigitalBitsSdk.Networks.TESTNET,
           "SDF",
-          "testanchor.testnet.digitalbits.io"
+          "testanchor.digitalbits.io"
         ),
       ).to.throw(
         DigitalBitsSdk.InvalidSep10ChallengeError,
@@ -255,7 +495,7 @@ describe('Utils', function() {
         "SDF",
         300,
         DigitalBitsSdk.Networks.TESTNET,
-        "testanchor.testnet.digitalbits.io"
+        "testanchor.digitalbits.io"
       );
 
       let serverAccountId = DigitalBitsSdk.Keypair.random().publicKey();
@@ -266,7 +506,7 @@ describe('Utils', function() {
           serverAccountId,
           DigitalBitsSdk.Networks.TESTNET,
           "SDF",
-          "testanchor.testnet.digitalbits.io"
+          "testanchor.digitalbits.io"
         ),
       ).to.throw(
         DigitalBitsSdk.InvalidSep10ChallengeError,
@@ -296,7 +536,7 @@ describe('Utils', function() {
           keypair.publicKey(),
           DigitalBitsSdk.Networks.TESTNET,
           "SDF",
-          "testanchor.testnet.digitalbits.io"
+          "testanchor.digitalbits.io"
         ),
       ).to.throw(
         DigitalBitsSdk.InvalidSep10ChallengeError,
@@ -332,7 +572,7 @@ describe('Utils', function() {
           keypair.publicKey(),
           DigitalBitsSdk.Networks.TESTNET,
           "SDF",
-          "testanchor.testnet.digitalbits.io"
+          "testanchor.digitalbits.io"
         ),
       ).to.throw(
         DigitalBitsSdk.InvalidSep10ChallengeError,
@@ -368,7 +608,7 @@ describe('Utils', function() {
           keypair.publicKey(),
           DigitalBitsSdk.Networks.TESTNET,
           "SDF",
-          "testanchor.testnet.digitalbits.io"
+          "testanchor.digitalbits.io"
         ),
       ).to.throw(
         DigitalBitsSdk.InvalidSep10ChallengeError,
@@ -428,7 +668,7 @@ describe('Utils', function() {
           serverKeypair.publicKey(),
           DigitalBitsSdk.Networks.TESTNET,
           anchorName,
-          "testanchor.testnet.digitalbits.io"
+          "testanchor.digitalbits.io"
         ),
       ).to.throw(
         DigitalBitsSdk.InvalidSep10ChallengeError,
@@ -465,7 +705,7 @@ describe('Utils', function() {
           keypair.publicKey(),
           DigitalBitsSdk.Networks.TESTNET,
           "SDF",
-          "testanchor.testnet.digitalbits.io"
+          "testanchor.digitalbits.io"
         ),
       ).to.throw(
         DigitalBitsSdk.InvalidSep10ChallengeError,
@@ -518,10 +758,11 @@ describe('Utils', function() {
         "SDF",
         300,
         DigitalBitsSdk.Networks.TESTNET,
-        "testanchor.testnet.digitalbits.io"
+        "testanchor.digitalbits.io"
       );
 
-      clock.tick(350000);
+      // Note that this is greater than the grace period of 5 minutes (600 seconds)
+      clock.tick(1000 * 1000);
 
       const transaction = new DigitalBitsSdk.Transaction(
         challenge,
@@ -540,9 +781,31 @@ describe('Utils', function() {
           keypair.publicKey(),
           DigitalBitsSdk.Networks.TESTNET,
           "SDF",
-          "testanchor.testnet.digitalbits.io"
+          "testanchor.digitalbits.io"
         ),
       ).to.throw(
+        DigitalBitsSdk.InvalidSep10ChallengeError,
+        /The transaction has expired/,
+      );
+    });
+
+
+    it("does NOT throw errors when the user is slightly out of minTime", function() {
+      clock.tick(1626888681 * 1000);
+
+      // this challenge from Stablex's testnet env, collected 2021-07-21T17:31:21.530Z,
+      // is erroring, and we want to know if it's a bug on our side or in the sdk
+      const signedChallenge = "AAAAAgAAAADZJunw2QO9LzjqagEjh/mpWG8Us5nOb+gc6wOex8G+IwAAAGQAAAAAAAAAAAAAAAEAAAAAYPhZ6gAAAXrKHz2UAAAAAAAAAAEAAAABAAAAAJyknd/qYHdzX6iV3TkHlh/usJUr5/U8cRsfVNqaruBAAAAACgAAAB50ZXN0bmV0LXNlcC5zdGFibGV4LmNsb3VkIGF1dGgAAAAAAAEAAABAaEs3QUZieUFCZzBEekx0WnpTVXJkcEhWOXdkdExXUkwxUHFFOW5QRVIrZVlaZzQvdDJlc3drclpBc0ZnTnp5UQAAAAAAAAABx8G+IwAAAEA8I5qQ+/HHXoHrULlg1ODTiCEQ92GQrVBFaB40OKxJhTf1c597AuKLHhJ3c4TNdSp1rjLGbk7qUuhjauxUuH0N";
+
+      expect(() =>
+        DigitalBitsSdk.Utils.readChallengeTx(
+          signedChallenge,
+          "GDMSN2PQ3EB32LZY5JVACI4H7GUVQ3YUWOM4437IDTVQHHWHYG7CGA5Z",
+          DigitalBitsSdk.Networks.TESTNET,
+          "testnet-sep.stablex.cloud",
+          "staging-transfer-server.zetl.network"
+        ),
+      ).not.to.throw(
         DigitalBitsSdk.InvalidSep10ChallengeError,
         /The transaction has expired/,
       );
@@ -559,7 +822,7 @@ describe('Utils', function() {
         .addOperation(
           DigitalBitsSdk.Operation.manageData({
             source: clientKP.publicKey(),
-            name: "testanchor.testnet.digitalbits.io auth",
+            name: "testanchor.digitalbits.io auth",
             value: randomBytes(48).toString("base64"),
           }),
         )
@@ -582,13 +845,14 @@ describe('Utils', function() {
           challenge,
           serverKP.publicKey(),
           DigitalBitsSdk.Networks.TESTNET,
-          "testanchor.testnet.digitalbits.io",
-          "testanchor.testnet.digitalbits.io"
+          "testanchor.digitalbits.io",
+          "testanchor.digitalbits.io"
         ),
       ).to.eql({
         tx: transactionRoundTripped,
         clientAccountID: clientKP.publicKey(),
-        matchedHomeDomain: "testanchor.testnet.digitalbits.io",
+        matchedHomeDomain: "testanchor.digitalbits.io",
+        memo: null
       });
     });
 
@@ -603,7 +867,7 @@ describe('Utils', function() {
         .addOperation(
           DigitalBitsSdk.Operation.manageData({
             source: clientKP.publicKey(),
-            name: "testanchor.testnet.digitalbits.io auth",
+            name: "testanchor.digitalbits.io auth",
             value: randomBytes(48).toString("base64"),
           }),
         )
@@ -626,13 +890,14 @@ describe('Utils', function() {
           challenge,
           serverKP.publicKey(),
           DigitalBitsSdk.Networks.TESTNET,
-          ["SDF", "Test", "testanchor.testnet.digitalbits.io", "SDF-test"],
-          "testanchor.testnet.digitalbits.io"
+          ["SDF", "Test", "testanchor.digitalbits.io", "SDF-test"],
+          "testanchor.digitalbits.io"
         ),
       ).to.eql({
         tx: transactionRoundTripped,
         clientAccountID: clientKP.publicKey(),
-        matchedHomeDomain: "testanchor.testnet.digitalbits.io",
+        matchedHomeDomain: "testanchor.digitalbits.io",
+        memo: null
       });
     });
 
@@ -647,7 +912,7 @@ describe('Utils', function() {
         .addOperation(
           DigitalBitsSdk.Operation.manageData({
             source: clientKP.publicKey(),
-            name: "testanchor.testnet.digitalbits.io auth",
+            name: "testanchor.digitalbits.io auth",
             value: randomBytes(48).toString("base64"),
           }),
         )
@@ -684,7 +949,7 @@ describe('Utils', function() {
         .addOperation(
           DigitalBitsSdk.Operation.manageData({
             source: clientKP.publicKey(),
-            name: "testanchor.testnet.digitalbits.io auth",
+            name: "testanchor.digitalbits.io auth",
             value: randomBytes(48).toString("base64"),
           }),
         )
@@ -740,8 +1005,8 @@ describe('Utils', function() {
           challenge,
           serverKP.publicKey(),
           DigitalBitsSdk.Networks.TESTNET,
-          "testanchor.testnet.digitalbits.io",
-          "testanchor.testnet.digitalbits.io"
+          "testanchor.digitalbits.io",
+          "testanchor.digitalbits.io"
         ),
       ).to.throw(
         DigitalBitsSdk.InvalidSep10ChallengeError,
@@ -778,8 +1043,8 @@ describe('Utils', function() {
           challenge,
           serverKP.publicKey(),
           DigitalBitsSdk.Networks.TESTNET,
-          ["SDF", "Test", "testanchor.testnet.digitalbits.io", "SDF-test"],
-          "testanchor.testnet.digitalbits.io"
+          ["SDF", "Test", "testanchor.digitalbits.io", "SDF-test"],
+          "testanchor.digitalbits.io"
         ),
       ).to.throw(
         DigitalBitsSdk.InvalidSep10ChallengeError,
@@ -829,12 +1094,13 @@ describe('Utils', function() {
           serverKP.publicKey(),
           DigitalBitsSdk.Networks.TESTNET,
           "SDF",
-          "testanchor.testnet.digitalbits.io"
+          "testanchor.digitalbits.io"
         ),
       ).to.eql({
         tx: transactionRoundTripped,
         clientAccountID: clientKP.publicKey(),
         matchedHomeDomain: "SDF",
+        memo: null
       });
     });
 
@@ -880,7 +1146,7 @@ describe('Utils', function() {
           serverKP.publicKey(),
           DigitalBitsSdk.Networks.TESTNET,
           "SDF",
-          "testanchor.testnet.digitalbits.io"
+          "testanchor.digitalbits.io"
         ),
       ).to.throw(
         DigitalBitsSdk.InvalidSep10ChallengeError,
@@ -929,7 +1195,7 @@ describe('Utils', function() {
           serverKP.publicKey(),
           DigitalBitsSdk.Networks.TESTNET,
           "SDF",
-          "testanchor.testnet.digitalbits.io"
+          "testanchor.digitalbits.io"
         ),
       ).to.throw(
         DigitalBitsSdk.InvalidSep10ChallengeError,
@@ -948,7 +1214,7 @@ describe('Utils', function() {
         .addOperation(
           DigitalBitsSdk.Operation.manageData({
             source: clientKP.publicKey(),
-            name: "testanchor.testnet.digitalbits.io auth",
+            name: "testanchor.digitalbits.io auth",
             value: randomBytes(48).toString("base64"),
           }),
         )
@@ -978,12 +1244,12 @@ describe('Utils', function() {
           challenge,
           serverKP.publicKey(),
           DigitalBitsSdk.Networks.TESTNET,
-          "testanchor.testnet.digitalbits.io",
-          "testanchor.testnet.digitalbits.io"
+          "testanchor.digitalbits.io",
+          "testanchor.digitalbits.io"
         ),
       ).to.throw(
         DigitalBitsSdk.InvalidSep10ChallengeError,
-        /'web_auth_domain' operation value does not match testanchor.testnet.digitalbits.io/
+        /'web_auth_domain' operation value does not match testanchor.digitalbits.io/
       );
     });
 
@@ -998,7 +1264,7 @@ describe('Utils', function() {
         .addOperation(
           DigitalBitsSdk.Operation.manageData({
             source: clientKP.publicKey(),
-            name: "testanchor.testnet.digitalbits.io auth",
+            name: "testanchor.digitalbits.io auth",
             value: randomBytes(48).toString("base64"),
           }),
         )
@@ -1006,7 +1272,7 @@ describe('Utils', function() {
           DigitalBitsSdk.Operation.manageData({
             source: clientKP.publicKey(),
             name: "web_auth_domain",
-            value: "testanchor.testnet.digitalbits.io"
+            value: "testanchor.digitalbits.io"
           }),
         )
         .setTimeout(30)
@@ -1028,8 +1294,8 @@ describe('Utils', function() {
           challenge,
           serverKP.publicKey(),
           DigitalBitsSdk.Networks.TESTNET,
-          "testanchor.testnet.digitalbits.io",
-          "testanchor.testnet.digitalbits.io"
+          "testanchor.digitalbits.io",
+          "testanchor.digitalbits.io"
         ),
       ).to.throw(
         DigitalBitsSdk.InvalidSep10ChallengeError,
@@ -1048,7 +1314,7 @@ describe('Utils', function() {
         .addOperation(
           DigitalBitsSdk.Operation.manageData({
             source: clientKP.publicKey(),
-            name: "testanchor.testnet.digitalbits.io auth",
+            name: "testanchor.digitalbits.io auth",
             value: randomBytes(48).toString("base64"),
           }),
         )
@@ -1071,13 +1337,14 @@ describe('Utils', function() {
           challenge,
           serverKP.publicKey(),
           DigitalBitsSdk.Networks.TESTNET,
-          "testanchor.testnet.digitalbits.io",
-          "testanchor.testnet.digitalbits.io"
+          "testanchor.digitalbits.io",
+          "testanchor.digitalbits.io"
         ),
       ).to.eql({
         tx: transactionRoundTripped,
         clientAccountID: clientKP.publicKey(),
-        matchedHomeDomain: "testanchor.testnet.digitalbits.io",
+        matchedHomeDomain: "testanchor.digitalbits.io",
+        memo: null
       });
     });
 
@@ -1092,7 +1359,7 @@ describe('Utils', function() {
         .addOperation(
           DigitalBitsSdk.Operation.manageData({
             source: clientKP.publicKey(),
-            name: "testanchor.testnet.digitalbits.io auth",
+            name: "testanchor.digitalbits.io auth",
             value: randomBytes(48).toString("base64"),
           }),
         )
@@ -1100,7 +1367,7 @@ describe('Utils', function() {
           DigitalBitsSdk.Operation.manageData({
             source: serverKP.publicKey(),
             name: "web_auth_domain",
-            value: "auth.testnet.digitalbits.io"
+            value: "auth.digitalbits.io"
           }),
         )
         .setTimeout(30)
@@ -1122,13 +1389,14 @@ describe('Utils', function() {
           challenge,
           serverKP.publicKey(),
           DigitalBitsSdk.Networks.TESTNET,
-          "testanchor.testnet.digitalbits.io",
-          "auth.testnet.digitalbits.io"
+          "testanchor.digitalbits.io",
+          "auth.digitalbits.io"
         ),
       ).to.eql({
         tx: transactionRoundTripped,
         clientAccountID: clientKP.publicKey(),
-        matchedHomeDomain: "testanchor.testnet.digitalbits.io",
+        matchedHomeDomain: "testanchor.digitalbits.io",
+        memo: null
       });
     });
 
@@ -1143,7 +1411,7 @@ describe('Utils', function() {
         .addOperation(
           DigitalBitsSdk.Operation.manageData({
             source: clientKP.publicKey(),
-            name: "testanchor.testnet.digitalbits.io auth",
+            name: "testanchor.digitalbits.io auth",
             value: randomBytes(48).toString("base64"),
           }),
         )
@@ -1173,14 +1441,57 @@ describe('Utils', function() {
           challenge,
           serverKP.publicKey(),
           DigitalBitsSdk.Networks.TESTNET,
-          "testanchor.testnet.digitalbits.io",
-          "auth.testnet.digitalbits.io"
+          "testanchor.digitalbits.io",
+          "auth.digitalbits.io"
         ),
       ).to.eql({
         tx: transactionRoundTripped,
         clientAccountID: clientKP.publicKey(),
-        matchedHomeDomain: "testanchor.testnet.digitalbits.io",
+        matchedHomeDomain: "testanchor.digitalbits.io",
+        memo: null
       });
+    });
+
+    it("validates a challenge containing a 'client_domain' manageData operation", () => {
+      let serverKP = DigitalBitsSdk.Keypair.random();
+      let clientKP = DigitalBitsSdk.Keypair.random();
+      const serverAccount = new DigitalBitsSdk.Account(serverKP.publicKey(), "-1");
+      let clientSigningKeypair = DigitalBitsSdk.Keypair.random();
+
+      const transaction = new DigitalBitsSdk.TransactionBuilder(
+        serverAccount,
+        txBuilderOpts,
+      )
+        .addOperation(
+          DigitalBitsSdk.Operation.manageData({
+            source: clientKP.publicKey(),
+            name: "testanchor.digitalbits.io auth",
+            value: randomBytes(48).toString("base64"),
+          }),
+        )
+        .addOperation(
+          DigitalBitsSdk.Operation.manageData({
+            source: clientSigningKeypair.publicKey(),
+            name: "client_domain",
+            value: "testdomain"
+          }),
+        )
+        .setTimeout(30)
+        .build();
+
+      transaction.sign(serverKP);
+      const challenge = transaction
+        .toEnvelope()
+        .toXDR("base64")
+        .toString();
+
+      DigitalBitsSdk.Utils.readChallengeTx(
+        challenge,
+        serverKP.publicKey(),
+        DigitalBitsSdk.Networks.TESTNET,
+        "testanchor.digitalbits.io",
+        "testanchor.digitalbits.io"
+      );
     });
   });
 
@@ -1239,7 +1550,7 @@ describe('Utils', function() {
           threshold,
           signerSummary,
           "SDF-test",
-          "testanchor.testnet.digitalbits.io"
+          "testanchor.digitalbits.io"
         ),
       ).to.throw(
         DigitalBitsSdk.InvalidSep10ChallengeError,
@@ -1254,7 +1565,7 @@ describe('Utils', function() {
         "SDF",
         300,
         DigitalBitsSdk.Networks.TESTNET,
-        "testanchor.testnet.digitalbits.io"
+        "testanchor.digitalbits.io"
       );
 
       clock.tick(200);
@@ -1282,7 +1593,7 @@ describe('Utils', function() {
           threshold,
           signerSummary,
           "SDF",
-          "testanchor.testnet.digitalbits.io"
+          "testanchor.digitalbits.io"
         ),
       ).to.eql([this.clientKP1.publicKey()]);
     });
@@ -1294,7 +1605,7 @@ describe('Utils', function() {
         "SDF",
         300,
         DigitalBitsSdk.Networks.TESTNET,
-        "testanchor.testnet.digitalbits.io"
+        "testanchor.digitalbits.io"
       );
 
       clock.tick(200);
@@ -1323,7 +1634,7 @@ describe('Utils', function() {
           threshold,
           signerSummary,
           "SDF",
-          "testanchor.testnet.digitalbits.io"
+          "testanchor.digitalbits.io"
         ),
       ).to.eql([this.clientKP1.publicKey(), this.clientKP2.publicKey()]);
     });
@@ -1335,7 +1646,7 @@ describe('Utils', function() {
         "SDF",
         300,
         DigitalBitsSdk.Networks.TESTNET,
-        "testanchor.testnet.digitalbits.io"
+        "testanchor.digitalbits.io"
       );
 
       clock.tick(200);
@@ -1365,7 +1676,7 @@ describe('Utils', function() {
           threshold,
           signerSummary,
           "SDF",
-          "testanchor.testnet.digitalbits.io"
+          "testanchor.digitalbits.io"
         ),
       ).to.eql([this.clientKP1.publicKey(), this.clientKP2.publicKey()]);
     });
@@ -1381,7 +1692,7 @@ describe('Utils', function() {
         "SDF",
         300,
         DigitalBitsSdk.Networks.TESTNET,
-        "testanchor.testnet.digitalbits.io"
+        "testanchor.digitalbits.io"
       );
 
       clock.tick(200);
@@ -1414,7 +1725,7 @@ describe('Utils', function() {
           threshold,
           signerSummary,
           "SDF",
-          "testanchor.testnet.digitalbits.io"
+          "testanchor.digitalbits.io"
         ),
       ).to.eql([this.clientKP1.publicKey(), this.clientKP2.publicKey()]);
     });
@@ -1426,7 +1737,7 @@ describe('Utils', function() {
         "SDF",
         300,
         DigitalBitsSdk.Networks.TESTNET,
-        "testanchor.testnet.digitalbits.io"
+        "testanchor.digitalbits.io"
       );
 
       clock.tick(200);
@@ -1456,7 +1767,7 @@ describe('Utils', function() {
           threshold,
           signerSummary,
           "SDF",
-          "testanchor.testnet.digitalbits.io"
+          "testanchor.digitalbits.io"
         ),
       ).to.throw(
         DigitalBitsSdk.InvalidSep10ChallengeError,
@@ -1471,7 +1782,7 @@ describe('Utils', function() {
         "SDF",
         300,
         DigitalBitsSdk.Networks.TESTNET,
-        "testanchor.testnet.digitalbits.io"
+        "testanchor.digitalbits.io"
       );
 
       clock.tick(200);
@@ -1500,7 +1811,7 @@ describe('Utils', function() {
           threshold,
           signerSummary,
           "SDF",
-          "testanchor.testnet.digitalbits.io"
+          "testanchor.digitalbits.io"
         ),
       ).to.throw(
         DigitalBitsSdk.InvalidSep10ChallengeError,
@@ -1515,7 +1826,7 @@ describe('Utils', function() {
         "SDF",
         300,
         DigitalBitsSdk.Networks.TESTNET,
-        "testanchor.testnet.digitalbits.io"
+        "testanchor.digitalbits.io"
       );
 
       clock.tick(200);
@@ -1540,7 +1851,7 @@ describe('Utils', function() {
           threshold,
           [],
           "SDF",
-          "testanchor.testnet.digitalbits.io"
+          "testanchor.digitalbits.io"
         ),
       ).to.throw(
         DigitalBitsSdk.InvalidSep10ChallengeError,
@@ -1581,7 +1892,7 @@ describe('Utils', function() {
         "SDF",
         300,
         DigitalBitsSdk.Networks.TESTNET,
-        "testanchor.testnet.digitalbits.io"
+        "testanchor.digitalbits.io"
       );
 
       clock.tick(200);
@@ -1604,7 +1915,7 @@ describe('Utils', function() {
           DigitalBitsSdk.Networks.TESTNET,
           [this.clientKP1.publicKey()],
           "SDF",
-          "testanchor.testnet.digitalbits.io"
+          "testanchor.digitalbits.io"
         ),
       ).to.eql([this.clientKP1.publicKey()]);
     });
@@ -1632,7 +1943,7 @@ describe('Utils', function() {
           DigitalBitsSdk.Networks.TESTNET,
           [this.clientKP1.publicKey()],
           "SDF-test",
-          "testanchor.testnet.digitalbits.io"
+          "testanchor.digitalbits.io"
         ),
       ).to.throw(
         DigitalBitsSdk.InvalidSep10ChallengeError,
@@ -1647,7 +1958,7 @@ describe('Utils', function() {
         "SDF",
         300,
         DigitalBitsSdk.Networks.TESTNET,
-        "testanchor.testnet.digitalbits.io"
+        "testanchor.digitalbits.io"
       );
 
       clock.tick(200);
@@ -1659,7 +1970,7 @@ describe('Utils', function() {
           DigitalBitsSdk.Networks.TESTNET,
           [],
           "SDF",
-          "testanchor.testnet.digitalbits.io"
+          "testanchor.digitalbits.io"
         ),
       ).to.throw(
         DigitalBitsSdk.InvalidSep10ChallengeError,
@@ -1674,7 +1985,7 @@ describe('Utils', function() {
         "SDF",
         300,
         DigitalBitsSdk.Networks.TESTNET,
-        "testanchor.testnet.digitalbits.io"
+        "testanchor.digitalbits.io"
       );
 
       clock.tick(200);
@@ -1696,7 +2007,7 @@ describe('Utils', function() {
           DigitalBitsSdk.Networks.TESTNET,
           [this.clientKP1.publicKey()],
           "SDF",
-          "testanchor.testnet.digitalbits.io"
+          "testanchor.digitalbits.io"
         ),
       ).to.throw(
         DigitalBitsSdk.InvalidSep10ChallengeError,
@@ -1711,7 +2022,7 @@ describe('Utils', function() {
         "SDF",
         300,
         DigitalBitsSdk.Networks.TESTNET,
-        "testanchor.testnet.digitalbits.io"
+        "testanchor.digitalbits.io"
       );
 
       clock.tick(200);
@@ -1736,7 +2047,7 @@ describe('Utils', function() {
           DigitalBitsSdk.Networks.TESTNET,
           clientSignersPubKey,
           "SDF",
-          "testanchor.testnet.digitalbits.io"
+          "testanchor.digitalbits.io"
         ),
       ).to.eql(clientSignersPubKey);
     });
@@ -1748,7 +2059,7 @@ describe('Utils', function() {
         "SDF",
         300,
         DigitalBitsSdk.Networks.TESTNET,
-        "testanchor.testnet.digitalbits.io"
+        "testanchor.digitalbits.io"
       );
 
       clock.tick(200);
@@ -1773,7 +2084,7 @@ describe('Utils', function() {
           DigitalBitsSdk.Networks.TESTNET,
           clientSignersPubKey,
           "SDF",
-          "testanchor.testnet.digitalbits.io"
+          "testanchor.digitalbits.io"
         ),
       ).to.have.same.members(clientSignersPubKey);
     });
@@ -1785,7 +2096,7 @@ describe('Utils', function() {
         "SDF",
         300,
         DigitalBitsSdk.Networks.TESTNET,
-        "testanchor.testnet.digitalbits.io"
+        "testanchor.digitalbits.io"
       );
 
       clock.tick(200);
@@ -1808,7 +2119,7 @@ describe('Utils', function() {
           DigitalBitsSdk.Networks.TESTNET,
           [this.clientKP2.publicKey()],
           "SDF",
-          "testanchor.testnet.digitalbits.io"
+          "testanchor.digitalbits.io"
         ),
       ).to.eql([this.clientKP2.publicKey()]);
     });
@@ -1820,7 +2131,7 @@ describe('Utils', function() {
         "SDF",
         300,
         DigitalBitsSdk.Networks.TESTNET,
-        "testanchor.testnet.digitalbits.io"
+        "testanchor.digitalbits.io"
       );
 
       clock.tick(200);
@@ -1843,7 +2154,7 @@ describe('Utils', function() {
           DigitalBitsSdk.Networks.TESTNET,
           [this.clientKP2.publicKey(), DigitalBitsSdk.Keypair.random().publicKey()],
           "SDF",
-          "testanchor.testnet.digitalbits.io"
+          "testanchor.digitalbits.io"
         ),
       ).to.eql([this.clientKP2.publicKey()]);
     });
@@ -1855,7 +2166,7 @@ describe('Utils', function() {
         "SDF",
         300,
         DigitalBitsSdk.Networks.TESTNET,
-        "testanchor.testnet.digitalbits.io"
+        "testanchor.digitalbits.io"
       );
 
       clock.tick(200);
@@ -1878,7 +2189,7 @@ describe('Utils', function() {
           DigitalBitsSdk.Networks.TESTNET,
           [this.clientKP2.publicKey(), this.serverKP.publicKey()],
           "SDF",
-          "testanchor.testnet.digitalbits.io"
+          "testanchor.digitalbits.io"
         ),
       ).to.throw(
         DigitalBitsSdk.InvalidSep10ChallengeError,
@@ -1893,7 +2204,7 @@ describe('Utils', function() {
         "SDF",
         300,
         DigitalBitsSdk.Networks.TESTNET,
-        "testanchor.testnet.digitalbits.io"
+        "testanchor.digitalbits.io"
       );
 
       clock.tick(200);
@@ -1916,7 +2227,7 @@ describe('Utils', function() {
           DigitalBitsSdk.Networks.TESTNET,
           [this.clientKP2.publicKey(), this.clientKP2.publicKey()],
           "SDF",
-          "testanchor.testnet.digitalbits.io"
+          "testanchor.digitalbits.io"
         ),
       ).to.eql([this.clientKP2.publicKey()]);
     });
@@ -1932,7 +2243,7 @@ describe('Utils', function() {
         "SDF",
         300,
         DigitalBitsSdk.Networks.TESTNET,
-        "testanchor.testnet.digitalbits.io"
+        "testanchor.digitalbits.io"
       );
 
       clock.tick(200);
@@ -1955,7 +2266,7 @@ describe('Utils', function() {
           DigitalBitsSdk.Networks.TESTNET,
           [this.clientKP2.publicKey(), preauthTxHash, xHash, unknownSignerType],
           "SDF",
-          "testanchor.testnet.digitalbits.io"
+          "testanchor.digitalbits.io"
         ),
       ).to.eql([this.clientKP2.publicKey()]);
     });
@@ -1967,7 +2278,7 @@ describe('Utils', function() {
         "SDF",
         300,
         DigitalBitsSdk.Networks.TESTNET,
-        "testanchor.testnet.digitalbits.io"
+        "testanchor.digitalbits.io"
       );
 
       clock.tick(200);
@@ -1989,7 +2300,7 @@ describe('Utils', function() {
           DigitalBitsSdk.Networks.TESTNET,
           [this.clientKP2.publicKey(), this.clientKP2.publicKey()],
           "SDF",
-          "testanchor.testnet.digitalbits.io"
+          "testanchor.digitalbits.io"
         ),
       ).to.throw(
         DigitalBitsSdk.InvalidSep10ChallengeError,
@@ -2004,7 +2315,7 @@ describe('Utils', function() {
         "SDF",
         300,
         DigitalBitsSdk.Networks.TESTNET,
-        "testanchor.testnet.digitalbits.io"
+        "testanchor.digitalbits.io"
       );
 
       clock.tick(200);
@@ -2027,7 +2338,7 @@ describe('Utils', function() {
           DigitalBitsSdk.Networks.TESTNET,
           [this.clientKP2.publicKey()],
           "SDF",
-          "testanchor.testnet.digitalbits.io"
+          "testanchor.digitalbits.io"
         ),
       ).to.throw(
         DigitalBitsSdk.InvalidSep10ChallengeError,
@@ -2042,7 +2353,7 @@ describe('Utils', function() {
         "SDF",
         300,
         DigitalBitsSdk.Networks.TESTNET,
-        "testanchor.testnet.digitalbits.io"
+        "testanchor.digitalbits.io"
       );
 
       clock.tick(200);
@@ -2065,7 +2376,7 @@ describe('Utils', function() {
           DigitalBitsSdk.Networks.TESTNET,
           [this.clientKP2.secret()],
           "SDF",
-          "testanchor.testnet.digitalbits.io"
+          "testanchor.digitalbits.io"
         ),
       ).to.throw(
         DigitalBitsSdk.InvalidSep10ChallengeError,
@@ -2100,7 +2411,7 @@ describe('Utils', function() {
           DigitalBitsSdk.Networks.TESTNET,
           clientSigners,
           "SDF-test",
-          "testanchor.testnet.digitalbits.io"
+          "testanchor.digitalbits.io"
         ),
       ).to.throw(
         DigitalBitsSdk.InvalidSep10ChallengeError,
@@ -2115,7 +2426,7 @@ describe('Utils', function() {
         "SDF",
         300,
         DigitalBitsSdk.Networks.TESTNET,
-        "testanchor.testnet.digitalbits.io"
+        "testanchor.digitalbits.io"
       );
 
       clock.tick(200);
@@ -2138,11 +2449,160 @@ describe('Utils', function() {
           DigitalBitsSdk.Networks.TESTNET,
           [],
           "SDF",
-          "testanchor.testnet.digitalbits.io"
+          "testanchor.digitalbits.io"
         ),
       ).to.throw(
         DigitalBitsSdk.InvalidSep10ChallengeError,
         /No verifiable client signers provided, at least one G... address must be provided/,
+      );
+    });
+
+    it("validates challenges containing client domain signers", () => {
+      const serverKP = DigitalBitsSdk.Keypair.random();
+      const clientKP = DigitalBitsSdk.Keypair.random();
+      const clientSigningKey = DigitalBitsSdk.Keypair.random();
+      const challenge = DigitalBitsSdk.Utils.buildChallengeTx(
+        serverKP,
+        clientKP.publicKey(),
+        "SDF",
+        300,
+        DigitalBitsSdk.Networks.TESTNET,
+        "testanchor.digitalbits.io",
+        null,
+        "testdomain",
+        clientSigningKey.publicKey()
+      );
+
+      clock.tick(200);
+
+      const transaction = new DigitalBitsSdk.Transaction(
+        challenge,
+        DigitalBitsSdk.Networks.TESTNET
+      );
+
+      transaction.sign(clientKP);
+      transaction.sign(clientSigningKey);
+
+      const signedChallenge = transaction
+        .toEnvelope()
+        .toXDR("base64")
+        .toString();
+
+      const signersFound = DigitalBitsSdk.Utils.verifyChallengeTxSigners(
+        signedChallenge,
+        serverKP.publicKey(),
+        DigitalBitsSdk.Networks.TESTNET,
+        [clientKP.publicKey()],
+        "SDF",
+        "testanchor.digitalbits.io"
+      );
+
+      expect(signersFound.indexOf(clientSigningKey.publicKey())).to.eql(-1);
+    });
+
+    it("throws an error if a challenge with a client_domain operation doesn't have a matching signature", () => {
+      const serverKP = DigitalBitsSdk.Keypair.random();
+      const clientKP = DigitalBitsSdk.Keypair.random();
+      const clientSigningKeypair = DigitalBitsSdk.Keypair.random();
+      const challenge = DigitalBitsSdk.Utils.buildChallengeTx(
+        serverKP,
+        clientKP.publicKey(),
+        "SDF",
+        300,
+        DigitalBitsSdk.Networks.TESTNET,
+        "testanchor.digitalbits.io",
+        null,
+        "testdomain",
+        clientSigningKeypair.publicKey()
+      );
+
+      clock.tick(200);
+
+      const transaction = new DigitalBitsSdk.Transaction(
+        challenge,
+        DigitalBitsSdk.Networks.TESTNET
+      );
+
+      transaction.sign(clientKP);
+
+      const signedChallenge = transaction
+        .toEnvelope()
+        .toXDR("base64")
+        .toString();
+
+      expect(() => 
+        DigitalBitsSdk.Utils.verifyChallengeTxSigners(
+          signedChallenge,
+          serverKP.publicKey(),
+          DigitalBitsSdk.Networks.TESTNET,
+          [clientKP.publicKey()],
+          "SDF",
+          "testanchor.digitalbits.io"
+        )
+      ).to.throw(
+        DigitalBitsSdk.InvalidSep10ChallengeError,
+        /Transaction not signed by the source account of the 'client_domain' ManageData operation/
+      );
+    });
+
+    it("throws an error if a challenge has multiple client_domain operations", () => {
+      const serverKP = DigitalBitsSdk.Keypair.random();
+      const clientKP = DigitalBitsSdk.Keypair.random();
+      const clientSigningKeypair = DigitalBitsSdk.Keypair.random();
+
+      const serverAccount = new DigitalBitsSdk.Account(serverKP.publicKey(), "-1");
+
+      const transaction = new DigitalBitsSdk.TransactionBuilder(
+        serverAccount,
+        txBuilderOpts,
+      )
+        .addOperation(
+          DigitalBitsSdk.Operation.manageData({
+            source: clientKP.publicKey(),
+            name: "testanchor.digitalbits.io auth",
+            value: randomBytes(48).toString("base64"),
+          }),
+        )
+        .addOperation(
+          DigitalBitsSdk.Operation.manageData({
+            source: clientSigningKeypair.publicKey(),
+            name: "client_domain",
+            value: "testdomain"
+          }),
+        )
+        .addOperation(
+          DigitalBitsSdk.Operation.manageData({
+            source: clientSigningKeypair.publicKey(),
+            name: "client_domain",
+            value: "testdomain2"
+          }),
+        )
+        .setTimeout(30)
+        .build();
+
+      clock.tick(200);
+
+      transaction.sign(serverKP);
+      transaction.sign(clientKP);
+      transaction.sign(clientSigningKeypair);
+
+      const signedChallenge = transaction
+        .toEnvelope()
+        .toXDR("base64")
+        .toString();
+
+      expect(() => 
+        DigitalBitsSdk.Utils.verifyChallengeTxSigners(
+          signedChallenge,
+          serverKP.publicKey(),
+          DigitalBitsSdk.Networks.TESTNET,
+          [clientKP.publicKey()],
+          "testanchor.digitalbits.io",
+          "testanchor.digitalbits.io"
+        )
+      ).to.throw(
+        DigitalBitsSdk.InvalidSep10ChallengeError,
+        /Found more than one client_domain operation/
       );
     });
   });

@@ -1,4 +1,4 @@
-import { Asset } from "xdb-digitalbits-base";
+import { Asset } from "@digitalbits-blockchain/xdb-digitalbits-base";
 import { Omit } from "utility-types";
 import { Frontier } from "./frontier_api";
 
@@ -90,10 +90,13 @@ export namespace ServerApi {
     paging_token: string;
     account_id: string;
     sequence: string;
+    sequence_ledger?: number;
+    sequence_time?: string;
     subentry_count: number;
     home_domain?: string;
     inflation_destination?: string;
     last_modified_ledger: number;
+    last_modified_time: string;
     thresholds: Frontier.AccountThresholds;
     flags: Frontier.Flags;
     balances: Frontier.BalanceLine[];
@@ -111,6 +114,20 @@ export namespace ServerApi {
     payments: CallCollectionFunction<PaymentOperationRecord>;
     trades: CallCollectionFunction<TradeRecord>;
   }
+  export interface LiquidityPoolRecord extends Frontier.BaseResponse {
+    id: string;
+    paging_token: string;
+    fee_bp: number;
+    type: Frontier.LiquidityPoolType;
+    total_trustlines: string;
+    total_shares: string;
+    reserves: Frontier.Reserve[];
+  }
+  export enum TradeType {
+    all = "all",
+    liquidityPools = "liquidity_pool",
+    orderbook = "orderbook",
+  }
   interface EffectRecordMethods {
     operation?: CallFunction<OperationRecord>;
     precedes?: CallFunction<EffectRecord>;
@@ -122,19 +139,33 @@ export namespace ServerApi {
     hash: string;
     prev_hash: string;
     sequence: number;
-    transaction_count: number;
+    successful_transaction_count: number;
+    failed_transaction_count: number;
     operation_count: number;
     tx_set_operation_count: number | null;
     closed_at: string;
     total_coins: string;
     fee_pool: string;
-    base_fee: number;
-    base_reserve: string;
     max_tx_set_size: number;
     protocol_version: number;
     header_xdr: string;
     base_fee_in_nibbs: number;
     base_reserve_in_nibbs: number;
+    /**
+     * @deprecated  This will be removed in the next major version: the property
+     *     no longer exists on the Frontier API
+     */
+    transaction_count: number;
+    /**
+     * @deprecated  This will be removed in the next major version: the property
+     *     no longer exists on the Frontier API
+     */
+    base_fee: number;
+    /**
+     * @deprecated  This will be removed in the next major version: the property
+     *     no longer exists on the Frontier API
+     */
+    base_reserve: string;
 
     effects: CallCollectionFunction<EffectRecord>;
     operations: CallCollectionFunction<OperationRecord>;
@@ -285,29 +316,52 @@ export namespace ServerApi {
     | BeginSponsoringFutureReservesOperationRecord
     | EndSponsoringFutureReservesOperationRecord
     | RevokeSponsorshipOperationRecord;
-  export interface TradeRecord extends Frontier.BaseResponse {
-    id: string;
-    paging_token: string;
-    ledger_close_time: string;
-    offer_id: string;
-    base_offer_id: string;
-    base_account: string;
-    base_amount: string;
-    base_asset_type: string;
-    base_asset_code?: string;
-    base_asset_issuer?: string;
-    counter_offer_id: string;
-    counter_account: string;
-    counter_amount: string;
-    counter_asset_type: string;
-    counter_asset_code?: string;
-    counter_asset_issuer?: string;
-    base_is_seller: boolean;
 
-    base: CallFunction<AccountRecord>;
-    counter: CallFunction<AccountRecord>;
-    operation: CallFunction<OperationRecord>;
+  export namespace TradeRecord {
+    interface Base extends Frontier.BaseResponse {
+      id: string;
+      paging_token: string;
+      ledger_close_time: string;
+      trade_type: TradeType;
+      base_account?: string;
+      base_amount: string;
+      base_asset_type: string;
+      base_asset_code?: string;
+      base_asset_issuer?: string;
+      counter_account?: string;
+      counter_amount: string;
+      counter_asset_type: string;
+      counter_asset_code?: string;
+      counter_asset_issuer?: string;
+      base_is_seller: boolean;
+      price?: {
+        n: string;
+        d: string;
+      };
+
+      operation: CallFunction<OperationRecord>;
+    }
+    export interface Orderbook extends Base {
+      trade_type: TradeType.orderbook;
+      base_offer_id: string;
+      base_account: string;
+      counter_offer_id: string;
+      counter_account: string;
+
+      base: CallFunction<AccountRecord>;
+      counter: CallFunction<AccountRecord>;
+    }
+    export interface LiquidityPool extends Base {
+      trade_type: TradeType.liquidityPools;
+      base_liquidity_pool_id?: string;
+      counter_liquidity_pool_id?: string;
+      liquidity_pool_fee_bp: number;
+
+      base: CallFunction<AccountRecord | LiquidityPoolRecord>;
+      counter: CallFunction<AccountRecord | LiquidityPoolRecord>;
+    }
   }
+  export type TradeRecord = TradeRecord.Orderbook | TradeRecord.LiquidityPool;
   export interface TransactionRecord
     extends Omit<Frontier.TransactionResponse, "ledger"> {
     ledger_attr: Frontier.TransactionResponse["ledger"];

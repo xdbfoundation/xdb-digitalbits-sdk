@@ -16,9 +16,9 @@ export class DigitalBitsTomlResolver {
   /**
    * Returns a parsed `digitalbits.toml` file for a given domain.
    * ```js
-   * DigitalBitsSdk.DigitalBitsTomlResolver.resolve('livenet.digitalbits.io')
-   *   .then(digitalBitsToml => {
-   *     // digitalBitsToml in an object representing domain digitalbits.toml file.
+   * DigitalBitsSdk.DigitalBitsTomlResolver.resolve('acme.com')
+   *   .then(digitalbitsToml => {
+   *     // digitalbitsToml in an object representing domain digitalbits.toml file.
    *   })
    *   .catch(error => {
    *     // digitalbits.toml does not exist or is invalid

@@ -1,4 +1,4 @@
-import { Asset } from "xdb-digitalbits-base";
+import { Asset } from "@digitalbits-blockchain/xdb-digitalbits-base";
 import { CallBuilder } from "./call_builder";
 import { ServerApi } from "./server_api";
 
@@ -18,12 +18,11 @@ import { ServerApi } from "./server_api";
  * the desired destination asset. The search's amount parameter will be used to
  * determine if there a given path can satisfy a payment of the desired amount.
  *
- * If a list of assets is passed as the source,  * As part of the search, frontier will load a list of assets available to the
- will find any payment
+ * If a list of assets is passed as the source, frontier will find any payment
  * paths from those source assets to the desired destination asset.
  *
  * Do not create this object directly, use {@link Server#strictReceivePaths}.
- * @see [Find Payment Paths](https://developers.digitalbits.io/reference/go/services/frontier/internal/docs/reference/endpoints/path-finding)
+ * @see [Find Payment Paths](https://developers.digitalbits.io/api/aggregations/paths/)
  * @extends CallBuilder
  * @param {string} serverUrl Frontier server URL.
  * @param {string|Asset[]} source The sender's account ID or a list of Assets. Any returned path must use a source that the sender can hold.
