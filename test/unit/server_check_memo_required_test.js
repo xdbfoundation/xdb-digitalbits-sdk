@@ -39,7 +39,7 @@ function buildAccount(id, data = {}) {
   return {
     "_links": {
       "data": {
-        "href": `https://frontier.testnet.digitalbits.io/accounts/${id}/data/{key}`,
+        "href": `https://horizon.futurenet.xdbchain.com/accounts/${id}/data/{key}`,
         "templated": true
       }
     },
@@ -95,7 +95,7 @@ function mockAccountRequest(axiosMock, id, status, data = {}) {
   axiosMock.expects("get")
     .withArgs(
       sinon.match(
-        `https://frontier.testnet.digitalbits.io/accounts/${id}`
+        `https://horizon.futurenet.xdbchain.com/accounts/${id}`
       )
     )
     .returns(response)
@@ -105,7 +105,7 @@ function mockAccountRequest(axiosMock, id, status, data = {}) {
 describe("server.js check-memo-required", function() {
     beforeEach(function() {
       this.server = new DigitalBitsSdk.Server(
-        "https://frontier.testnet.digitalbits.io"
+        "https://horizon.futurenet.xdbchain.com"
       );
       this.axiosMock = sinon.mock(FrontierAxiosClient);
     });

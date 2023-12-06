@@ -4,7 +4,7 @@ describe('server.js transaction tests', function() {
   
   beforeEach(function() {
     this.server = new DigitalBitsSdk.Server(
-      'https://frontier.livenet.digitalbits.io:1337'
+      'https://horizon.livenet.xdbchain.com:1337'
     );
     this.axiosMock = sinon.mock(FrontierAxiosClient);
     let transaction = new DigitalBitsSdk.TransactionBuilder(account, {
@@ -42,7 +42,7 @@ describe('server.js transaction tests', function() {
     this.axiosMock
       .expects('post')
       .withArgs(
-        'https://frontier.livenet.digitalbits.io:1337/transactions',
+        'https://horizon.livenet.xdbchain.com:1337/transactions',
         `tx=${this.blob}`
       )
       .returns(Promise.resolve({ data: {} }));
@@ -61,7 +61,7 @@ describe('server.js transaction tests', function() {
       _links: {
         transaction: {
           href:
-            'https://frontier.livenet.digitalbits.io/transactions/db2c69a07be57eb5baefbfbb72b95c7c20d2c4d6f2a0e84e7c27dd0359055a2f'
+            'https://horizon.livenet.xdbchain.com/transactions/db2c69a07be57eb5baefbfbb72b95c7c20d2c4d6f2a0e84e7c27dd0359055a2f'
         }
       },
       hash: 'db2c69a07be57eb5baefbfbb72b95c7c20d2c4d6f2a0e84e7c27dd0359055a2f',
@@ -76,7 +76,7 @@ describe('server.js transaction tests', function() {
     this.axiosMock
       .expects('post')
       .withArgs(
-        'https://frontier.livenet.digitalbits.io:1337/transactions',
+        'https://horizon.livenet.xdbchain.com:1337/transactions',
         `tx=${this.blob}`
       )
       .returns(Promise.resolve({ data: response }));
@@ -107,7 +107,7 @@ describe('server.js transaction tests', function() {
       _links: {
         transaction: {
           href:
-            'https://frontier.livenet.digitalbits.io/transactions/d88ded94c558790f7e819b85fd35adb10a1e474312c34ebd611495c349a8eb69'
+            'https://horizon.livenet.xdbchain.com/transactions/d88ded94c558790f7e819b85fd35adb10a1e474312c34ebd611495c349a8eb69'
         }
       },
       hash: 'd88ded94c558790f7e819b85fd35adb10a1e474312c34ebd611495c349a8eb69',
@@ -123,7 +123,7 @@ describe('server.js transaction tests', function() {
     this.axiosMock
       .expects('post')
       .withArgs(
-        'https://frontier.livenet.digitalbits.io:1337/transactions',
+        'https://horizon.livenet.xdbchain.com:1337/transactions',
         `tx=${this.blob}`
       )
       .returns(Promise.resolve({ data: response }));
@@ -152,7 +152,7 @@ describe('server.js transaction tests', function() {
       _links: {
         transaction: {
           href:
-            'https://frontier.livenet.digitalbits.io/transactions/e1c2b91141d8c4185dc8c18118f345a269d88c476bdadec695c1b3ecdc999831'
+            'https://horizon.livenet.xdbchain.com/transactions/e1c2b91141d8c4185dc8c18118f345a269d88c476bdadec695c1b3ecdc999831'
         }
       },
       hash: 'e1c2b91141d8c4185dc8c18118f345a269d88c476bdadec695c1b3ecdc999831',
@@ -168,7 +168,7 @@ describe('server.js transaction tests', function() {
     this.axiosMock
       .expects('post')
       .withArgs(
-        'https://frontier.livenet.digitalbits.io:1337/transactions',
+        'https://horizon.livenet.xdbchain.com:1337/transactions',
         `tx=${this.blob}`
       )
       .returns(Promise.resolve({ data: response }));
@@ -197,7 +197,7 @@ describe('server.js transaction tests', function() {
       _links: {
         transaction: {
           href:
-            'https://frontier.livenet.digitalbits.io/transactions/28552ba6a70ab74f6de05319950e2ddad94491159ebc97b14cfcde2d3c7e70a1'
+            'https://horizon.livenet.xdbchain.com/transactions/28552ba6a70ab74f6de05319950e2ddad94491159ebc97b14cfcde2d3c7e70a1'
         }
       },
       hash: '28552ba6a70ab74f6de05319950e2ddad94491159ebc97b14cfcde2d3c7e70a1',
@@ -213,7 +213,7 @@ describe('server.js transaction tests', function() {
     this.axiosMock
       .expects('post')
       .withArgs(
-        'https://frontier.livenet.digitalbits.io:1337/transactions',
+        'https://horizon.livenet.xdbchain.com:1337/transactions',
         `tx=${this.blob}`
       )
       .returns(Promise.resolve({ data: response }));
@@ -253,7 +253,7 @@ describe('server.js transaction tests', function() {
       _links: {
         transaction: {
           href:
-            'https://frontier.livenet.digitalbits.io/transactions/6c3191f252f2c586c74275c766ce761021513e520eab3bb63d3fd18d0d01492e'
+            'https://horizon.livenet.xdbchain.com/transactions/6c3191f252f2c586c74275c766ce761021513e520eab3bb63d3fd18d0d01492e'
         }
       },
       hash: '6c3191f252f2c586c74275c766ce761021513e520eab3bb63d3fd18d0d01492e',
@@ -268,7 +268,7 @@ describe('server.js transaction tests', function() {
     this.axiosMock
       .expects('post')
       .withArgs(
-        'https://frontier.livenet.digitalbits.io:1337/transactions',
+        'https://horizon.livenet.xdbchain.com:1337/transactions',
         `tx=${this.blob}`
       )
       .returns(Promise.resolve({ data: response }));
@@ -288,7 +288,7 @@ describe('server.js transaction tests', function() {
       _links: {
         transaction: {
           href:
-            'https://frontier.livenet.digitalbits.io/transactions/6a22d6896140f6f330ef19086827df0780eb2ad3324f3271b38c70cb1cba1c3d'
+            'https://horizon.livenet.xdbchain.com/transactions/6a22d6896140f6f330ef19086827df0780eb2ad3324f3271b38c70cb1cba1c3d'
         }
       },
       hash: '6a22d6896140f6f330ef19086827df0780eb2ad3324f3271b38c70cb1cba1c3d',
@@ -304,7 +304,7 @@ describe('server.js transaction tests', function() {
     this.axiosMock
       .expects('post')
       .withArgs(
-        'https://frontier.livenet.digitalbits.io:1337/transactions',
+        'https://horizon.livenet.xdbchain.com:1337/transactions',
         `tx=${this.blob}`
       )
       .returns(Promise.resolve({ data: response }));
@@ -330,14 +330,14 @@ describe('server.js transaction tests', function() {
     this.axiosMock
       .expects('post')
       .withArgs(
-        'https://frontier.livenet.digitalbits.io:1337/transactions',
+        'https://horizon.livenet.xdbchain.com:1337/transactions',
         `tx=${this.blob}`
       )
       .returns(Promise.resolve({ data: {} }));
     this.axiosMock.expects("get") 
       .withArgs(
         sinon.match(
-          'https://frontier.livenet.digitalbits.io:1337/accounts/GASOCNHNNLYFNMDJYQ3XFMI7BYHIOCFW3GJEOWRPEGK2TDPGTG2E5EDW'
+          'https://horizon.livenet.xdbchain.com:1337/accounts/GASOCNHNNLYFNMDJYQ3XFMI7BYHIOCFW3GJEOWRPEGK2TDPGTG2E5EDW'
         )
       )
       .returns(Promise.reject({ response: { status: 404, statusText: "NotFound", data: {} } }))
@@ -370,7 +370,7 @@ describe('server.js transaction tests', function() {
     this.axiosMock
       .expects('post')
       .withArgs(
-        'https://frontier.livenet.digitalbits.io:1337/transactions',
+        'https://horizon.livenet.xdbchain.com:1337/transactions',
         `tx=${this.blob}`
       )
       .returns(Promise.resolve({ data: {} }));

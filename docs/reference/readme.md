@@ -15,7 +15,7 @@ to Frontier. Starting with a [server](https://xdbfoundation.github.io/xdb-digita
 (See the [Frontier reference](https://developers.digitalbits.io/frontier/reference/index.html) documentation for what methods are possible.)
 ```js
 var DigitalBitsSdk = require('@digitalbits-blockchain/xdb-digitalbits-sdk');
-var server = new DigitalBitsSdk.Server('https://frontier.testnet.digitalbits.io');
+var server = new DigitalBitsSdk.Server('https://horizon.futurenet.xdbchain.com');
 // get a list of transactions that occurred in ledger 1400
 server.transactions()
     .forLedger(1400)
@@ -39,7 +39,7 @@ For example, to log instances of transactions from a particular account:
 
 ```javascript
 var DigitalBitsSdk = require('@digitalbits-blockchain/xdb-digitalbits-sdk')
-var server = new DigitalBitsSdk.Server('https://frontier.testnet.digitalbits.io');
+var server = new DigitalBitsSdk.Server('https://horizon.futurenet.xdbchain.com');
 var lastCursor=0; // or load where you left off
 
 var txHandler = function (txResponse) {
@@ -99,7 +99,7 @@ See the [Building Transactions](https://github.com/xdbfoundation/js-digitalbits-
 Once you have built your transaction, you can submit it to the DigitalBits network with `Server.submitTransaction()`.
 ```js
 const DigitalBitsSdk = require('@digitalbits-blockchain/xdb-digitalbits-sdk')
-const server = new DigitalBitsSdk.Server('https://frontier.testnet.digitalbits.io');
+const server = new DigitalBitsSdk.Server('https://horizon.futurenet.xdbchain.com');
 
 (async function main() {
     const account = await server.loadAccount(publicKey);

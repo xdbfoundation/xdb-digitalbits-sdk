@@ -60,7 +60,7 @@ function _getAmountInNibbs(amt: BigNumber) {
  * Server handles the network connection to a [Frontier](https://developers.digitalbits.io/reference/)
  * instance and exposes an interface for requests to that instance.
  * @constructor
- * @param {string} serverURL Frontier Server URL (ex. `https://frontier.testnet.digitalbits.io`).
+ * @param {string} serverURL Frontier Server URL (ex. `https://horizon.futurenet.xdbchain.com`).
  * @param {object} [opts] Options object
  * @param {boolean} [opts.allowHttp] - Allow connecting to http servers, default: `false`. This must be set to false in production deployments! You can also use {@link Config} class to set this globally.
  * @param {string} [opts.appName] - Allow set custom header `X-App-Name`, default: `undefined`.
@@ -68,7 +68,7 @@ function _getAmountInNibbs(amt: BigNumber) {
  */
 export class Server {
   /**
-   * serverURL Frontier Server URL (ex. `https://frontier.testnet.digitalbits.io`).
+   * serverURL Frontier Server URL (ex. `https://horizon.futurenet.xdbchain.com`).
    *
    * TODO: Solve `URI(this.serverURL as any)`.
    */

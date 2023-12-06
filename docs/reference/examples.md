@@ -40,8 +40,8 @@ const sourcePublicKey = sourceKeypair.publicKey();
 const receiverPublicKey = 'GAIRISXKPLOWZBMFRPU5XRGUUX3VMA3ZEWKBM5MSNRU3CHV6P4PYZ74D';
 
 // Configure DigitalBitsSdk to talk to the frontier instance hosted by DigitalBits.io
-// To use the live network, set the hostname to 'frontier.livenet.digitalbits.io'
-const server = new DigitalBitsSdk.Server('https://frontier.testnet.digitalbits.io');
+// To use the live network, set the hostname to 'horizon.livenet.xdbchain.com'
+const server = new DigitalBitsSdk.Server('https://horizon.futurenet.xdbchain.com');
 
 (async function main() {
   // Transactions require a valid sequence number that is specific to this account.
@@ -107,7 +107,7 @@ Let's say you want to look at an account's transaction history.  You can use the
 
 ```javascript
 const DigitalBitsSdk = require('@digitalbits-blockchain/xdb-digitalbits-sdk')
-const server = new DigitalBitsSdk.Server('https://frontier.testnet.digitalbits.io');
+const server = new DigitalBitsSdk.Server('https://horizon.futurenet.xdbchain.com');
 const accountId = 'GBBORXCY3PQRRDLJ7G7DWHQBXPCJVFGJ4RGMJQVAX6ORAUH6RWSPP6FM';
 
 server.transactions()
@@ -134,7 +134,7 @@ server.transactions()
 Try submitting a transaction (via the guide above) while running the following code example.
 ```javascript
 const DigitalBitsSdk = require('@digitalbits-blockchain/xdb-digitalbits-sdk')
-const server = new DigitalBitsSdk.Server('https://frontier.testnet.digitalbits.io');
+const server = new DigitalBitsSdk.Server('https://horizon.futurenet.xdbchain.com');
 
 // Get a message any time a payment occurs. Cursor is set to "now" to be notified
 // of payments happening starting from when this script runs (as opposed to from
